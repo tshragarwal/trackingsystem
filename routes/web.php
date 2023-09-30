@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 //Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth'])->name('dashboard');
-Route::get('/dashboard', function () { return redirect('/publisher/job/list'); })->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', function () { return redirect('/report/list'); })->middleware(['auth'])->name('dashboard');
 
 
 require __DIR__.'/auth.php';
@@ -61,3 +61,9 @@ Route::post('/publisher/job/save', [App\Http\Controllers\PublisherJobController:
 
 // --------- Tracking Url --------------- //
 Route::get('/ts/{proxy_url}', [App\Http\Controllers\PublisherJobController::class, 'tracking_url']);
+
+// ---------- CSV && Report
+Route::get('/report/list', [App\Http\Controllers\ReportController::class, 'list'] )->middleware(['auth'])->name('report.list');
+Route::get('/report/csv', [App\Http\Controllers\ReportController::class, 'csv'] )->middleware(['auth'])->name('report.csv');
+Route::post('/report/uploadcsv', [App\Http\Controllers\ReportController::class, 'uploadcsv'] )->middleware(['auth'])->name('report.uploadcsv');
+Route::get('/report/download', [App\Http\Controllers\ReportController::class, 'downloadcsv'] )->middleware(['auth'])->name('report.downloadcsv');

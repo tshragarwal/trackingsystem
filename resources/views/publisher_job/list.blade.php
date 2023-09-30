@@ -5,14 +5,14 @@
 
 <div class="container">
     @if($user_type == 'admin')
-        <div class="row " style="margin-bottom: 20px">
+<!--        <div class="row " style="margin-bottom: 20px">
 
             <div class=" offset-md-10">
                 <a href="{{route('publisher.job.form')}}" class="btn btn-primary">
                     {{ __('Assign Publisher Job') }}
                 </a>
             </div>
-        </div>
+        </div>-->
     @endif
      @if( !empty($success))
         <div class="alert alert-success" role="alert">

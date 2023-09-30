@@ -132,13 +132,23 @@
         <div class="d-flex" id="wrapper">
 
             @if(Auth::guard('web')->check())
+            
             <!-- Sidebar -->
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="list-group list-group-flush">
-                    <a href="/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign List</a>
-                    <!--<a href="/advertiser/form" class="list-group-item list-group-item-action bg-light">Add Advertizer</a>-->
-                    <a href="/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
-                    <a href="/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Jobs</a>
+                    @if( Auth::guard('web')->user()->user_type == "admin")
+                        <a href="/advertiser/form" class="list-group-item list-group-item-action bg-light">Add New Advertiser</a>
+                        <a href="/advertiser/campaign" class="list-group-item list-group-item-action bg-light">Add New Campaign</a>
+                        <a href="/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign List</a>
+                        <a href="/publisher/form" class="list-group-item list-group-item-action bg-light">Add New Publisher</a>
+                        <a href="/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
+                        <a href="/publisher/job/form" class="list-group-item list-group-item-action bg-light">Assign Job to Publisher</a>
+                        <a href="/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job List</a>
+                        <a href="/report/csv" class="list-group-item list-group-item-action bg-light">Upload Report</a>
+                    @endif
+                    
+                    
+                    <a href="/report/list" class="list-group-item list-group-item-action bg-light">Report</a>
 
                 </div>
             </div>
@@ -155,13 +165,6 @@
 
         </div>
        
-        
-        
-        
-        
-        
-        
-         
     </div>
 </body>
 </html>

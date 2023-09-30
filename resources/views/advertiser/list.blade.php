@@ -4,7 +4,7 @@
 
 
 <div class="container">
-    <div class="row " style="margin-bottom: 20px">
+<!--    <div class="row " style="margin-bottom: 20px">
     
         <div class=" offset-md-9">
              <a href="{{route('advertiser.campaign')}}" class="btn btn-primary">
@@ -14,7 +14,7 @@
                 {{ __('Add Advertiser') }}
             </a>
         </div>
-    </div>
+    </div>-->
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
             New Advertiser data successfully saved.
