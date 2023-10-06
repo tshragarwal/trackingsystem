@@ -76,7 +76,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/tracking') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -95,7 +95,7 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="/tracking/login">{{ __('Login') }}</a>
                                 </li>
                             @endif
 
@@ -111,13 +111,13 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                    <a class="dropdown-item" href="/tracking/logout"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="/tracking/logout" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -137,18 +137,18 @@
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="list-group list-group-flush">
                     @if( Auth::guard('web')->user()->user_type == "admin")
-                        <a href="/advertiser/form" class="list-group-item list-group-item-action bg-light">Add New Advertiser</a>
-                        <a href="/advertiser/campaign" class="list-group-item list-group-item-action bg-light">Add New Campaign</a>
-                        <a href="/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign List</a>
-                        <a href="/publisher/form" class="list-group-item list-group-item-action bg-light">Add New Publisher</a>
-                        <a href="/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
-                        <a href="/publisher/job/form" class="list-group-item list-group-item-action bg-light">Assign Job to Publisher</a>
-                        <a href="/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job List</a>
-                        <a href="/report/csv" class="list-group-item list-group-item-action bg-light">Upload Report</a>
+                        <a href="/tracking/advertiser/form" class="list-group-item list-group-item-action bg-light">Add New Advertiser</a>
+                        <a href="/tracking/advertiser/campaign" class="list-group-item list-group-item-action bg-light">Add New Campaign</a>
+                        <a href="/tracking/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign List</a>
+                        <a href="/tracking/publisher/form" class="list-group-item list-group-item-action bg-light">Add New Publisher</a>
+                        <a href="/tracking/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
+                        <a href="/tracking/publisher/job/form" class="list-group-item list-group-item-action bg-light">Assign Job to Publisher</a>
+                        <a href="/tracking/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job List</a>
+                        <a href="/tracking/report/csv" class="list-group-item list-group-item-action bg-light">Upload Report</a>
                     @endif
                     
                     
-                    <a href="/report/list" class="list-group-item list-group-item-action bg-light">Report</a>
+                    <a href="/tracking/report/list" class="list-group-item list-group-item-action bg-light">Report</a>
 
                 </div>
             </div>

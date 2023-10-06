@@ -41,7 +41,7 @@ class AdvertizerController extends Controller
 
             $modelObj->save();
            
-            return redirect('/campaign/list?s=1');
+            return redirect('/tracking/campaign/list?s=1');
         }
         
     }

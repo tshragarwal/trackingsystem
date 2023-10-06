@@ -3,19 +3,20 @@
 @section('content')
 
 
+
 <div class="container">
     <div class="card card-body" style="margin-bottom: 20px">
-        <form action="/report/list" method='get'>
+        <form action="/tracking/report/list" method='get'>
           <div class="row">
             <div class="col">
-              <input type="text" class="form-control" name="subid" placeholder="Enter Subid" aria-label="Subid">
+              <input type="text" class="form-control" name="subid" value="{{$query_string['subid']??''}}" placeholder="Enter Subid" aria-label="Subid">
             </div>
 
             <div class="col">
-              <input type="text" class="form-control" name="start_date" placeholder="Start Date Format(2023-09-09)" aria-label="start date">
+              <input type="text" class="form-control" name="start_date" value="{{$query_string['start_date']??''}}" placeholder="Start Date Format(2023-09-09)" aria-label="start date">
             </div>
               <div class="col">
-              <input type="text" class="form-control" name="end_date" placeholder="End Date Format(2023-09-09)" aria-label="End date">
+              <input type="text" class="form-control" name="end_date" value="{{$query_string['end_date']??''}}" placeholder="End Date Format(2023-09-09)" aria-label="End date">
             </div>
 
             <div class="col">
@@ -27,7 +28,7 @@
     </div>
     
     <div style="margin-bottom: 20px;text-align: end;">
-         <form action="/report/download" method='get'>
+         <form action="/tracking/report/download" method='get'>
           <div class="row">
             <div class="col">
                 <input type='hidden' name='query_string' value="{{http_build_query($query_string)}}" />

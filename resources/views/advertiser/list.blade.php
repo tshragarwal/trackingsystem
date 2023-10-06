@@ -41,7 +41,7 @@
                 @foreach($data as $record)
                   
                     <tr>
-                      <th scope="row"><a href="/campaign/detail/{{$record->id}}">{{$record->id}}</a></th>
+                      <th scope="row"><a href="/tracking/campaign/detail/{{$record->id}}">{{$record->id}}</a></th>
                       <td>{{$record->advertiser->name}} ({{$record->advertiser->manual_id}})</td>
                       <td>{{$record->campaign_name}}</td>
                       <td>{{$record->target_count}}</td>

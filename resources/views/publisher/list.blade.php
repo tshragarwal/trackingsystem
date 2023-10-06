@@ -35,7 +35,7 @@
                 @foreach($data as $record)
                   
                     <tr>
-                      <th scope="row"><a href="/publisher/detail/{{$record->id}}">{{$record->id}}</a></th>
+                      <th scope="row"><a href="/tracking/publisher/detail/{{$record->id}}">{{$record->id}}</a></th>
                       <td>{{$record->name}}</td>
                       <td>{{$record->email}}</td>
                       <td>{{$record->updated_at}}</td>
