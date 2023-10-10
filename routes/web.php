@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 $prepix = "/tracking";
 
 Route::get($prepix.'/', function () {
-    return view('welcome');
+    return redirect('/tracking/login');
 });
 
 //Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth'])->name('dashboard');

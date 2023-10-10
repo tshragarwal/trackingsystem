@@ -141,7 +141,7 @@ class ReportController extends Controller
         $data = $reportModel->downloadcsvdata($requestData);
 
         $filename = "tracking_system_".time().".csv";
-        /*
+        
         $handle = fopen($filename, 'w+');
 
         fputcsv($handle, array_keys($this->_csv_mapping_header));
@@ -159,41 +159,7 @@ class ReportController extends Controller
         $headers = array(
             'Content-Type' => 'text/csv',
         );
-        $respone = Response::download($filename, $filename, $headers);
-        unlink($filename);
-        */
-        
-        
-        // Create a new CSV writer
-        $csv = Writer::createFromFileObject(new \SplTempFileObject());
-
-        // Add data to the CSV (you can replace this with your own data)
-        $csv->insertOne(array_keys($this->_csv_mapping_header));
-        
-        foreach($data as $row) {
-            $csv->insertOne([
-                $row['subid'], $row['total_searches'], $row['monetized_searches'], $row['ad_clicks'], 
-                $row['date'], $row['ctr'], $row['cpc'], $row['rpm'], $row['revenue']
-            ]);
-            
-        }
-        
-//        $filename =  $filename;
-
-        // Save the CSV to a temporary file
-        $tempFilePath = storage_path("$filename");
-        $csv->output($filename);
-
-        $headers = [
-        'Content-Type' => 'text/csv',
-//        'Content-Disposition' => "attachment; filename=$filename",
-    ];
-        // Download the file and remove it afterward
-        return Response::download($tempFilePath, $filename, $headers);
-//                ->deleteFileAfterSend(true);
-        
-        
-        
-//        return $respone;
+        $respone = Response::download($filename, $filename, $headers)->deleteFileAfterSend(true);
+        return $respone;
     }
 }

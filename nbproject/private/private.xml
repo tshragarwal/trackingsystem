@@ -4,9 +4,17 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/resources/views/layouts/app.blade.php</file>
+            <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/resources/views/auth/login.blade.php</file>
+            <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/public/mix-manifest.json</file>
+            <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/resources/views/welcome.blade.php</file>
             <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/app/Http/Controllers/PublisherJobController.php</file>
+            <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/app/Http/Controllers/Auth/AuthenticatedSessionController.php</file>
+            <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/app/Http/Controllers/ReportController.php</file>
+            <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/composer.json</file>
             <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/.env</file>
             <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/routes/web.php</file>
+            <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/resources/views/reports/list.blade.php</file>
+            <file>file:/Users/bharatbhushan/NetBeansProjects/Sandbox/src/trackingsystem/app/Models/ReportModel.php</file>
         </group>
     </open-files>
 </project-private>
