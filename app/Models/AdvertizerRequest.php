@@ -21,6 +21,9 @@ class AdvertizerRequest extends Model
        return static::where('id', $id)->first();
     }
     
+    public function get_publisher_list($size = 10){
+        return self::orderby('id','desc')->paginate($size);
+    }    
     
 //    public function update($data){
 //        if(!empty($data)){

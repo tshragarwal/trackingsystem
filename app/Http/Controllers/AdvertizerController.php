@@ -9,6 +9,7 @@ use App\Http\Requests\CampaignSaveRequest;
 use App\Models\AdvertizerRequest;
 use App\Models\AdvertiserCampaignModel;
 use App\Http\Traits\CommonTrait;
+use Illuminate\Support\Facades\Validator;
 
 
 
@@ -16,32 +17,53 @@ class AdvertizerController extends Controller
 {
     use CommonTrait;
     
-    public function form(){
+    public function form(Request $request){
         if(!CommonTrait::is_super_admin()){
             return view('access_denied');
         }
-        return view('advertiser.form');
+        $advertizer = [];
+        if(!empty($request->adv_id)){
+            $advertizerObj = AdvertizerRequest::find($request->adv_id);
+            $advertizer = $advertizerObj->toArray();
+        }
+        
+        return view('advertiser.form', ['advertizer' => $advertizer]);
     }
     
     public function form_save(AdvertizerFormSaveRequest $request){
         if(!CommonTrait::is_super_admin()){
             return view('access_denied');
         }      
-
+        
         $requestData = $request->post();
+        if(!empty($requestData['manual_email'])){
+            $validator = Validator::make($requestData, [
+                'manual_email' => 'email',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+        }
+        
+        if(!empty($requestData['advertizer_id'])){
+            $advertizerObj = AdvertizerRequest::find( $requestData['advertizer_id']);
+           
+            $advertizerObj->name =  $requestData['name'];
+            $advertizerObj->manual_email =  $requestData['manual_email'];
+            $advertizerObj->save();
+            return redirect('/tracking/advertiser/list?s=1');
+        }
         
         if(!empty($requestData['name'])){
         
             $modelObj = new AdvertizerRequest();
             $modelObj->name = $requestData['name'];
-            if(!empty($requestData['manual_id'])){
-                $modelObj->manual_id = $requestData['manual_id'];
+            if(!empty($requestData['manual_email'])){
+                $modelObj->manual_email = $requestData['manual_email'];
             }
-//            $modelObj->target_url = $requestData['target_url'];
 
             $modelObj->save();
-           
-            return redirect('/tracking/campaign/list?s=1');
+            return redirect('/tracking/advertiser/list?s=1');
         }
         
     }
@@ -61,7 +83,13 @@ class AdvertizerController extends Controller
         }
         
         $requestData = $request->post();
-        if(!empty($requestData) && !empty($requestData['advertiser_id']) && !empty($requestData['target_url']) && !empty($requestData['target_count']) && !empty($requestData['query_string'])){
+        if(!empty($requestData) && !empty($requestData['advertiser_id']) && !empty($requestData['target_url']) && !empty($requestData['target_count'])){
+            
+            // --- validation for {keyword} in target url -----//
+            if (strpos($requestData['target_url'], '{keyword}') === false) {
+                return redirect()->back()->with('error_status',"Target Url required '{keyword}'");
+            }
+            
              $dbObj = AdvertizerRequest::find($requestData['advertiser_id']);
             
              if(!empty($dbObj)){
@@ -74,7 +102,7 @@ class AdvertizerController extends Controller
                 }
                 $tableObj->link_type = $requestData['link_type'];
                 $tableObj->target_url = $requestData['target_url'];
-                $tableObj->query_string = $requestData['query_string'];
+//                $tableObj->query_string = $requestData['query_string'];
                 $tableObj->target_count = $requestData['target_count'];
                 $tableObj->updated_at = date('Y-m-d H:i:s');
                 $tableObj->save();
@@ -85,7 +113,7 @@ class AdvertizerController extends Controller
     }
     
     public function campaignlist(Request $request){
-        
+        $drequestData = $request->all();
         /*
          * @if(Auth::guard('admin')->check())
     Hello {{Auth::guard('admin')->user()->name}}
@@ -98,7 +126,7 @@ class AdvertizerController extends Controller
         }
         
         $modelObj = new AdvertiserCampaignModel();
-        $result = $modelObj->list();
+        $result = $modelObj->list($drequestData);
         return view('advertiser.list', ['data' => $result, 'success' => $request->s??0]);
         
     }
@@ -130,7 +158,14 @@ class AdvertizerController extends Controller
              $dbObj = AdvertiserCampaignModel::find($requestData['id']);
             
              if(!empty($dbObj)){
+                
+                
+                // --- validation for {keyword} in target url -----//
+                if (strpos($requestData['target_url'], '{keyword}') === false) {
+                    return redirect()->back()->with('error_status',"Target Url required '{keyword}'");
+                }
                 $dbObj->target_url = $requestData['target_url'];
+                
                 
                 $dbObj->campaign_name = $requestData['campaign_name'];
                 if(!empty($requestData['subid'])){
@@ -138,7 +173,7 @@ class AdvertizerController extends Controller
                 }
                 $dbObj->link_type = $requestData['link_type'];
                 
-                $dbObj->query_string = $requestData['query_string'];
+//                $dbObj->query_string = $requestData['query_string'];
                 $dbObj->target_count = $requestData['target_count'];
                 $dbObj->status = $requestData['status'];
                 $dbObj->updated_at = date('Y-m-d H:i:s');
@@ -163,7 +198,7 @@ class AdvertizerController extends Controller
                 $d['link_type'] = $data->link_type;
                 $d['target_url'] = $data->target_url;
                 $d['target_count'] = $data->target_count;
-                $d['query_string'] = $data->query_string;
+//                $d['query_string'] = $data->query_string;
                 $d['status'] = $data->status;
                 
                 $response[] = $d;
@@ -172,4 +207,14 @@ class AdvertizerController extends Controller
         }
         return [];
     }
+    
+    public function list(Request $request){
+        if(!CommonTrait::is_super_admin()){
+            return view('access_denied');
+        }
+        $userObj = new AdvertizerRequest();
+        $advertizerList = $userObj->get_publisher_list(100);
+       
+        return view('advertiser.advertizerlist', ['data' => $advertizerList, 'success' => $request->s]);
+    }    
 }

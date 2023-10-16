@@ -23,6 +23,9 @@
                             @if (session('success_status'))
                               <h6 class="alert alert-success">{{ session('success_status') }}</h6>
                            @endif
+                            @if (session('error_status'))
+                              <h6 class="alert alert-danger">{{ session('error_status') }}</h6>
+                           @endif
                            
                              @csrf
                              <input id="id" type="hidden" class="form-control  is-invalid " name="id" value="{{ $data->id }}">
@@ -30,7 +33,7 @@
                                  <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Advertizer Name') }}</label>
                                  
                                  <div class="col-md-6">
-                                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" readonly="readonly" name="name" value="{{ $data->advertiser->name }}  ({{ $data->advertiser->manual_id}})" required autocomplete="name" autofocus>
+                                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" readonly="readonly" name="name" value="{{ $data->advertiser->name }}  ({{ $data->advertiser->manual_email}})" required autocomplete="name" autofocus>
 
                                      @error('name')
                                          <span class="invalid-feedback" role="alert">
@@ -55,18 +58,7 @@
                              </div>
 
                                                           
-                             <div class="row mb-3">
-                                 <label for="subid" class="col-md-4 col-form-label text-md-end">{{ __('Subid') }}</label>
-                                 
-                                 <div class="col-md-6">
-                                     <input id="subid" type="text" class="form-control @error('subid') is-invalid @enderror"  name="subid" value="{{ $data->subid }}" required autocomplete="subid" autofocus>
-                                     @error('subid')
-                                         <span class="invalid-feedback" role="alert">
-                                             <strong>{{ $message }}</strong>
-                                         </span>
-                                     @enderror
-                                 </div>
-                             </div>
+
                              
                              <div class="row mb-3">
                                  <label for="link_type" class="col-md-4 col-form-label text-md-end">{{ __('Link Type') }}</label>
@@ -103,7 +95,7 @@
 
                                  <div class="col-md-6">
                                      <input id="target_url" type="text" class="form-control @error('target_url') is-invalid @enderror" name="target_url" value="{{ $data->target_url }}" required>
-
+                                     <span style='font-size: 10px;color: red;'>Target Url required '{keyword}' </span>
                                      @error('target_url')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -111,9 +103,20 @@
                                      @enderror
                                  </div>
                              </div>
-
+                             <div class="row mb-3">
+                                 <label for="subid" class="col-md-4 col-form-label text-md-end">{{ __('Subid') }}</label>
+                                 
+                                 <div class="col-md-6">
+                                     <input id="subid" type="text" class="form-control @error('subid') is-invalid @enderror"  name="subid" value="{{ $data->subid }}" required autocomplete="subid" autofocus>
+                                     @error('subid')
+                                         <span class="invalid-feedback" role="alert">
+                                             <strong>{{ $message }}</strong>
+                                         </span>
+                                     @enderror
+                                 </div>
+                             </div>
                              
-                              <div class="row mb-3">
+<!--                              <div class="row mb-3">
                                  <label for="query_string" class="col-md-4 col-form-label text-md-end">{{ __('Query String') }}</label>
 
                                  <div class="col-md-6">
@@ -125,7 +128,7 @@
                                          </span>
                                      @enderror
                                  </div>
-                             </div>
+                             </div>-->
 
                              
                              
@@ -159,9 +162,9 @@
                                             @endif
                                             
                                             @if ($data->status == "2")
-                                                <option value="2"  Selected > Inactive</option>
+                                                <option value="2"  Selected > Paused</option>
                                             @else
-                                                <option value="2"> Inactive</option>
+                                                <option value="2"> Pause</option>
                                             @endif
                                             
                                             @if ($data->status == "3")

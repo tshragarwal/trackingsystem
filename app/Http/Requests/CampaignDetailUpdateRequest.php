@@ -26,7 +26,7 @@ class CampaignDetailUpdateRequest extends FormRequest
         return [
             'id' => ['required', 'numeric'],
             'target_url' => ['required', 'string'],
-            'query_string' => ['required', 'string'],
+//            'query_string' => ['required', 'string'],
             'target_count' => ['required', 'numeric'],
             'status' => ['required', 'numeric', 'in:1,2,3'],
             'campaign_name' => ['required', 'string'],

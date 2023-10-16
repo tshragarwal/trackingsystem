@@ -5,14 +5,14 @@
 
 <div class="container">
     @if($user_type == 'admin')
-<!--        <div class="row " style="margin-bottom: 20px">
+        <div class="row " style="margin-bottom: 20px">
 
             <div class=" offset-md-10">
                 <a href="{{route('publisher.job.form')}}" class="btn btn-primary">
                     {{ __('Assign Publisher Job') }}
                 </a>
             </div>
-        </div>-->
+        </div>
     @endif
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
@@ -42,7 +42,7 @@
                       <th scope="row">{{$record->id}}</th>
                       <td>{{$record->publisher->name}}</td>
                       <td>{{$record->campaign->campaign_name}}</td>
-                      <td>{{$domain}}/ts/{{$record->proxy_url}}</td>
+                      <td>{{$domain}}/search?code={{$record->proxy_url}}</td>
                       <td>{{$record->target_count}}</td>
                       <td>{{$record->tracking_count}}</td>
                       <td>{{$record->updated_at}}</td>

@@ -16,7 +16,7 @@ class AddTableAdvertizerRequests extends Migration
         Schema::create('advertisers', function (Blueprint $table) {
             $table->id();
             $table->string("name", 100);
-            $table->string("manual_id", 20);
+            $table->string("manual_email", 30);
             $table->timestamps();
         });
     }

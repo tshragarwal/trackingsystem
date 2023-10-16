@@ -19,6 +19,9 @@
                              @if (session('success_status'))
                               <h6 class="alert alert-success">{{ session('success_status') }}</h6>
                            @endif
+                             @if (session('error_status'))
+                              <h6 class="alert alert-danger">{{ session('error_status') }}</h6>
+                           @endif
                         
                         <div class="row mb-3">
                             <label for="advertiser_id" class="col-md-4 col-form-label text-md-end">{{ __('Select Advertizer') }}</label>
@@ -29,7 +32,7 @@
                                     <select class="form-control" name="advertiser_id" id="advertiser_id" >
                                         <option value="0">--SELECT--</option>
                                         @foreach($advertiserObj as $object)
-                                            <option value="{{$object->id}}">{{$object->name}} ({{$object->manual_id}})</option>
+                                            <option value="{{$object->id}}">{{$object->name}} ({{$object->manual_email}})</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -58,19 +61,7 @@
                         </div>                           
                         
                         
-                        <div class="row mb-3">
-                            <label for="subid" class="col-md-4 col-form-label text-md-end">{{ __('Subid') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="subid" type="text" class="form-control @error('subid') is-invalid @enderror" name="subid" value="{{ old('subid') }}" required autocomplete="subid" autofocus>
-                                
-                                @error('subid')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+ 
                            
                         <div class="row mb-3">
                             <label for="link_type" class="col-md-4 col-form-label text-md-end">{{ __('Link Type') }}</label>
@@ -91,27 +82,43 @@
                                 @enderror
                             </div>
                         </div>
-                           
-                        
+
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Target Url') }}</label>
 
                             <div class="col-md-6">
                                 <!--<input id="target_url" type="textarea" class="form-control @error('target_url') is-invalid @enderror" name="target_url" value="{{ old('target_url') }}" required autocomplete="target_url" autofocus>-->
                                 <textarea class="form-control" name="target_url" id="target_url" rows="3" required autocomplete="target_url" autofocus>{{ old('target_url') }}</textarea>
+                                <span style='font-size: 10px;color: red;'>Target Url required '{keyword}' </span>
                                 @error('target_url')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+                        </div>      
+
+                           
+                       <div class="row mb-3">
+                            <label for="subid" class="col-md-4 col-form-label text-md-end">{{ __('Subid') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="subid" type="text" class="form-control @error('subid') is-invalid @enderror" name="subid" value="{{ old('subid') }}" required autocomplete="subid" autofocus>
+                                
+                                @error('subid')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>                           
-                        
-                        <div class="row mb-3">
+                           
+                                            
+<!--                        <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Target Query String') }}</label>
 
                             <div class="col-md-6">
-                                <!--<input id="query_string" type="text" class="form-control @error('query_string') is-invalid @enderror" name="query_string" value="{{ old('query_string') }}" required autocomplete="query_string" autofocus>-->
+                                <input id="query_string" type="text" class="form-control @error('query_string') is-invalid @enderror" name="query_string" value="{{ old('query_string') }}" required autocomplete="query_string" autofocus>
                                 <textarea class="form-control" name="query_string" id="query_string" rows="3" required autocomplete="query_string" autofocus>{{ old('query_string') }}</textarea>
                                 @error('query_string')
                                     <span class="invalid-feedback" role="alert">
@@ -119,7 +126,7 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div>-->
                         
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Target Count') }}</label>

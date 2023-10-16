@@ -4,17 +4,14 @@
 
 
 <div class="container">
-<!--    <div class="row " style="margin-bottom: 20px">
+    <div class="row " style="margin-bottom: 20px">
     
-        <div class=" offset-md-9">
+        <div class=" offset-md-10">
              <a href="{{route('advertiser.campaign')}}" class="btn btn-primary">
-                {{ __('Add Campaign') }}
-            </a>
-            <a href="{{route('advertiser.form')}}" class="btn btn-primary">
-                {{ __('Add Advertiser') }}
+                {{ __('Add New Campaign') }}
             </a>
         </div>
-    </div>-->
+    </div>
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
             New Advertiser data successfully saved.
@@ -29,11 +26,11 @@
               <th scope="col">Campaign Name</th>
               <th scope="col">Target Count</th>
               <th scope="col">Target Url</th>
-              <th scope="col">Query String</th>
+            
               <th scope="col">Status</th>
               <th scope="col">Last Updated</th>
               <th scope="col">Created At</th>
-              <th scope="col">Edit</th>
+              <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -41,16 +38,20 @@
                 @foreach($data as $record)
                   
                     <tr>
-                      <th scope="row"><a href="/tracking/campaign/detail/{{$record->id}}">{{$record->id}}</a></th>
-                      <td>{{$record->advertiser->name}} ({{$record->advertiser->manual_id}})</td>
+                      <th scope="row">{{$record->id}}</th>
+                      <td>{{$record->advertiser->name}} ({{$record->advertiser->manual_email}})</td>
                       <td>{{$record->campaign_name}}</td>
                       <td>{{$record->target_count}}</td>
                       <td>{{$record->target_url}}</td>
-                      <td>{{$record->query_string}}</td>
-                      <td>{{$record->status}}</td>
+                      <td>{{ ($record->status == 1)? 'Active': (($record->status == 2)? 'Paused': 'Completed') }}</td>
                       <td>{{$record->updated_at}}</td>
                       <td>{{$record->created_at}}</td>
-                      <td><i class="fa fa-pencil" aria-hidden="true"></i></td>
+                      <td>
+                          <a href="/tracking/campaign/detail/{{$record->id}}"><i class="fa fa-edit"></i></a>
+                          @if($record->status == 1 || $record->status == 2)
+                            <a style="margin-left:11px" href="{{route('publisher.job.form', ['campaign_id' => $record->id])}}"><i class="fa fa-tasks" aria-hidden="true"></a></i>
+                          @endif
+                      </td>
                       
                     </tr>
                 @endforeach

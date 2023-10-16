@@ -21,7 +21,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="tracking/public/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
         jQuery(document).ready(function($){
             $("#menu-toggle").click(function(e) {
@@ -137,14 +137,15 @@
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="list-group list-group-flush">
                     @if( Auth::guard('web')->user()->user_type == "admin")
-                        <a href="/tracking/advertiser/form" class="list-group-item list-group-item-action bg-light">Add New Advertiser</a>
-                        <a href="/tracking/advertiser/campaign" class="list-group-item list-group-item-action bg-light">Add New Campaign</a>
-                        <a href="/tracking/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign List</a>
-                        <a href="/tracking/publisher/form" class="list-group-item list-group-item-action bg-light">Add New Publisher</a>
+                        <a href="/tracking/advertiser/list" class="list-group-item list-group-item-action bg-light">Advertiser</a>
+                        <!--<a href="/tracking/advertiser/form" class="list-group-item list-group-item-action bg-light">Advertiser</a>-->
+                        <!--<a href="/tracking/advertiser/campaign" class="list-group-item list-group-item-action bg-light">Add New Campaign</a>-->
+                        <a href="/tracking/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign</a>
+                        <!--<a href="/tracking/publisher/form" class="list-group-item list-group-item-action bg-light">Add New Publisher</a>-->
                         <a href="/tracking/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
-                        <a href="/tracking/publisher/job/form" class="list-group-item list-group-item-action bg-light">Assign Job to Publisher</a>
-                        <a href="/tracking/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job List</a>
-                        <a href="/tracking/report/csv" class="list-group-item list-group-item-action bg-light">Upload Report</a>
+                        <!--<a href="/tracking/publisher/job/form" class="list-group-item list-group-item-action bg-light">Assign Job to Publisher</a>-->
+                        <a href="/tracking/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job</a>
+                        <!--<a href="/tracking/report/csv" class="list-group-item list-group-item-action bg-light">Upload Report</a>-->
                     @endif
                     
                     

@@ -30,9 +30,13 @@
                                   
                                     <select class="form-control" name="advertiser_id" id="advertiser_id" >
                                         <option value="0">--SELECT--</option>
-                                        @foreach($advertiserObj as $object)
-                                            <option value="{{$object->id}}">{{$object->name}} ({{$object->manual_id}})</option>
-                                        @endforeach
+                                        @if(!empty($camp_array))
+                                            <option value="{{$camp_array['advertiser_id']}}" selected >{{$camp_array['advertizer_name']}} ({{$camp_array['advertizer_email']}})</option>
+                                        @else
+                                            @foreach($advertiserObj as $object)
+                                                <option value="{{$object->id}}">{{$object->name}} ({{$object->manual_email}})</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
 
@@ -49,9 +53,15 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                  
-                                    <select class="form-control advertiser_campaign_id_select" name="advertiser_campaign_id" id="advertiser_campaign_id" >
-                                    </select>
+                                    @if(!empty($camp_array))
+                                        <select class="form-control advertiser_campaign_id_select" name="advertiser_campaign_id" id="advertiser_campaign_id" >
+                                            <option value="{{$camp_array['campaign_id']}}" selected >{{$camp_array['campaign_name']}}</option>
+                                        </select>
+                                            
+                                   @else
+                                        <select class="form-control advertiser_campaign_id_select" name="advertiser_campaign_id" id="advertiser_campaign_id" ></select>
+                                     @endif
+                                    
                                 </div>
 
                                 @error('advertiser_campaign_id')
@@ -62,7 +72,7 @@
                             </div>
                         </div>
                            
-                        <div id="form_further_info" style="display:none">
+                        <div id="form_further_info" style="{{ empty($camp_array)? 'display:none':'' }}">
                             <div class="row mb-3">
                                 <label for="publisher_id" class="col-md-4 col-form-label text-md-end">{{ __('Select Publisher') }}</label>
 

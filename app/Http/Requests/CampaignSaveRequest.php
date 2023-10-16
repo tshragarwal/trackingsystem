@@ -27,7 +27,7 @@ class CampaignSaveRequest extends FormRequest
             'advertiser_id' => ['required', 'numeric','min:1'],
             'target_url' => ['required', 'string'],
             'campaign_name' => ['required', 'string'],
-            'query_string' => ['required', 'string'],
+//            'query_string' => ['required', 'string'],
             'link_type' => ['required', 'string', 'in:typein,n2s'],
             'target_count' => ['required', 'numeric','min:1']
         ];

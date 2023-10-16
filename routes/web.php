@@ -33,6 +33,7 @@ Route::get($prepix.'/home', [App\Http\Controllers\HomeController::class, 'index'
 
 //--------- Advertiser  ----------------- //
 Route::get($prepix.'/advertiser/form', [App\Http\Controllers\AdvertizerController::class, 'form'] )->middleware(['auth'])->name('advertiser.form');
+Route::get($prepix.'/advertiser/list', [App\Http\Controllers\AdvertizerController::class, 'list'] )->middleware(['auth'])->name('advertiser.list');
 Route::post($prepix.'/advertiser/form/save', [App\Http\Controllers\AdvertizerController::class, 'form_save'] )->middleware(['auth'])->name('advertiser.formsave');
 Route::get($prepix.'/advertiser/campaign', [App\Http\Controllers\AdvertizerController::class, 'campaign'] )->middleware(['auth'])->name('advertiser.campaign');
 Route::get($prepix.'/advertiser/campaign/list/{advertiser_id}', [App\Http\Controllers\AdvertizerController::class, 'advertiser_campaign_list'] )->middleware(['auth']);
@@ -62,7 +63,7 @@ Route::post($prepix.'/publisher/job/save', [App\Http\Controllers\PublisherJobCon
 
 
 // --------- Tracking Url --------------- //
-Route::get($prepix.'/ts/{proxy_url}', [App\Http\Controllers\PublisherJobController::class, 'tracking_url']);
+Route::get($prepix.'/search', [App\Http\Controllers\PublisherJobController::class, 'tracking_url']);
 
 // ---------- CSV && Report
 Route::get($prepix.'/report/list', [App\Http\Controllers\ReportController::class, 'list'] )->middleware(['auth'])->name('report.list');

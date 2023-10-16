@@ -8,8 +8,8 @@
     
         <div class=" offset-md-10">
     
-            <a href="{{route('publisher.form')}}" class="btn btn-primary">
-                {{ __('Add New Publisher') }}
+            <a href="{{route('advertiser.form')}}" class="btn btn-primary">
+                {{ __('Add New Advertizer') }}
             </a>
         </div>
     </div>
@@ -23,8 +23,8 @@
         <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Publisher Name</th>
-              <th scope="col">Publisher Email</th>
+              <th scope="col">Advertizer Name</th>
+              <th scope="col">Advertizer Email</th>
               <th scope="col">Last Updated</th>
               <th scope="col">Created At</th>
               <th scope="col">Action</th>
@@ -38,12 +38,11 @@
                     <tr>
                       <th scope="row">{{$record->id}}</th>
                       <td>{{$record->name}}</td>
-                      <td>{{$record->email}}</td>
+                      <td>{{$record->manual_email}}</td>
                       <td>{{$record->updated_at}}</td>
                       <td>{{$record->created_at}}</td>
-                      <td>
-                          <a href="/tracking/publisher/detail/{{$record->id}}"><i class="fa fa-edit"></i></a>
-                          <a style='margin-left: 12px' href="{{route('publisher.job.list', ['publisher_id' => $record->id])}}"><i class="fa fa-eye"></i></a>
+                      <td><a href="{{route('advertiser.form', ['adv_id' => $record->id])}}"><i class="fa fa-edit"> </i></a>
+                          <a style="margin-left: 12px;" href="{{route('campaign.list', ['advertizer' => $record->id])}}"><i class="fa fa-eye"> </i></a>
                       </td>
                     </tr>
                 @endforeach
@@ -51,7 +50,6 @@
 
         </tbody>
     </table>
-    <!-- Display pagination links -->
        {{ $data->links() }}
  
 </div>

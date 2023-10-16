@@ -20,7 +20,7 @@ class AddAdvertiserCampaignsTable extends Migration
             $table->string("subid", 50);
             $table->enum("link_type", ['typein','n2s']);
             $table->text("target_url");
-            $table->text("query_string");
+//            $table->text("query_string");
             $table->integer('target_count');
             $table->tinyInteger('status')->default(1)->comment("1: active, 2: stopped, 3: completed");
             $table->timestamps();
