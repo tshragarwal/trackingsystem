@@ -23,11 +23,11 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#">Report</a></li>
-          <li class="breadcrumb-item"><a href="javascript:void(0)">N2S Report</a></li>
+          <li class="breadcrumb-item"><a href="javascript:void(0)">Typein Report</a></li>
         </ol>
     </nav>
-    <div class="card card-body" style="margin-bottom: 20px">
-        <form action="{{route('report.list')}}" method='get'>
+   <div class="card card-body" style="margin-bottom: 20px">
+        <form action="{{route('report.typein_list')}}" method='get'>
           <div class="row">
               
             <div class="col" id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
@@ -41,12 +41,11 @@
               <input type="text" class="form-control" name="subid" value="{{$query_string['subid']??''}}" placeholder="Enter Subid" aria-label="Subid">
             </div>
               
-            @if($adminFlag == true)
+             @if($adminFlag == true)
                 <div class="col">
                   <input type="text" class="form-control" name="country" value="{{$query_string['country']??''}}" placeholder="Country Name" aria-label="country">
                 </div>
-            @endif
-            
+            @endif 
             
             @if(!empty($publisher_advertizer_list) && !empty($publisher_advertizer_list['publisher_list']))
             
@@ -82,13 +81,13 @@
     </div>
     
     <div style="margin-bottom: 20px;text-align: end;">
-         <form action="{{route('report.downloadcsv')}}" method='get'>
+         <form action="{{route('report.typein_downloadcsv')}}" method='get'>
           <div class="row">
             <div class="col">
                 <input type='hidden' name='query_string' value="{{http_build_query($query_string)}}" />
                 <button target="_blank" type="submit" class="btn btn-success">DOWNLOAD CSV</button>
-                 @if( Auth::guard('web')->user()->user_type == "admin")
-                    <a href="{{route('report.csv')}}" class="btn btn-primary"> {{ __('UPLOAD REPORT') }} </a>
+                 @if($adminFlag == true)
+                    <a href="{{route('report.typein_csv')}}" class="btn btn-primary"> {{ __('UPLOAD REPORT') }} </a>
                 @endif
             </div>
           
@@ -100,57 +99,61 @@
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
-                    <tr>                     
-                    @if($adminFlag == true)
+                    <tr>
+                       @if($adminFlag == true)
                         <th scope="col">#</th>
                         <th scope="col">Date</th>
                         <th scope="col">Country</th>
-                        <th scope="col">Advertiser Subid</th>
-                        <th scope="col">Advertiser CPC</th>
-                        <th scope="col">Advertiser RPM</th>
                         <th scope="col">Campaign id</th>
                         <th scope="col">Campaign Name</th>
-                        <th scope="col">Searches</th>
-                        <th scope="col">Clicks</th>
-                        <th scope="col">TQ</th>
-                        <th scope="col">CTR (in %)</th>
-                        <th scope="col">Net Revenue</th>                        
-                    @endif
-                    <th scope="col">Advertiser Name</th>
-                    <th scope="col">Gross Revenue</th>
-                    <th scope="col">Publisher Id</th>
-                    <th scope="col">Offer Id</th>
-                    <th scope="col">Publisher RPM</th>
-                    <th scope="col">Publisher RPC</th>
+                        <th scope="col">Advertiser Subid</th>
+                        <th scope="col">Total Searches</th>
+                        <th scope="col">Monetized Searches</th>
+                        <th scope="col">Ad Clicks</th>
+                        <th scope="col">Ad Coverage (in %)</th>
+                        <th scope="col">CTR</th>
+                        <th scope="col">CPC</th>
+                        <th scope="col">RPM</th>
+                        <th scope="col">Net Revenue</th>
+                       @endif
+                        <th scope="col">Advertiser Name</th>
+                        <th scope="col">Gross Revenue</th>
+                        <th scope="col">Publisher Id</th>
+                        <th scope="col">Offer Id</th>
+                        <th scope="col">Publisher RPM</th>
+                        <th scope="col">Publisher RPC</th>
+
                     </tr>
                 </thead>
                 <tbody>
                     @if(!empty($data))
                         @foreach($data as $record)
+
                             <tr>
-                                
                                 @if($adminFlag == true)
                                     <th scope="row">{{$record->id}}</th>
                                     <td scope="row">{{$record->date}}</td>
-                                    <td scope="row">{{$record->country}}</td>
-                                    <td scope="row">{{$record->subid}}</td>
-                                    <td scope="row">{{$record->advertiser_CPC}}</td>
-                                    <td scope="row">{{$record->advertiser_RPM}}</td>
+                                    <td scope="row"><b>{{$record->country}}</td>
                                     <td scope="row"><b>{{$record->campaign_id}}</td>
                                     <td scope="row"><b>{{$record->campaign_name}}</td>
+                                    <td scope="row">{{$record->subid}}</td>
                                     <td scope="row">{{$record->total_searches}}</td>
+                                    <td scope="row">{{$record->monetized_searches}}</td>
                                     <td scope="row">{{$record->ad_clicks}}</td>
-                                    <td scope="row">{{$record->tq}}</td>
+                                    <td scope="row">{{$record->ad_coverage}}</td>
                                     <td scope="row">{{$record->ctr}}</td>
-                                    <td scope="row">{{$record->revenue}}</td>                                    
+                                    <td scope="row">{{$record->cpc}}</td>
+                                    <td scope="row">{{$record->rpm}}</td>
+                                    <td scope="row">{{$record->net_revenue}}</td>
                                 @endif
-                                
                                 <td scope="row">{{$record->advertiser_name}}</td>
                                 <td scope="row">{{$record->gross_revenue}}</td>
                                 <td scope="row">{{$record->publisher_id}}</td>
-                                <td scope="row">{{$record->offer_id}}</td>                                
-                                 <td scope="row">{{$record->publisher_RPM}}</td>
+                                <td scope="row">{{$record->offer_id}}</td>
+                                <td scope="row">{{$record->publisher_RPM}}</td>
                                 <td scope="row">{{$record->publisher_RPC}}</td>
+                               
+
                             </tr>
                         @endforeach
                     @endif
@@ -164,6 +167,14 @@
 </div>
 <script type="text/javascript">
 $(function() {
+$('#publisher_select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    var selectedValues = $('#publisher_select').val();
+    $('#publishers_id').val(selectedValues);
+});
+$('#advertizer_select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    var selectedValues = $('#advertizer_select').val();
+    $('#advertizers_name').val(selectedValues);
+});
 
     if (($.trim($('#start_date').val()) !== '' ) && ($.trim($('#end_date').val()) !== '' )){
          var start = moment($.trim($('#start_date').val()), "YYYY-MM-DD");
@@ -196,14 +207,7 @@ $(function() {
 
 });
 
-$('#publisher_select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-    var selectedValues = $('#publisher_select').val();
-    $('#publishers_id').val(selectedValues);
-});
-$('#advertizer_select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-    var selectedValues = $('#advertizer_select').val();
-    $('#advertizers_name').val(selectedValues);
-});
+
 </script>
 
 

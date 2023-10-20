@@ -69,4 +69,12 @@ Route::get($prepix.'/search', [App\Http\Controllers\PublisherJobController::clas
 Route::get($prepix.'/report/list', [App\Http\Controllers\ReportController::class, 'list'] )->middleware(['auth'])->name('report.list');
 Route::get($prepix.'/report/csv', [App\Http\Controllers\ReportController::class, 'csv'] )->middleware(['auth'])->name('report.csv');
 Route::post($prepix.'/report/uploadcsv', [App\Http\Controllers\ReportController::class, 'uploadcsv'] )->middleware(['auth'])->name('report.uploadcsv');
-Route::get($prepix.'/report/download', [App\Http\Controllers\ReportController::class, 'downloadcsv'] )->middleware(['auth'])->name('report.downloadcsv');
+Route::get($prepix.'/report/download', [App\Http\Controllers\ReportController::class, 'n2s_downloadcsv'] )->middleware(['auth'])->name('report.downloadcsv');
+Route::get($prepix.'/report/csv_sample', [App\Http\Controllers\ReportController::class, 'n2s_csv_sample'] )->middleware(['auth'])->name('report.n2s_csv_sample');
+
+
+Route::get($prepix.'/report/typein/list', [App\Http\Controllers\ReportController::class, 'typein_list'] )->middleware(['auth'])->name('report.typein_list');
+Route::get($prepix.'/report/typein/csv', [App\Http\Controllers\ReportController::class, 'typein_csv'] )->middleware(['auth'])->name('report.typein_csv');
+Route::post($prepix.'/report/typein/uploadcsv', [App\Http\Controllers\ReportController::class, 'typein_uploadcsv'] )->middleware(['auth'])->name('report.typein_uploadcsv');
+Route::get($prepix.'/report/typein/download', [App\Http\Controllers\ReportController::class, 'typein_downloadcsv'] )->middleware(['auth'])->name('report.typein_downloadcsv');
+Route::get($prepix.'/report/typein/csv_sample', [App\Http\Controllers\ReportController::class, 'typein_csv_sample'] )->middleware(['auth'])->name('report.typein_csv_sample');

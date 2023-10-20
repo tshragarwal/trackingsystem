@@ -17,13 +17,10 @@ class AddReportTable extends Migration
             $table->id();
             $table->string('subid', 10);
             $table->integer('total_searches');
-            $table->integer('monetized_searches');
             $table->integer('ad_clicks');
             $table->date('date');
             $table->double('ctr', 8, 2);
-            $table->double('cpc', 8, 2);
-            $table->double('rpm', 8, 2);
-            $table->double('revenue', 8, 2)->comment(' revenue in (USD)');
+            $table->double('revenue', 8, 2)->comment(' Net Revenue');
             
             $table->timestamps();
             $table->index(['subid', 'date']);

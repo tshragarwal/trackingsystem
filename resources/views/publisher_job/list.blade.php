@@ -42,7 +42,7 @@
                       <th scope="row">{{$record->id}}</th>
                       <td>{{$record->publisher->name}}</td>
                       <td>{{$record->campaign->campaign_name}}</td>
-                      <td>{{$domain}}/search?code={{$record->proxy_url}}</td>
+                      <td>{{$domain}}/search?code={{$record->proxy_url}}&q={keyword}</td>
                       <td>{{$record->target_count}}</td>
                       <td>{{$record->tracking_count}}</td>
                       <td>{{$record->updated_at}}</td>

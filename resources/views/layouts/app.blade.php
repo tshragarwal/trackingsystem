@@ -147,9 +147,14 @@
                         <a href="/tracking/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job</a>
                         <!--<a href="/tracking/report/csv" class="list-group-item list-group-item-action bg-light">Upload Report</a>-->
                     @endif
-                    
-                    
-                    <a href="/tracking/report/list" class="list-group-item list-group-item-action bg-light">Report</a>
+                    <a href="javascript:void(0)"  style="border: 1px rgba(0,0,0,.125);" class="parentReport list-group-item list-group-item-action bg-light">
+                        Report<br/>
+                    </a>
+                    <ul class="childReport " style="border: 1px solid rgba(0,0,0,.125); display: none">
+				    <li><a class="" href="{{route('report.list')}}">N2S Report</a></li>
+				    <li><a class="" href="{{route('report.typein_list')}}">Typein Report</a></li>
+				</ul>
+                   
 
                 </div>
             </div>
@@ -167,5 +172,10 @@
         </div>
        
     </div>
+    <script>
+        $('.parentReport').on('click', function(){
+            $('.childReport').css("display", "block");
+        });
+        </script>
 </body>
 </html>

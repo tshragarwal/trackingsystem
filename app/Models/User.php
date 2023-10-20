@@ -45,4 +45,7 @@ class User extends Authenticatable
     public function get_publisher_list($size = 10){
         return self::where('user_type','publisher')->orderby('id','desc')->paginate($size);
     }
+    public function all_publisher_list(){
+        return self::select(['id', 'name'])->where('user_type','publisher')->get();
+    }
 }
