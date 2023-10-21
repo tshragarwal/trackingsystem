@@ -44,7 +44,7 @@ class ReportController extends Controller
             return view('access_denied');
         }
         
-        return view('reports.uploadcsv');
+        return view('report.uploadcsv');
     }
     
     public function uploadcsv(Request $request) {
@@ -142,7 +142,7 @@ class ReportController extends Controller
         $size = 50;
         $reportN2sModel = new ReportN2sModel();
         $data = $reportN2sModel->reportList($requestData, $size);
-        return view('reports.list', ['data' => $data, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list, 'adminFlag' => $admin]);
+        return view('report.list', ['data' => $data, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list, 'adminFlag' => $admin]);
     }
     
     public function n2s_downloadcsv(Request $request){
@@ -251,7 +251,7 @@ class ReportController extends Controller
         $reportN2sModel = new ReportTypeinModel();
         $data = $reportN2sModel->reportList($requestData, $size);
        
-        return view('reports.typein_list', ['data' => $data, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list, 'adminFlag' => $admin]);
+        return view('report.typein_list', ['data' => $data, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list, 'adminFlag' => $admin]);
         
     }
     
@@ -260,7 +260,7 @@ class ReportController extends Controller
             return view('access_denied');
         }
         
-        return view('reports.typein_uploadcsv');
+        return view('report.typein_uploadcsv');
     }
     
     public function typein_uploadcsv(Request $request) {
