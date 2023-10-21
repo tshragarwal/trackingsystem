@@ -101,27 +101,36 @@
             <table class="table table-hover">
                 <thead>
                     <tr>                     
-                    @if($adminFlag == true)
-                        <th scope="col">#</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Country</th>
-                        <th scope="col">Advertiser Subid</th>
-                        <th scope="col">Advertiser CPC</th>
-                        <th scope="col">Advertiser RPM</th>
-                        <th scope="col">Campaign id</th>
-                        <th scope="col">Campaign Name</th>
-                        <th scope="col">Searches</th>
-                        <th scope="col">Clicks</th>
-                        <th scope="col">TQ</th>
-                        <th scope="col">CTR (in %)</th>
-                        <th scope="col">Net Revenue</th>                        
-                    @endif
-                    <th scope="col">Advertiser Name</th>
-                    <th scope="col">Gross Revenue</th>
-                    <th scope="col">Publisher Id</th>
-                    <th scope="col">Offer Id</th>
-                    <th scope="col">Publisher RPM</th>
-                    <th scope="col">Publisher RPC</th>
+                        @if($adminFlag == true)
+                            <th scope="col">#</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Advertiser Name</th>
+                            <th scope="col">Campaign Name</th>
+                            <th scope="col">Campaign id</th>
+                            <th scope="col">Advertiser Subid</th>
+                            <th scope="col">Searches</th>
+                            <th scope="col">Clicks</th>
+                            <th scope="col">TQ</th>
+                            <th scope="col">CTR (in %)</th>
+                            <th scope="col">Advertiser CPC</th>
+                            <th scope="col">Advertiser RPM</th>
+                            <th scope="col">Gross Revenue</th>
+                            <th scope="col">Publisher Name</th>
+                            <th scope="col">Publisher Id</th>
+                            <th scope="col">Offer Id</th>
+                            <th scope="col">Publisher RPM</th>
+                            <th scope="col">Publisher RPC</th>
+                            <th scope="col">Net Revenue</th>                        
+                            <th scope="col">Country</th>
+                        @else
+                            <th scope="col">Publisher Name</th>
+                            <th scope="col">Publisher Id</th>
+                            <th scope="col">Offer Id</th>
+                            <th scope="col">Publisher RPM</th>
+                            <th scope="col">Publisher RPC</th>
+                             <th scope="col">Net Revenue</th> 
+                            <th scope="col">Country</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -132,25 +141,33 @@
                                 @if($adminFlag == true)
                                     <th scope="row">{{$record->id}}</th>
                                     <td scope="row">{{$record->date}}</td>
-                                    <td scope="row">{{$record->country}}</td>
+                                    <td scope="row">{{$record->advertiser_name}}</td>
+                                    <td scope="row">{{$record->campaign_name}}</td>
+                                    <td scope="row">{{$record->campaign_id}}</td>
                                     <td scope="row">{{$record->subid}}</td>
-                                    <td scope="row">{{$record->advertiser_CPC}}</td>
-                                    <td scope="row">{{$record->advertiser_RPM}}</td>
-                                    <td scope="row"><b>{{$record->campaign_id}}</td>
-                                    <td scope="row"><b>{{$record->campaign_name}}</td>
                                     <td scope="row">{{$record->total_searches}}</td>
                                     <td scope="row">{{$record->ad_clicks}}</td>
                                     <td scope="row">{{$record->tq}}</td>
                                     <td scope="row">{{$record->ctr}}</td>
-                                    <td scope="row">{{$record->revenue}}</td>                                    
+                                    <td scope="row">{{$record->advertiser_CPC}}</td>
+                                    <td scope="row">{{$record->advertiser_RPM}}</td>
+                                    <td scope="row">{{$record->gross_revenue}}</td>
+                                    <td scope="row">{{$record->publisher_name}}</td>
+                                    <td scope="row">{{$record->publisher_id}}</td>
+                                    <td scope="row">{{$record->offer_id}}</td>                                
+                                     <td scope="row">{{$record->publisher_RPM}}</td>
+                                    <td scope="row">{{$record->publisher_RPC}}</td>
+                                    <td scope="row">{{$record->revenue}}</td>                                 
+                                    <td scope="row">{{$record->country}}</td>
+                                @else
+                                    <td scope="row">{{$record->publisher_name}}</td>
+                                    <td scope="row">{{$record->publisher_id}}</td>
+                                    <td scope="row">{{$record->offer_id}}</td>                                
+                                     <td scope="row">{{$record->publisher_RPM}}</td>
+                                    <td scope="row">{{$record->publisher_RPC}}</td> 
+                                    <td scope="row">{{$record->revenue}}</td>                                 
+                                    <td scope="row">{{$record->country}}</td>                                    
                                 @endif
-                                
-                                <td scope="row">{{$record->advertiser_name}}</td>
-                                <td scope="row">{{$record->gross_revenue}}</td>
-                                <td scope="row">{{$record->publisher_id}}</td>
-                                <td scope="row">{{$record->offer_id}}</td>                                
-                                 <td scope="row">{{$record->publisher_RPM}}</td>
-                                <td scope="row">{{$record->publisher_RPC}}</td>
                             </tr>
                         @endforeach
                     @endif

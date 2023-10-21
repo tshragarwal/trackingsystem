@@ -22,6 +22,7 @@
         <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Advertiser Id</th>
               <th scope="col">Advertiser Name</th>
               <th scope="col">Campaign Name</th>
               <th scope="col">Target Count</th>
@@ -39,6 +40,7 @@
                   
                     <tr>
                       <th scope="row">{{$record->id}}</th>
+                      <td>{{$record->advertiser->id}}</td>
                       <td>{{$record->advertiser->name}} ({{$record->advertiser->manual_email}})</td>
                       <td>{{$record->campaign_name}}</td>
                       <td>{{$record->target_count}}</td>

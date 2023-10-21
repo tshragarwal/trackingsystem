@@ -27,14 +27,14 @@ class ReportController extends Controller
         'Date' => 'date', 'Country'=> 'country', 'Advertiser Subid' => 'subid', 'Searches' => 'total_searches', 'Clicks' => 'ad_clicks','CTR' => 'ctr', 'Net Revenue' => 'revenue',
         'Advertiser Name' => 'advertiser_name', 'Campaign Name' => 'campaign_name', 'Campaign id' => 'campaign_id', 'TQ' => 'tq', 'Publisher RPM' => 'publisher_RPM', 
         'Publisher RPC' => 'publisher_RPC', 'Advertiser RPM' => 'advertiser_RPM', 'Advertiser CPC' => 'advertiser_CPC', 'Gross Revenue' => 'gross_revenue', 
-        'Publisher Id' => 'publisher_id', 'Offer Id' => 'offer_id'
+        'Publisher name' => 'publisher_name', 'Publisher Id' => 'publisher_id', 'Offer Id' => 'offer_id'
         ];
     
     
     protected $_typein_csv_mapping_header = [
         'Date' => 'date', 'Country'=> 'country', 'Advertiser Name' => 'advertiser_name', 'Campaign Name' => 'campaign_name', 'Advertiser Subid' => 'subid', 'Campaign id' => 'campaign_id',  
         'Total Searches' => 'total_searches', 'Monetized Searches' => 'monetized_searches' ,'Ad Clicks' => 'ad_clicks','Ad Coverage' => 'ad_coverage', 'CTR' => 'ctr','CPC' => 'cpc', 
-        'RPM' => 'rpm', 'Gross Revenue' => 'gross_revenue', 'Publisher Id' => 'publisher_id', 'Offer Id' => 'offer_id',
+        'RPM' => 'rpm', 'Gross Revenue' => 'gross_revenue', 'Publisher name' => 'publisher_name', 'Publisher Id' => 'publisher_id', 'Offer Id' => 'offer_id',
         'Publisher RPM' => 'publisher_RPM', 'Publisher RPC' => 'publisher_RPC', 'Net Revenue' => 'net_revenue',
         ];
 
@@ -103,7 +103,9 @@ class ReportController extends Controller
         }
         
         if(!empty($finalBatch)){
-            return DB::table('report_n2s')->insert($finalBatch);
+            return DB::table('report_n2s')->upsert($finalBatch, ['date', 'subid', 'campaign_id', 'publisher_id'],
+                    ['advertiser_name', 'publisher_name', 'offer_id', 'campaign_name', 'country', 'total_searches', 'ad_clicks', 'ctr', 'tq', 'revenue', 'publisher_RPM',
+                        'publisher_RPC', 'advertiser_RPM', 'advertiser_CPC', 'gross_revenue','updated_at']);
         }
         return false;
     }
@@ -181,26 +183,30 @@ class ReportController extends Controller
         $handle = fopen($filename, 'w+');
         
         // ------ header ---------//
+        $hF = array_flip($this->_n2s_csv_mapping_header);
         if($publisher){
-            $hF = array_flip($this->_n2s_csv_mapping_header);
             fputcsv($handle, [
-                $hF['advertiser_name'], $hF['gross_revenue'], $hF['publisher_id'], $hF['offer_id'], $hF['publisher_RPM'], $hF['publisher_RPC']
+               $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'], $hF['publisher_RPM'], $hF['publisher_RPC'], $hF['revenue'], $hF['country']
             ]);
         }else{
-            fputcsv($handle, array_keys($this->_n2s_csv_mapping_header));
+            fputcsv($handle, [
+                $hF['date'], $hF['advertiser_name'],  $hF['campaign_name'], $hF['campaign_id'], $hF['subid'], $hF['total_searches'], $hF['ad_clicks'], $hF['tq'], $hF['ctr'], 
+                $hF['advertiser_CPC'], $hF['advertiser_RPM'], $hF['gross_revenue'],  $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'],
+                $hF['publisher_RPM'], $hF['publisher_RPC'],  $hF['revenue'], $hF['country']
+            ]);
         }
 
         
         foreach($data as $row) {
             if($publisher) {
                 fputcsv($handle, [
-                    $row['advertiser_name'],$row['gross_revenue'], $row['publisher_id'], $row['offer_id'], $row['publisher_RPM'], $row['publisher_RPC']
+                    $row['publisher_name'], $row['publisher_id'], $row['offer_id'], $row['publisher_RPM'], $row['publisher_RPC'], $row['revenue'], $row['country']
                 ]);            
             } else {
                 fputcsv($handle, [
-                    $row['date'], $row['country'], $row['subid'], $row['total_searches'], $row['ad_clicks'], $row['ctr'], $row['revenue'], $row['advertiser_name'], $row['campaign_name'], $row['campaign_id'],
-                    $row['tq'], $row['publisher_RPM'], $row['publisher_RPC'], $row['advertiser_RPM'], $row['advertiser_CPC'],
-                    $row['gross_revenue'], $row['publisher_id'], $row['offer_id']
+                    $row['date'], $row['advertiser_name'],  $row['campaign_name'], $row['campaign_id'], $row['subid'], $row['total_searches'], $row['ad_clicks'], $row['tq'], $row['ctr'], 
+                    $row['advertiser_CPC'], $row['advertiser_RPM'], $row['gross_revenue'],  $row['publisher_name'], $row['publisher_id'], $row['offer_id'],
+                    $row['publisher_RPM'], $row['publisher_RPC'],  $row['revenue'], $row['country']
                 ]);
             }
         }
@@ -313,7 +319,10 @@ class ReportController extends Controller
         }
         
         if(!empty($finalBatch)){
-            return DB::table('report_typein')->insert($finalBatch);
+            return DB::table('report_typein')->upsert($finalBatch, 
+                    ['date', 'subid', 'campaign_id', 'publisher_id'],
+                    ['advertiser_name', 'publisher_name', 'campaign_name', 'country', 'total_searches','monetized_searches', 'ad_clicks','ad_coverage', 
+                        'ctr', 'cpc', 'rpm','gross_revenue','offer_id', 'publisher_RPM', 'publisher_RPC','net_revenue','updated_at']);
         }
         return false;
     }
@@ -371,26 +380,33 @@ class ReportController extends Controller
         $handle = fopen($filename, 'w+');
         
         // ------ header ---------//
+        $hF = array_flip($this->_typein_csv_mapping_header);
         if($publisher){
-            $hF = array_flip($this->_typein_csv_mapping_header);
             fputcsv($handle, [
-                $hF['advertiser_name'], $hF['gross_revenue'], $hF['publisher_id'], $hF['offer_id'], $hF['publisher_RPM'], $hF['publisher_RPC']
+                $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'], $hF['publisher_RPM'], $hF['publisher_RPC'], $hF['revenue'], $hF['country']
             ]);
         }else{
-            fputcsv($handle, array_keys($this->_typein_csv_mapping_header));
+            fputcsv($handle, [
+                $hF['date'], $hF['advertiser_name'],  $hF['campaign_name'], $hF['campaign_id'], $hF['subid'], $hF['total_searches'], 
+                $hF['monetized_searches'],
+                $hF['ad_clicks'],$hF['ad_coverage'],  $hF['ctr'], $hF['cpc'], $hF['rpm'], $hF['gross_revenue'],
+                $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'],
+                $hF['publisher_RPM'], $hF['publisher_RPC'],  $hF['revenue'], $hF['country']
+            ]);
         }
         
         foreach($data as $row) {
             if($publisher) {
                 fputcsv($handle, [
-                        $row['advertiser_name'], $row['gross_revenue'], $row['publisher_id'], $row['offer_id'], $row['publisher_RPM'], $row['publisher_RPC']
+                        $row['publisher_name'], $row['publisher_id'], $row['offer_id'], $row['publisher_RPM'], $row['publisher_RPC'], $row['revenue'], $row['country']
                         ]);                
             } else {
                 fputcsv($handle, [
-                    $row['date'], $row['country'], $row['advertiser_name'],$row['campaign_name'], $row['subid'],$row['campaign_id'], 
-                    $row['total_searches'], $row['monetized_searches'],$row['ad_clicks'], $row['ad_coverage'], $row['ctr'], $row['cpc'],
-                    $row['rpm'], $row['gross_revenue'], $row['publisher_id'], $row['offer_id'], 
-                    $row['publisher_RPM'],$row['publisher_RPC'], $row['net_revenue']
+                    $row['date'], $row['advertiser_name'],  $row['campaign_name'], $row['campaign_id'], $row['subid'], $row['total_searches'], 
+                    $row['monetized_searches'],
+                    $row['ad_clicks'], $row['ad_coverage'],  $row['ctr'], $row['cpc'], $row['rpm'], $row['gross_revenue'],
+                    $row['publisher_name'], $row['publisher_id'], $row['offer_id'],
+                    $row['publisher_RPM'], $row['publisher_RPC'],  $row['revenue'], $row['country']
                 ]);
             }
         }
