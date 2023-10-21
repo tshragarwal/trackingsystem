@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 $prepix = "/tracking";
 
-$domain = $_SERVER['HTTP_HOST'];
+
+$domain =  filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING);
 if($domain == env('WEB_DOMAIN')){
     Route::get($prepix.'/', function () {
         return redirect('/tracking/login');
