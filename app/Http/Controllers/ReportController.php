@@ -383,7 +383,7 @@ class ReportController extends Controller
         $hF = array_flip($this->_typein_csv_mapping_header);
         if($publisher){
             fputcsv($handle, [
-                $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'], $hF['publisher_RPM'], $hF['publisher_RPC'], $hF['revenue'], $hF['country']
+                $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'], $hF['publisher_RPM'], $hF['publisher_RPC'], $hF['net_revenue'], $hF['country']
             ]);
         }else{
             fputcsv($handle, [
@@ -391,14 +391,14 @@ class ReportController extends Controller
                 $hF['monetized_searches'],
                 $hF['ad_clicks'],$hF['ad_coverage'],  $hF['ctr'], $hF['cpc'], $hF['rpm'], $hF['gross_revenue'],
                 $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'],
-                $hF['publisher_RPM'], $hF['publisher_RPC'],  $hF['revenue'], $hF['country']
+                $hF['publisher_RPM'], $hF['publisher_RPC'],  $hF['net_revenue'], $hF['country']
             ]);
         }
         
         foreach($data as $row) {
             if($publisher) {
                 fputcsv($handle, [
-                        $row['publisher_name'], $row['publisher_id'], $row['offer_id'], $row['publisher_RPM'], $row['publisher_RPC'], $row['revenue'], $row['country']
+                        $row['publisher_name'], $row['publisher_id'], $row['offer_id'], $row['publisher_RPM'], $row['publisher_RPC'], $row['net_revenue'], $row['country']
                         ]);                
             } else {
                 fputcsv($handle, [
@@ -406,7 +406,7 @@ class ReportController extends Controller
                     $row['monetized_searches'],
                     $row['ad_clicks'], $row['ad_coverage'],  $row['ctr'], $row['cpc'], $row['rpm'], $row['gross_revenue'],
                     $row['publisher_name'], $row['publisher_id'], $row['offer_id'],
-                    $row['publisher_RPM'], $row['publisher_RPC'],  $row['revenue'], $row['country']
+                    $row['publisher_RPM'], $row['publisher_RPC'],  $row['net_revenue'], $row['country']
                 ]);
             }
         }
