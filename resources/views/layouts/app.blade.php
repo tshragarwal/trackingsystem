@@ -10,14 +10,14 @@
     <title>{{ config('app.name', 'Tracking System') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('tracking/js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('tracking/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -76,7 +76,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/tracking') }}">
+                <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -95,7 +95,7 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/tracking/login">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{route('login')}}">{{ __('Login') }}</a>
                                 </li>
                             @endif
 
@@ -111,13 +111,13 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/tracking/logout"
+                                    <a class="dropdown-item" href="/logout"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="/tracking/logout" method="POST" class="d-none">
+                                    <form id="logout-form" action="/logout" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -137,15 +137,10 @@
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="list-group list-group-flush">
                     @if( Auth::guard('web')->user()->user_type == "admin")
-                        <a href="/tracking/advertiser/list" class="list-group-item list-group-item-action bg-light">Advertiser</a>
-                        <!--<a href="/tracking/advertiser/form" class="list-group-item list-group-item-action bg-light">Advertiser</a>-->
-                        <!--<a href="/tracking/advertiser/campaign" class="list-group-item list-group-item-action bg-light">Add New Campaign</a>-->
-                        <a href="/tracking/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign</a>
-                        <!--<a href="/tracking/publisher/form" class="list-group-item list-group-item-action bg-light">Add New Publisher</a>-->
-                        <a href="/tracking/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
-                        <!--<a href="/tracking/publisher/job/form" class="list-group-item list-group-item-action bg-light">Assign Job to Publisher</a>-->
-                        <a href="/tracking/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job</a>
-                        <!--<a href="/tracking/report/csv" class="list-group-item list-group-item-action bg-light">Upload Report</a>-->
+                        <a href="/advertiser/list" class="list-group-item list-group-item-action bg-light">Advertiser</a>
+                        <a href="/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign</a>
+                        <a href="/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
+                        <a href="/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job</a>
                     @endif
                     <a href="javascript:void(0)"  style="border: 1px rgba(0,0,0,.125);" class="parentReport list-group-item list-group-item-action bg-light">
                         Report<br/>

@@ -42,7 +42,7 @@
                       <td>{{$record->updated_at}}</td>
                       <td>{{$record->created_at}}</td>
                       <td>
-                          <a href="/tracking/publisher/detail/{{$record->id}}"><i class="fa fa-edit"></i></a>
+                          <a href="{{route('publisher.detail', ['id' => $record->id])}}"><i class="fa fa-edit"></i></a>
                           <a style='margin-left: 12px' href="{{route('publisher.job.list', ['publisher_id' => $record->id])}}"><i class="fa fa-eye"></i></a>
                       </td>
                     </tr>

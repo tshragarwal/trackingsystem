@@ -51,7 +51,8 @@ class AdvertizerController extends Controller
             $advertizerObj->name =  $requestData['name'];
             $advertizerObj->manual_email =  $requestData['manual_email'];
             $advertizerObj->save();
-            return redirect('/tracking/advertiser/list?s=1');
+//            return redirect('/tracking/advertiser/list?s=1');
+            return redirect()->route('advertiser.list', ['s' => 1]);
         }
         
         if(!empty($requestData['name'])){
@@ -63,7 +64,8 @@ class AdvertizerController extends Controller
             }
 
             $modelObj->save();
-            return redirect('/tracking/advertiser/list?s=1');
+//            return redirect('/tracking/advertiser/list?s=1');
+            return redirect()->route('advertiser.list', ['s' => 1]);
         }
         
     }

@@ -13,17 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$prepix = "/tracking";
+$prepix = "";
 
 
 $domain =  filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING);
 if($domain == env('WEB_DOMAIN')){
     Route::get($prepix.'/', function () {
-        return redirect('/tracking/login');
+        return redirect('/login');
     });
 
     //Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth'])->name('dashboard');
-    Route::get($prepix.'/dashboard', function () { return redirect('/tracking/report/list'); })->middleware(['auth'])->name('dashboard');
+    Route::get($prepix.'/dashboard', function () { return redirect('/report/list'); })->middleware(['auth'])->name('dashboard');
 
 
     require __DIR__.'/auth.php';

@@ -130,7 +130,7 @@
 $('#advertiser_id').on('change', function(){
     $('#form_further_info').attr('style', 'display:none');
    var request = $.ajax({
-        url: "/tracking/advertiser/campaign/list/"+ this.value,
+        url: "/advertiser/campaign/list/"+ this.value,
         type: "GET",
         dataType: "json",
         success: function(data){

@@ -3,7 +3,7 @@
 @section('content')
 @if (Route::has('login'))
 <script>
-    window.location.href = "/tracking/report/list";
+    window.location.href = "/report/list";
 </script>
 @endif
 <div class="container">
@@ -13,7 +13,7 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="/tracking/login">
+                    <form method="POST" action="/login">
                         @csrf
 
                         <div class="row mb-3">

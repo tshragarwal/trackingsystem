@@ -49,7 +49,7 @@
                       <td>{{$record->updated_at}}</td>
                       <td>{{$record->created_at}}</td>
                       <td>
-                          <a href="/tracking/campaign/detail/{{$record->id}}"><i class="fa fa-edit"></i></a>
+                          <a href="{{route('advertiser.detail', ['id' => $record->id])}}"><i class="fa fa-edit"></i></a>
                           @if($record->status == 1 || $record->status == 2)
                             <a style="margin-left:11px" href="{{route('publisher.job.form', ['campaign_id' => $record->id])}}"><i class="fa fa-tasks" aria-hidden="true"></a></i>
                           @endif
