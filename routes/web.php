@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 $prepix = "/tracking";
 
+Route::domain('searchoss.com')->group(function ($prepix) {
 Route::get($prepix.'/', function () {
     return redirect('/tracking/login');
 });
@@ -62,9 +63,6 @@ Route::get($prepix.'/publisher/job/form', [App\Http\Controllers\PublisherJobCont
 Route::post($prepix.'/publisher/job/save', [App\Http\Controllers\PublisherJobController::class, 'save'] )->middleware(['auth'])->name('publisher.job.save');
 
 
-// --------- Tracking Url --------------- //
-Route::get($prepix.'/search', [App\Http\Controllers\PublisherJobController::class, 'tracking_url']);
-
 // ---------- CSV && Report
 Route::get($prepix.'/report/list', [App\Http\Controllers\ReportController::class, 'list'] )->middleware(['auth'])->name('report.list');
 Route::get($prepix.'/report/csv', [App\Http\Controllers\ReportController::class, 'csv'] )->middleware(['auth'])->name('report.csv');
@@ -78,3 +76,11 @@ Route::get($prepix.'/report/typein/csv', [App\Http\Controllers\ReportController:
 Route::post($prepix.'/report/typein/uploadcsv', [App\Http\Controllers\ReportController::class, 'typein_uploadcsv'] )->middleware(['auth'])->name('report.typein_uploadcsv');
 Route::get($prepix.'/report/typein/download', [App\Http\Controllers\ReportController::class, 'typein_downloadcsv'] )->middleware(['auth'])->name('report.typein_downloadcsv');
 Route::get($prepix.'/report/typein/csv_sample', [App\Http\Controllers\ReportController::class, 'typein_csv_sample'] )->middleware(['auth'])->name('report.typein_csv_sample');
+});
+
+Route::domain('trckwinners.com')->group(function ($prepix) {
+    
+    // --------- Tracking Url --------------- //
+    Route::get($prepix.'/search', [App\Http\Controllers\PublisherJobController::class, 'tracking_url']);
+
+});
