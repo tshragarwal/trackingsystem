@@ -78,7 +78,11 @@ class PublisherJobController extends Controller
         $tableObj->target_count = $requestData['target_count']??0;
         $tableObj->save();
         
-        return redirect()->back()->with('success_status','Successfully Campaign is assigned to Publisher');
+        
+        
+        $url = env('APP_DOMAIN').'/search?code='.$uid.'&q={keyword}';
+        
+        return redirect()->back()->with(['success_status' => 'Successfully Campaign is assigned to Publisher', 'link_url' => $url]);
         
     }
     

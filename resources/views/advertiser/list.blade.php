@@ -4,6 +4,12 @@
 
 
 <div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="javascript:void(0)">Campaign List</a></li>
+         
+        </ol>
+    </nav>
     <div class="row " style="margin-bottom: 20px">
     
         <div class=" offset-md-10">
@@ -21,7 +27,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-              <th scope="col">#</th>
+           
               <th scope="col">Advertiser Id</th>
               <th scope="col">Advertiser Name</th>
               <th scope="col">Campaign Name</th>
@@ -39,7 +45,6 @@
                 @foreach($data as $record)
                   
                     <tr>
-                      <th scope="row">{{$record->id}}</th>
                       <td>{{$record->advertiser->id}}</td>
                       <td>{{$record->advertiser->name}} ({{$record->advertiser->manual_email}})</td>
                       <td>{{$record->campaign_name}}</td>

@@ -1,9 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-
+<style>
+    .table-responsive {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+</style>
 
 <div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="javascript:void(0)">Publisher Job List</a></li>
+         
+        </ol>
+    </nav>
     @if($user_type == 'admin')
         <div class="row " style="margin-bottom: 20px">
 
@@ -19,13 +30,14 @@
             New Advertiser data successfully saved.
         </div>
     @endif
-    
+     <div class="table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Publisher Name</th>
               <th scope="col">Campaign name</th>
+              <th scope="col">Campaign Target Url</th>
               <th scope="col">Link</th>
               <th scope="col">Target Count</th>
               <th scope="col">Tracking Count</th>
@@ -42,6 +54,7 @@
                       <th scope="row">{{$record->id}}</th>
                       <td>{{$record->publisher->name}}</td>
                       <td>{{$record->campaign->campaign_name}}</td>
+                      <td>{{$record->campaign->target_url}}</td>
                       <td>{{$domain}}/search?code={{$record->proxy_url}}&q={keyword}</td>
                       <td>{{$record->target_count}}</td>
                       <td>{{$record->tracking_count}}</td>
@@ -53,6 +66,7 @@
 
         </tbody>
     </table>
+    </div>     
     <!-- Display pagination links -->
  
 </div>

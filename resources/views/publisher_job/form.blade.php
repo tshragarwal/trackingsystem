@@ -15,6 +15,7 @@
 
                             @if (session('success_status'))
                               <h6 class="alert alert-success">{{ session('success_status') }}</h6>
+                              <h6 class="alert alert-primary">{{ session('link_url') }}</h6>
                            @endif
                            
                             @if (session('error_status'))
