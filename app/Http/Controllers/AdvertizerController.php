@@ -10,6 +10,7 @@ use App\Models\AdvertizerRequest;
 use App\Models\AdvertiserCampaignModel;
 use App\Http\Traits\CommonTrait;
 use Illuminate\Support\Facades\Validator;
+use App\Models\PublisherJobModel;
 
 
 
@@ -218,5 +219,60 @@ class AdvertizerController extends Controller
         $advertizerList = $userObj->get_publisher_list(100);
        
         return view('advertiser.advertizerlist', ['data' => $advertizerList, 'success' => $request->s]);
+    }    
+    
+    public function destroy(Request $request){
+        $requestData = $request->all();
+        if(!empty($requestData['advertizer_id'])){
+            
+            $record = AdvertizerRequest::find($requestData['advertizer_id']);
+            if ($record) {
+                
+                // -- check is there campaign assign to it or not ------//
+                $modelObj = new AdvertiserCampaignModel();
+                $count = $modelObj->get_advertizer_campaign_count($requestData['advertizer_id']);
+                $s = 1;
+                if( $count > 0){
+                    $message = "Avertizer can not be deleted because $count campaign is assigned it advertizer. Please first delete all associated campaign then Advertizer. ";
+                    $s = 0;
+                }else{
+                    $record->delete();
+                    $message = 'Advertizer deleted successfully';
+                }
+                
+                
+                return response()->json(['message' => $message, 'status' => $s]);
+            } else {
+                return response()->json(['message' => 'Advertizer not found'], 404);
+            }
+        }
+    }
+    
+   
+    public function delete_campaign(Request $request){
+        $requestData = $request->all();
+        if(!empty($requestData['campaign_id'])){
+            
+            $record = AdvertiserCampaignModel::find($requestData['campaign_id']);
+            if ($record) {
+                
+                // -- check is there campaign assign to it or not ------//
+                $modelObj = new PublisherJobModel();
+                $count = $modelObj->get_all_campaign_publisher_job_count($requestData['campaign_id']);
+                $s = 1;
+                if( $count > 0){
+                    $message = "Campaign can not be deleted because $count Publisher Job is assigned with this Campaign. Please firstly delete all associated Publisher Job.";
+                    $s = 0;
+                }else{
+                    $record->delete();
+                    $message = 'Campaign deleted successfully';
+                }
+                
+                
+                return response()->json(['message' => $message, 'status' => $s]);
+            } else {
+                return response()->json(['message' => 'Campaign not found'], 404);
+            }
+        }
     }    
 }

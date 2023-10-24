@@ -123,13 +123,16 @@
                             <th scope="col">Net Revenue</th>                        
                             <th scope="col">Country</th>
                         @else
-                            <th scope="col">Publisher Name</th>
-                            <th scope="col">Publisher Id</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Offer Id</th>
-                            <th scope="col">Publisher RPM</th>
-                            <th scope="col">Publisher RPC</th>
-                             <th scope="col">Net Revenue</th> 
                             <th scope="col">Country</th>
+                             <th scope="col">Total Searches</th>
+                             <th scope="col">Ad Clicks</th>
+                             <th scope="col">CTR (in %)</th>
+                            <th scope="col">RPC</th>
+                            <th scope="col">RPM</th>
+                             <th scope="col">Net Revenue</th> 
+                             <th scope="col">TQ</th>
                         @endif
                     </tr>
                 </thead>
@@ -160,13 +163,17 @@
                                     <td scope="row">{{$record->revenue}}</td>                                 
                                     <td scope="row">{{$record->country}}</td>
                                 @else
-                                    <td scope="row">{{$record->publisher_name}}</td>
-                                    <td scope="row">{{$record->publisher_id}}</td>
+                                    <td scope="row">{{$record->date}}</td>
                                     <td scope="row">{{$record->offer_id}}</td>                                
-                                     <td scope="row">{{$record->publisher_RPM}}</td>
+                                    <td scope="row">{{$record->country}}</td>   
+                                    <td scope="row">{{$record->total_searches}}</td>
+                                    <td scope="row">{{$record->ad_clicks}}</td>
+                                     <td scope="row">{{$record->ctr}}</td>
+                                    
                                     <td scope="row">{{$record->publisher_RPC}}</td> 
-                                    <td scope="row">{{$record->revenue}}</td>                                 
-                                    <td scope="row">{{$record->country}}</td>                                    
+                                     <td scope="row">{{$record->publisher_RPM}}</td>
+                                    <td scope="row">{{$record->revenue}}</td>     
+                                     <td scope="row">{{$record->tq}}</td>
                                 @endif
                             </tr>
                         @endforeach

@@ -186,7 +186,7 @@ class ReportController extends Controller
         $hF = array_flip($this->_n2s_csv_mapping_header);
         if($publisher){
             fputcsv($handle, [
-               $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'], $hF['publisher_RPM'], $hF['publisher_RPC'], $hF['revenue'], $hF['country']
+               $hF['date'],$hF['offer_id'], $hF['country'],  $hF['total_searches'], $hF['ad_clicks'], $hF['ctr'],  $hF['publisher_RPC'],  $hF['publisher_RPM'], $hF['revenue'], $hF['tq']
             ]);
         }else{
             fputcsv($handle, [
@@ -200,7 +200,7 @@ class ReportController extends Controller
         foreach($data as $row) {
             if($publisher) {
                 fputcsv($handle, [
-                    $row['publisher_name'], $row['publisher_id'], $row['offer_id'], $row['publisher_RPM'], $row['publisher_RPC'], $row['revenue'], $row['country']
+                    $row['date'],$row['offer_id'], $row['country'],  $row['total_searches'], $row['ad_clicks'], $row['ctr'],  $row['publisher_RPC'],  $row['publisher_RPM'], $row['revenue'], $row['tq']
                 ]);            
             } else {
                 fputcsv($handle, [
@@ -383,7 +383,8 @@ class ReportController extends Controller
         $hF = array_flip($this->_typein_csv_mapping_header);
         if($publisher){
             fputcsv($handle, [
-                $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'], $hF['publisher_RPM'], $hF['publisher_RPC'], $hF['net_revenue'], $hF['country']
+                $hF['date'], $hF['offer_id'], $hF['country'] , $hF['total_searches'], $hF['monetized_searches'],
+                $hF['ad_clicks'],$hF['ad_coverage'],  $hF['ctr'],    $hF['publisher_RPC'], $hF['publisher_RPM'], $hF['net_revenue']
             ]);
         }else{
             fputcsv($handle, [
@@ -398,7 +399,8 @@ class ReportController extends Controller
         foreach($data as $row) {
             if($publisher) {
                 fputcsv($handle, [
-                        $row['publisher_name'], $row['publisher_id'], $row['offer_id'], $row['publisher_RPM'], $row['publisher_RPC'], $row['net_revenue'], $row['country']
+                        $row['date'], $row['offer_id'], $row['country'] , $row['total_searches'], $row['monetized_searches'],
+                $row['ad_clicks'],$row['ad_coverage'],  $row['ctr'],    $row['publisher_RPC'], $row['publisher_RPM'], $row['net_revenue']
                         ]);                
             } else {
                 fputcsv($handle, [

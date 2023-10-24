@@ -138,4 +138,21 @@ class PublisherJobController extends Controller
         }
         return response()->json(['message' => 'Inactive Job'], 406);
     }
+    
+    public function delete_publisher_job(Request $request){
+        $requestData = $request->all();
+
+        if(!empty($requestData['publisher_job_id'])){
+            
+            $record = PublisherJobModel::find($requestData['publisher_job_id']);
+            if ($record) {
+                $record->delete();
+                $message = 'Publisher Job deleted successfully';
+                
+                return response()->json(['message' => $message, 'status' => 1]);
+            } else {
+                return response()->json(['message' => 'Publisher not found'], 404);
+            }
+        }
+    }    
 }

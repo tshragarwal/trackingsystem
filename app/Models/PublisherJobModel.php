@@ -41,4 +41,8 @@ class PublisherJobModel extends Model
     {
         return $this->hasMany(TrackingPublisherJobModel::class, 'publisher_job_id');
     }
+    
+    public function get_all_campaign_publisher_job_count($advertizer_campaign_id){
+        return static::where('advertiser_campaign_id', $advertizer_campaign_id)->count();
+    }
 }

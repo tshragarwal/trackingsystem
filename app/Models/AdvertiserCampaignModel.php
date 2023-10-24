@@ -46,4 +46,8 @@ class AdvertiserCampaignModel extends Model
     }
     
     
+    public function get_advertizer_campaign_count($advertiserId){
+        return static::where('advertiser_id', $advertiserId)->count();
+    }
+    
 }

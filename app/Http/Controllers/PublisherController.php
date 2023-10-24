@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Traits\CommonTrait;
 use App\Http\Requests\UpdatePublisherRequest;
+use App\Models\PublisherJobModel;
 
 class PublisherController extends Controller
 {
@@ -99,4 +100,23 @@ class PublisherController extends Controller
              }
         }
     }
+    
+    public function delete_publisher(Request $request){
+        $requestData = $request->all();
+
+        if(!empty($requestData['publisher_id'])){
+            
+            $record = User::find($requestData['publisher_id']);
+            if ($record) {
+                PublisherJobModel::where('publisher_id', $requestData['publisher_id'])->delete();
+              
+                $record->delete();
+                $message = 'Publisher deleted successfully';
+                
+                return response()->json(['message' => $message, 'status' => 1]);
+            } else {
+                return response()->json(['message' => 'Publisher not found'], 404);
+            }
+        }
+    }    
 }

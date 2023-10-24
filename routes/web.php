@@ -37,6 +37,7 @@ if($domain == env('WEB_DOMAIN')){
     //--------- Advertiser  ----------------- //
     Route::get($prepix.'/advertiser/form', [App\Http\Controllers\AdvertizerController::class, 'form'] )->middleware(['auth'])->name('advertiser.form');
     Route::get($prepix.'/advertiser/list', [App\Http\Controllers\AdvertizerController::class, 'list'] )->middleware(['auth'])->name('advertiser.list');
+    Route::post($prepix.'/advertiser/delete', [App\Http\Controllers\AdvertizerController::class, 'destroy'] )->middleware(['auth'])->name('advertiser.delete');
     Route::post($prepix.'/advertiser/form/save', [App\Http\Controllers\AdvertizerController::class, 'form_save'] )->middleware(['auth'])->name('advertiser.formsave');
     Route::get($prepix.'/advertiser/campaign', [App\Http\Controllers\AdvertizerController::class, 'campaign'] )->middleware(['auth'])->name('advertiser.campaign');
     Route::get($prepix.'/advertiser/campaign/list/{advertiser_id}', [App\Http\Controllers\AdvertizerController::class, 'advertiser_campaign_list'] )->middleware(['auth']);
@@ -47,6 +48,7 @@ if($domain == env('WEB_DOMAIN')){
     Route::get($prepix.'/campaign/list', [App\Http\Controllers\AdvertizerController::class, 'campaignlist'] )->middleware(['auth'])->name('campaign.list');
     Route::post($prepix.'/campaign/update', [App\Http\Controllers\AdvertizerController::class, 'campaignupdate'] )->middleware(['auth'])->name('campaign.update');
     Route::get($prepix.'/campaign/detail/{id}', [App\Http\Controllers\AdvertizerController::class, 'campaigndetail'] )->middleware(['auth'])->name('advertiser.detail');
+    Route::post($prepix.'/campaign/delete', [App\Http\Controllers\AdvertizerController::class, 'delete_campaign'] )->middleware(['auth'])->name('advertiser.delete_campaign');
 
 
 
@@ -54,6 +56,7 @@ if($domain == env('WEB_DOMAIN')){
     //--------- Publisher  ----------------- //
     Route::get($prepix.'/publisher/list', [App\Http\Controllers\PublisherController::class, 'list'] )->middleware(['auth'])->name('publisher.list');
     Route::get($prepix.'/publisher/form', [App\Http\Controllers\PublisherController::class, 'form'] )->middleware(['auth'])->name('publisher.form');
+    Route::post($prepix.'/publisher/delete', [App\Http\Controllers\PublisherController::class, 'delete_publisher'] )->middleware(['auth'])->name('publisher.delete_publisher');
     Route::post($prepix.'/publisher/save', [App\Http\Controllers\PublisherController::class, 'save'] )->middleware(['auth'])->name('publisher.save');
     Route::get($prepix.'/publisher/detail/{id}', [App\Http\Controllers\PublisherController::class, 'publisher_detail'] )->middleware(['auth'])->name('publisher.detail');
     Route::post($prepix.'/publisher/update', [App\Http\Controllers\PublisherController::class, 'publisher_update'] )->middleware(['auth'])->name('publisher.update');
@@ -63,7 +66,7 @@ if($domain == env('WEB_DOMAIN')){
     Route::get($prepix.'/publisher/job/list', [App\Http\Controllers\PublisherJobController::class, 'list'] )->middleware(['auth'])->name('publisher.job.list');
     Route::get($prepix.'/publisher/job/form', [App\Http\Controllers\PublisherJobController::class, 'form'] )->middleware(['auth'])->name('publisher.job.form');
     Route::post($prepix.'/publisher/job/save', [App\Http\Controllers\PublisherJobController::class, 'save'] )->middleware(['auth'])->name('publisher.job.save');
-
+    Route::post($prepix.'/publisher/job/delete', [App\Http\Controllers\PublisherJobController::class, 'delete_publisher_job'] )->middleware(['auth'])->name('publisher.delete_publisher_job');
 
     // ---------- CSV && Report
     Route::get($prepix.'/report/list', [App\Http\Controllers\ReportController::class, 'list'] )->middleware(['auth'])->name('report.list');

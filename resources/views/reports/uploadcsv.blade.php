@@ -33,7 +33,7 @@
     <div class="container">
         <div class="col-sm-12">
             <div class="" style="margin-left:80%">
-                <form action="{{ route('report.typein_csv_sample') }}" >
+                <form action="{{ route('report.n2s_csv_sample') }}" >
                     @csrf
                     <button type="submit" class="btn btn-primary">DOWNLOAD N2S CSV File Sample</button>
                 </form>
