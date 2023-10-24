@@ -89,7 +89,7 @@
 <script>
     $('.delete_advertizer').on('click', function(){
         $('.delete_advertizer_confirm').attr('ad_id', $(this).attr('id'));
-        $('.delete_body').html('Do you want to delete <h5>' +$(this).attr('name') + '</h5>');
+        $('.delete_body').html('Deleting the record will not be reverted. Do you want to delete <h5>' +$(this).attr('name') + '</h5>');
         
     });
     $('.delete_advertizer_confirm').on('click', function(){
