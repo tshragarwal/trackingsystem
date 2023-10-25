@@ -44,7 +44,7 @@
               <th scope="col">Tracking Count</th>
               <th scope="col">Updated At</th>
               <th scope="col">Created At</th>
-              <!--<th scope="col">Action</th>-->
+              <th scope="col">Action</th>
 
             </tr>
         </thead>
@@ -63,7 +63,7 @@
                       <td>{{$record->tracking_count}}</td>
                       <td>{{$record->updated_at}}</td>
                       <td>{{$record->created_at}}</td>
-                      <!--<td><a href="javascript:void(0)" data-toggle="modal" data-target="#deletecamp" class="delete_camp" id="{{$record->id}}" ><i  class="fa fa-trash-o "></i></a></td>-->
+                      <td><a href="javascript:void(0)" data-toggle="modal" data-target="#deletecamp" class="delete_camp" id="{{$record->id}}" ><i  class="fa fa-trash-o "></i></a></td>
                     </tr>
                 @endforeach
             @endif
