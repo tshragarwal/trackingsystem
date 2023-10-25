@@ -32,10 +32,10 @@
                                     <select class="form-control" name="advertiser_id" id="advertiser_id" >
                                         <option value="0">--SELECT--</option>
                                         @if(!empty($camp_array))
-                                            <option value="{{$camp_array['advertiser_id']}}" selected >{{$camp_array['advertizer_name']}} ({{$camp_array['advertizer_email']}})</option>
+                                            <option value="{{$camp_array['advertiser_id']}}" selected >{{$camp_array['advertizer_name']}} ({{$camp_array['advertiser_id']}})</option>
                                         @else
                                             @foreach($advertiserObj as $object)
-                                                <option value="{{$object->id}}">{{$object->name}} ({{$object->manual_email}})</option>
+                                                <option value="{{$object->id}}">{{$object->name}} ({{$object->id}})</option>
                                             @endforeach
                                         @endif
                                     </select>

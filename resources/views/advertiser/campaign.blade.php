@@ -32,7 +32,7 @@
                                     <select class="form-control" name="advertiser_id" id="advertiser_id" >
                                         <option value="0">--SELECT--</option>
                                         @foreach($advertiserObj as $object)
-                                            <option value="{{$object->id}}">{{$object->name}} ({{$object->manual_email}})</option>
+                                            <option value="{{$object->id}}">{{$object->name}} ({{$object->id}})</option>
                                         @endforeach
                                     </select>
                                 </div>
