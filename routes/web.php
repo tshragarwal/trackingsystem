@@ -17,13 +17,15 @@ $prepix = "";
 
 
 $domain =  filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING);
-if($domain == env('WEB_DOMAIN')){
+if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::get($prepix.'/', function () {
         return redirect('/login');
     });
 
     //Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth'])->name('dashboard');
-    Route::get($prepix.'/dashboard', function () { return redirect('/report/list'); })->middleware(['auth'])->name('dashboard');
+    Route::get($prepix.'/dashboard', function () { 
+        return redirect('/report/list'); 
+    })->middleware(['auth', 'checkdomain'])->name('dashboard');
 
 
     require __DIR__.'/auth.php';
@@ -69,18 +71,18 @@ if($domain == env('WEB_DOMAIN')){
     Route::post($prepix.'/publisher/job/delete', [App\Http\Controllers\PublisherJobController::class, 'delete_publisher_job'] )->middleware(['auth'])->name('publisher.delete_publisher_job');
 
     // ---------- CSV && Report
-    Route::get($prepix.'/report/list', [App\Http\Controllers\ReportController::class, 'list'] )->middleware(['auth'])->name('report.list');
-    Route::get($prepix.'/report/csv', [App\Http\Controllers\ReportController::class, 'csv'] )->middleware(['auth'])->name('report.csv');
-    Route::post($prepix.'/report/uploadcsv', [App\Http\Controllers\ReportController::class, 'uploadcsv'] )->middleware(['auth'])->name('report.uploadcsv');
-    Route::get($prepix.'/report/download', [App\Http\Controllers\ReportController::class, 'n2s_downloadcsv'] )->middleware(['auth'])->name('report.downloadcsv');
-    Route::get($prepix.'/report/csv_sample', [App\Http\Controllers\ReportController::class, 'n2s_csv_sample'] )->middleware(['auth'])->name('report.n2s_csv_sample');
+    Route::get($prepix.'/report/list', [App\Http\Controllers\ReportController::class, 'list'] )->middleware(['auth', 'checkdomain'])->name('report.list');
+    Route::get($prepix.'/report/csv', [App\Http\Controllers\ReportController::class, 'csv'] )->middleware(['auth', 'checkdomain'])->name('report.csv');
+    Route::post($prepix.'/report/uploadcsv', [App\Http\Controllers\ReportController::class, 'uploadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.uploadcsv');
+    Route::get($prepix.'/report/download', [App\Http\Controllers\ReportController::class, 'n2s_downloadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.downloadcsv');
+    Route::get($prepix.'/report/csv_sample', [App\Http\Controllers\ReportController::class, 'n2s_csv_sample'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_csv_sample');
 
 
-    Route::get($prepix.'/report/typein/list', [App\Http\Controllers\ReportController::class, 'typein_list'] )->middleware(['auth'])->name('report.typein_list');
-    Route::get($prepix.'/report/typein/csv', [App\Http\Controllers\ReportController::class, 'typein_csv'] )->middleware(['auth'])->name('report.typein_csv');
-    Route::post($prepix.'/report/typein/uploadcsv', [App\Http\Controllers\ReportController::class, 'typein_uploadcsv'] )->middleware(['auth'])->name('report.typein_uploadcsv');
-    Route::get($prepix.'/report/typein/download', [App\Http\Controllers\ReportController::class, 'typein_downloadcsv'] )->middleware(['auth'])->name('report.typein_downloadcsv');
-    Route::get($prepix.'/report/typein/csv_sample', [App\Http\Controllers\ReportController::class, 'typein_csv_sample'] )->middleware(['auth'])->name('report.typein_csv_sample');
+    Route::get($prepix.'/report/typein/list', [App\Http\Controllers\ReportController::class, 'typein_list'] )->middleware(['auth', 'checkdomain'])->name('report.typein_list');
+    Route::get($prepix.'/report/typein/csv', [App\Http\Controllers\ReportController::class, 'typein_csv'] )->middleware(['auth', 'checkdomain'])->name('report.typein_csv');
+    Route::post($prepix.'/report/typein/uploadcsv', [App\Http\Controllers\ReportController::class, 'typein_uploadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.typein_uploadcsv');
+    Route::get($prepix.'/report/typein/download', [App\Http\Controllers\ReportController::class, 'typein_downloadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.typein_downloadcsv');
+    Route::get($prepix.'/report/typein/csv_sample', [App\Http\Controllers\ReportController::class, 'typein_csv_sample'] )->middleware(['auth', 'checkdomain'])->name('report.typein_csv_sample');
 }
 if($domain == env('PUBLISHER_DOMAIN')){
     // --------- Tracking Url --------------- //
