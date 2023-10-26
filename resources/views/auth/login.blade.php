@@ -37,6 +37,12 @@
                                     </span>
                                 @enderror
                             </div>
+                                                            
+                                @if(session('status'))
+                                    <span style="text-align: center;color: red;">
+                                            <strong>These credentials do not match our records or Unauthorized.</strong>
+                                    </span>
+                                @endif
                         </div>
 
                         <div class="row mb-3">

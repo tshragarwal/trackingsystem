@@ -34,8 +34,9 @@ class CheckDomain
             return $next($request);
         }
         Auth::logout();
-        return response()->json([
-                'message' => 'Unauthorized.',
-            ], 401);;
+        return redirect('/login')->with('status', 'Credential Unauthorized')->with('level', 'danger');
+//        return response()->json([
+//                'message' => 'Unauthorized.',
+//            ], 401);
     }
 }
