@@ -19,7 +19,9 @@ class CheckDomain
     {
         $fullDomain = $request->getHost();
         $user = Auth::guard('web')->user();
-        
+        if(empty($user)){
+             return $next($request);
+        }
         if($user->user_type == 'admin' && $fullDomain == env('FULL_DOMAIN')){
             return $next($request);
         }else if($user->user_type == 'publisher' && $fullDomain == env('SUB_DOMAIN')){
