@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckDomain
 {
+    
+//    public function __construct()
+//    {
+//        $this->middleware('auth');
+//    }
+
     /**
      * Handle an incoming request.
      *
@@ -27,7 +33,7 @@ class CheckDomain
         }else if($user->user_type == 'publisher' && $fullDomain == env('SUB_DOMAIN')){
             return $next($request);
         }
-        
+        Auth::logout();
         return response()->json([
                 'message' => 'Unauthorized.',
             ], 401);;
