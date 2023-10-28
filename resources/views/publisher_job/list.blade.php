@@ -73,7 +73,9 @@
     </table>
     </div>     
     <!-- Display pagination links -->
- 
+    <br/>
+     {{ $data->links() }}
+     <br/><br/>
 </div>
 
 
