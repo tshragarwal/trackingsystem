@@ -78,9 +78,8 @@ class PublisherJobController extends Controller
         $tableObj->target_count = $requestData['target_count']??0;
         $tableObj->save();
         
-        
-        
-        $url = env('APP_DOMAIN').'/search?code='.$uid.'&q={keyword}';
+        $id = $tableObj->id;
+        $url = env('APP_DOMAIN').'/search?code='.$uid.'&offerid='.$id.'&q={keyword}';
         
         return redirect()->back()->with(['success_status' => 'Successfully Campaign is assigned to Publisher', 'link_url' => $url]);
         
@@ -117,8 +116,7 @@ class PublisherJobController extends Controller
                 $finalRedirectUrl = str_replace('{keyword}', $requestData['q'], $publisherJobObj->campaign->target_url);
                 unset($requestData['q']);
                 
-                $finalRedirectUrl = (!empty($requestData))? ($finalRedirectUrl. '&'. http_build_query($requestData)): $finalRedirectUrl;
-               
+//                $finalRedirectUrl = (!empty($requestData))? ($finalRedirectUrl. '&'. http_build_query($requestData)): $finalRedirectUrl;
                 
 //                $final_queryString = http_build_query(array_merge($queryParams, $requestData));
 //                $result = strstr($publisherJobObj->campaign->target_url, '?', true);

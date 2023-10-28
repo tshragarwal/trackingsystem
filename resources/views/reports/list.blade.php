@@ -30,20 +30,27 @@
         <form action="{{route('report.list')}}" method='get'>
           <div class="row">
               
-            <div class="col" id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                <i class="fa fa-calendar"></i>&nbsp;
-                <span></span> <i class="fa fa-caret-down"></i>
-                <input type="hidden" id="start_date" name="start_date" value="{{$query_string['start_date']??''}}">
-                <input type="hidden" id="end_date" name="end_date" value="{{$query_string['end_date']??''}}">
+            
+            
+            <div class="col col-sm-3"  >
+                <lable> Date Range</lable>
+                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+                    <i class="fa fa-calendar"></i>&nbsp;
+                    <span></span> <i class="fa fa-caret-down"></i>
+                    <input type="hidden" id="start_date" name="start_date" value="{{$query_string['start_date']??''}}">
+                    <input type="hidden" id="end_date" name="end_date" value="{{$query_string['end_date']??''}}">
+                </div>
             </div>
               
             <div class="col">
-              <input type="text" class="form-control" name="subid" value="{{$query_string['subid']??''}}" placeholder="Enter Subid" aria-label="Subid">
+               <lable> Enter Subid</lable>
+              <input type="text" class="form-control" name="subid" value="{{$query_string['subid']??''}}" placeholder="" aria-label="Subid">
             </div>
               
             @if($adminFlag == true)
                 <div class="col">
-                  <input type="text" class="form-control" name="country" value="{{$query_string['country']??''}}" placeholder="Country Name" aria-label="country">
+                  <lable> Country Name</lable>
+                  <input type="text" class="form-control" name="country" value="{{$query_string['country']??''}}" placeholder="" aria-label="country">
                 </div>
             @endif
             
@@ -64,7 +71,7 @@
             @if(!empty($publisher_advertizer_list) && !empty($publisher_advertizer_list['advertizer_list']))
                 <div class="col">
                      <lable> Advertizer </lable>
-                    <select id="advertizer_select"  class="form-select selectpicker" multiple data-live-search="true">
+                    <select id="advertizer_select" style=""  class="form-select selectpicker" multiple data-live-search="true">
                         @foreach($publisher_advertizer_list['advertizer_list'] as $advert)
                             <option value="{{$advert['name']}}">{{$advert['name']}}</option>
                         @endforeach
@@ -73,7 +80,7 @@
                 <input type="hidden" id="advertizers_name" name="advertizers_name" value="{{$query_string['end_date']??''}}">
             @endif
               
-            <div class="col">
+            <div class="col" style="margin-top: 25px">
                 <button type="submit" class="btn btn-primary">Filter</button>
             </div>
         </div>

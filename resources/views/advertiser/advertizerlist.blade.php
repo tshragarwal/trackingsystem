@@ -2,7 +2,7 @@
 
 @section('content')
 
-
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
