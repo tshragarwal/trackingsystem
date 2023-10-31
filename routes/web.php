@@ -62,8 +62,10 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::post($prepix.'/publisher/save', [App\Http\Controllers\PublisherController::class, 'save'] )->middleware(['auth'])->name('publisher.save');
     Route::get($prepix.'/publisher/detail/{id}', [App\Http\Controllers\PublisherController::class, 'publisher_detail'] )->middleware(['auth'])->name('publisher.detail');
     Route::post($prepix.'/publisher/update', [App\Http\Controllers\PublisherController::class, 'publisher_update'] )->middleware(['auth'])->name('publisher.update');
-
-
+    
+    Route::get($prepix.'/publisher/token/list', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_list'] )->middleware(['auth','checkdomain'])->name('publisher_token.token_list');
+    Route::post($prepix.'/publisher/token/generate', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_generate'] )->middleware(['auth','checkdomain'])->name('publisher_token.token_generate');
+    
     //--------- Publisher Jobs ----------------- //
     Route::get($prepix.'/publisher/job/list', [App\Http\Controllers\PublisherJobController::class, 'list'] )->middleware(['auth'])->name('publisher.job.list');
     Route::get($prepix.'/publisher/job/form', [App\Http\Controllers\PublisherJobController::class, 'form'] )->middleware(['auth'])->name('publisher.job.form');
@@ -88,4 +90,8 @@ if($domain == env('PUBLISHER_DOMAIN')){
     // --------- Tracking Url --------------- //
     Route::get($prepix.'/search', [App\Http\Controllers\PublisherJobController::class, 'tracking_url']);
 
+}
+
+if($domain == env('PUBLISHER_API_DOMAIN')){
+    Route::get($prepix.'/publisher/token/data', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_data'] )->name('publisher_token.token_data');
 }
