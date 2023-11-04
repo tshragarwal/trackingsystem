@@ -34,7 +34,7 @@
           Publisher Report API
         </div>
         <div class="card-body">
-          <h6 class="card-title">{{$domain}}/publisher/token/data?token={{$user->api_token}}&start_date=2023-10-10&end_date=2023-10-10&report_type=n2s&format=json</h6>
+          <h6 class="card-title">https://{{$domain}}/publisher/token/data?token={{$user->api_token}}&start_date=2023-10-10&end_date=2023-10-10&report_type=n2s&format=json</h6>
           
           <br/>
           <br/>
