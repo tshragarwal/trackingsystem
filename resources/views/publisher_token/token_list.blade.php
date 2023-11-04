@@ -26,7 +26,7 @@
         <h6 class="alert alert-success">{{ session('success_status') }}</h6>
     @endif
     
-    @if(!empty($user))
+    @if(!empty($user) && !empty($user->api_token))
     
     
     <div class="card">
