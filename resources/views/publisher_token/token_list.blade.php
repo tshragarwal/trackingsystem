@@ -27,23 +27,30 @@
     @endif
     
     @if(!empty($user))
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                  <th scope="col">Publisher Id</th>
-                  <th scope="col">Api Token</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="publisher_{{$user->id}}">
-                  <td scope="row">{{$user->id}}</td>
-                  <td>{{$user->api_token}}</td>
-
-                </tr>
-
-
-            </tbody>
-        </table>
+    
+    
+    <div class="card">
+        <div class="card-header">
+          Publisher Report API
+        </div>
+        <div class="card-body">
+          <h6 class="card-title">{{$domain}}/publisher/token/data?token={{$user->api_token}}&start_date=2023-10-10&end_date=2023-10-10&report_type=n2s&format=json</h6>
+          
+          <br/>
+          <br/>
+         
+          <p class="card-text">
+               Required parameter start with *
+               <br/><br/>
+               
+              <b>*token</b> : This parameter is a fixed value included in the URL<br/>
+              <b>*start_date</b> : This parameter filters data based on the start date. Date format will be Year-Month-date (<b>2023-10-18</b>) <br/>
+              <b>end_date</b> : This parameter filters data based on the end date. Date format will be Year-Month-date (<b>2023-10-18</b>) <br/>
+              <b>*report_type</b> : Use this parameter to filter data by report type. Only two report formats are accepted, which are <b>n2s</b> / <b>typein</b>. <br/>
+              <b>*format</b> : This parameter allows you to specify the desired response format, such as <b>json</b> or <b>csv</b>. Only two formats are accepted: json / csv. <br/>
+          </p>
+        </div>
+    </div>
     @endif
  
 </div>

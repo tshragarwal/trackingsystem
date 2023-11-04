@@ -145,6 +145,8 @@
                         <a href="/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign</a>
                         <a href="/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
                         <a href="/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job</a>
+                    @else
+                        <a href="{{route('publisher_token.token_list')}}" class="list-group-item list-group-item-action bg-light">Publisher</a>
                     @endif
                     <a href="javascript:void(0)"  style="border: 1px rgba(0,0,0,.125);" class="parentReport list-group-item list-group-item-action bg-light">
                         Report<br/>

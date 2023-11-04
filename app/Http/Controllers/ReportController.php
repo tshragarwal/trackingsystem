@@ -21,23 +21,6 @@ use League\Csv\Writer;
 class ReportController extends Controller
 {
     use CommonTrait;
-    
-    // ----- mapping like [ Csv Header Name =>  Table column ]
-    protected $_n2s_csv_mapping_header = [
-        'Date' => 'date', 'Country'=> 'country', 'Advertiser Subid' => 'subid', 'Searches' => 'total_searches', 'Clicks' => 'ad_clicks','CTR' => 'ctr', 'Net Revenue' => 'revenue',
-        'Advertiser Name' => 'advertiser_name', 'Campaign Name' => 'campaign_name', 'Campaign id' => 'campaign_id', 'TQ' => 'tq', 'Publisher RPM' => 'publisher_RPM', 
-        'Publisher RPC' => 'publisher_RPC', 'Advertiser RPM' => 'advertiser_RPM', 'Advertiser CPC' => 'advertiser_CPC', 'Gross Revenue' => 'gross_revenue', 
-        'Publisher name' => 'publisher_name', 'Publisher Id' => 'publisher_id', 'Offer Id' => 'offer_id'
-        ];
-    
-    
-    protected $_typein_csv_mapping_header = [
-        'Date' => 'date', 'Country'=> 'country', 'Advertiser Name' => 'advertiser_name', 'Campaign Name' => 'campaign_name', 'Advertiser Subid' => 'subid', 'Campaign id' => 'campaign_id',  
-        'Total Searches' => 'total_searches', 'Monetized Searches' => 'monetized_searches' ,'Ad Clicks' => 'ad_clicks','Ad Coverage' => 'ad_coverage', 'CTR' => 'ctr','CPC' => 'cpc', 
-        'RPM' => 'rpm', 'Gross Revenue' => 'gross_revenue', 'Publisher name' => 'publisher_name', 'Publisher Id' => 'publisher_id', 'Offer Id' => 'offer_id',
-        'Publisher RPM' => 'publisher_RPM', 'Publisher RPC' => 'publisher_RPC', 'Net Revenue' => 'net_revenue',
-        ];
-
 
     public function csv(){
         if(!CommonTrait::is_super_admin()){
@@ -85,16 +68,17 @@ class ReportController extends Controller
     
     private function insertData(array $batch ) : bool {
         $finalBatch = [];
+        $n2s_csv_mapping_header = CommonTrait::n2s_csv_mapping_header();
         foreach($batch as $singleRecod) { 
             $newDoc = [];
             foreach($singleRecod as $fieldname => $value){
-                if(isset($this->_n2s_csv_mapping_header[$fieldname])) {
+                if(isset($n2s_csv_mapping_header[$fieldname])) {
                     if($fieldname == 'Date'){
 //                        $date = DateTime::createFromFormat('d/m/Y', $value);
 //                        $value = $date->format('Y-m-d');
                          $value = date('Y-m-d',strtotime($value)); 
                     }
-                    $newDoc[$this->_n2s_csv_mapping_header[$fieldname]] = $value;
+                    $newDoc[$n2s_csv_mapping_header[$fieldname]] = $value;
                 }
             }
             $newDoc['created_at'] = date('Y-m-d H:i:s');
@@ -183,7 +167,8 @@ class ReportController extends Controller
         $handle = fopen($filename, 'w+');
         
         // ------ header ---------//
-        $hF = array_flip($this->_n2s_csv_mapping_header);
+        $n2s_csv_mapping_header = CommonTrait::n2s_csv_mapping_header();
+        $hF = array_flip($n2s_csv_mapping_header);
         if($publisher){
             fputcsv($handle, [
                $hF['date'],$hF['offer_id'], $hF['country'],  $hF['total_searches'], $hF['ad_clicks'], $hF['ctr'],  $hF['publisher_RPC'],  $hF['publisher_RPM'], $hF['revenue'], $hF['tq']
@@ -301,16 +286,17 @@ class ReportController extends Controller
     
     private function typein_insertData(array $batch ) : bool {
         $finalBatch = [];
+        $typein_csv_mapping_header = CommonTrait::typein_csv_mapping_header();
         foreach($batch as $singleRecod) { 
             $newDoc = [];
             foreach($singleRecod as $fieldname => $value){
-                if(isset($this->_typein_csv_mapping_header[$fieldname])) {
+                if(isset($typein_csv_mapping_header[$fieldname])) {
                     if($fieldname == 'Date'){
 //                        $date = DateTime::createFromFormat('d/m/Y', $value);
 //                        $value = $date->format('Y-m-d');
                           $value = date('Y-m-d',strtotime($value)); 
                     }
-                    $newDoc[$this->_typein_csv_mapping_header[$fieldname]] = $value;
+                    $newDoc[$typein_csv_mapping_header[$fieldname]] = $value;
                 }
             }
             $newDoc['created_at'] = date('Y-m-d H:i:s');
@@ -380,7 +366,8 @@ class ReportController extends Controller
         $handle = fopen($filename, 'w+');
         
         // ------ header ---------//
-        $hF = array_flip($this->_typein_csv_mapping_header);
+        $typein_csv_mapping_header = CommonTrait::typein_csv_mapping_header();
+        $hF = array_flip($typein_csv_mapping_header);
         if($publisher){
             fputcsv($handle, [
                 $hF['date'], $hF['offer_id'], $hF['country'] , $hF['total_searches'], $hF['monetized_searches'],
@@ -425,7 +412,8 @@ class ReportController extends Controller
         $filename = "tracking_system_n2s_csv_sample.csv";
         
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, array_keys($this->_n2s_csv_mapping_header));
+        $n2s_csv_mapping_header = CommonTrait::n2s_csv_mapping_header();
+        fputcsv($handle, array_keys($n2s_csv_mapping_header));
       
         fclose($handle);
         
@@ -439,7 +427,8 @@ class ReportController extends Controller
         $filename = "tracking_system_typein_csv_sample.csv";
         
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, array_keys($this->_typein_csv_mapping_header));
+        $typein_csv_mapping_header = CommonTrait::typein_csv_mapping_header();
+        fputcsv($handle, array_keys($typein_csv_mapping_header));
       
         fclose($handle);
         
