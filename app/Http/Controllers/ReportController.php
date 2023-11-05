@@ -171,13 +171,13 @@ class ReportController extends Controller
         $hF = array_flip($n2s_csv_mapping_header);
         if($publisher){
             fputcsv($handle, [
-               $hF['date'],$hF['offer_id'], $hF['country'],  $hF['total_searches'], $hF['ad_clicks'], $hF['ctr'],  $hF['publisher_RPC'],  $hF['publisher_RPM'], $hF['revenue'], $hF['tq']
+               $hF['date'],$hF['offer_id'], $hF['country'],  $hF['total_searches'], $hF['ad_clicks'], $hF['ctr'],  $hF['publisher_RPC'] .' ($)',  $hF['publisher_RPM'].' ($)', $hF['revenue'].' ($)', $hF['tq']
             ]);
         }else{
             fputcsv($handle, [
                 $hF['date'], $hF['advertiser_name'],  $hF['campaign_name'], $hF['campaign_id'], $hF['subid'], $hF['total_searches'], $hF['ad_clicks'], $hF['tq'], $hF['ctr'], 
-                $hF['advertiser_CPC'], $hF['advertiser_RPM'], $hF['gross_revenue'],  $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'],
-                $hF['publisher_RPM'], $hF['publisher_RPC'],  $hF['revenue'], $hF['country']
+                $hF['advertiser_CPC'].' ($)', $hF['advertiser_RPM'].' ($)', $hF['gross_revenue'].' ($)',  $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'],
+                $hF['publisher_RPM'].' ($)', $hF['publisher_RPC'].' ($)',  $hF['revenue'].' ($)', $hF['country']
             ]);
         }
 
@@ -185,13 +185,13 @@ class ReportController extends Controller
         foreach($data as $row) {
             if($publisher) {
                 fputcsv($handle, [
-                    $row['date'],$row['offer_id'], $row['country'],  $row['total_searches'], $row['ad_clicks'], $row['ctr'],  $row['publisher_RPC'],  $row['publisher_RPM'], $row['revenue'], $row['tq']
+                    $row['date'],$row['offer_id'], $row['country'],  $row['total_searches'], $row['ad_clicks'], $row['ctr'], '$ '. $row['publisher_RPC'],  '$ '.$row['publisher_RPM'], '$ '.$row['revenue'], $row['tq']
                 ]);            
             } else {
                 fputcsv($handle, [
                     $row['date'], $row['advertiser_name'],  $row['campaign_name'], $row['campaign_id'], $row['subid'], $row['total_searches'], $row['ad_clicks'], $row['tq'], $row['ctr'], 
-                    $row['advertiser_CPC'], $row['advertiser_RPM'], $row['gross_revenue'],  $row['publisher_name'], $row['publisher_id'], $row['offer_id'],
-                    $row['publisher_RPM'], $row['publisher_RPC'],  $row['revenue'], $row['country']
+                    '$ '.$row['advertiser_CPC'], '$ '.$row['advertiser_RPM'], '$ '.$row['gross_revenue'],  $row['publisher_name'], $row['publisher_id'], $row['offer_id'],
+                    '$ '.$row['publisher_RPM'], '$ '.$row['publisher_RPC'],  '$ '.$row['revenue'], $row['country']
                 ]);
             }
         }
@@ -371,15 +371,15 @@ class ReportController extends Controller
         if($publisher){
             fputcsv($handle, [
                 $hF['date'], $hF['offer_id'], $hF['country'] , $hF['total_searches'], $hF['monetized_searches'],
-                $hF['ad_clicks'],$hF['ad_coverage'],  $hF['ctr'],    $hF['publisher_RPC'], $hF['publisher_RPM'], $hF['net_revenue']
+                $hF['ad_clicks'],$hF['ad_coverage'],  $hF['ctr'],    $hF['publisher_RPC'].' ($)', $hF['publisher_RPM'].' ($)', $hF['net_revenue'].' ($)'
             ]);
         }else{
             fputcsv($handle, [
                 $hF['date'], $hF['advertiser_name'],  $hF['campaign_name'], $hF['campaign_id'], $hF['subid'], $hF['total_searches'], 
                 $hF['monetized_searches'],
-                $hF['ad_clicks'],$hF['ad_coverage'],  $hF['ctr'], $hF['cpc'], $hF['rpm'], $hF['gross_revenue'],
+                $hF['ad_clicks'],$hF['ad_coverage'],  $hF['ctr'], $hF['cpc'].' ($)', $hF['rpm'].' ($)', $hF['gross_revenue'].' ($)',
                 $hF['publisher_name'], $hF['publisher_id'], $hF['offer_id'],
-                $hF['publisher_RPM'], $hF['publisher_RPC'],  $hF['net_revenue'], $hF['country']
+                $hF['publisher_RPM'].' ($)', $hF['publisher_RPC'].' ($)',  $hF['net_revenue'].' ($)', $hF['country']
             ]);
         }
         
@@ -387,15 +387,15 @@ class ReportController extends Controller
             if($publisher) {
                 fputcsv($handle, [
                         $row['date'], $row['offer_id'], $row['country'] , $row['total_searches'], $row['monetized_searches'],
-                $row['ad_clicks'],$row['ad_coverage'],  $row['ctr'],    $row['publisher_RPC'], $row['publisher_RPM'], $row['net_revenue']
+                $row['ad_clicks'],$row['ad_coverage'],  $row['ctr'],    '$ '.$row['publisher_RPC'], '$ '.$row['publisher_RPM'], '$ '.$row['net_revenue']
                         ]);                
             } else {
                 fputcsv($handle, [
                     $row['date'], $row['advertiser_name'],  $row['campaign_name'], $row['campaign_id'], $row['subid'], $row['total_searches'], 
                     $row['monetized_searches'],
-                    $row['ad_clicks'], $row['ad_coverage'],  $row['ctr'], $row['cpc'], $row['rpm'], $row['gross_revenue'],
+                    $row['ad_clicks'], $row['ad_coverage'],  $row['ctr'], '$ '.$row['cpc'], '$ '.$row['rpm'], '$ '.$row['gross_revenue'],
                     $row['publisher_name'], $row['publisher_id'], $row['offer_id'],
-                    $row['publisher_RPM'], $row['publisher_RPC'],  $row['net_revenue'], $row['country']
+                    '$ '.$row['publisher_RPM'], '$ '.$row['publisher_RPC'],  '$ '.$row['net_revenue'], $row['country']
                 ]);
             }
         }

@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <style>
-    .table-responsive {
+     .table-responsive {
         max-width: 100%;
         overflow-x: auto;
     }
@@ -71,7 +71,7 @@
             @if(!empty($publisher_advertizer_list) && !empty($publisher_advertizer_list['advertizer_list']))
                 <div class="col">
                      <lable> Advertizer </lable>
-                    <select id="advertizer_select" style=""  class="form-select selectpicker" multiple data-live-search="true">
+                    <select id="advertizer_select" style=""  class=" selectpicker" multiple data-live-search="true">
                         @foreach($publisher_advertizer_list['advertizer_list'] as $advert)
                             <option value="{{$advert['name']}}">{{$advert['name']}}</option>
                         @endforeach
@@ -104,30 +104,30 @@
         </form>
     </div>
     <div class="container">
-        <div class="table-responsive">
+        <div class="table-responsive table-cont" style="font-size: 11px !important;">
             <table class="table table-hover">
                 <thead>
                     <tr>                     
                         @if($adminFlag == true)
                             <th scope="col">#</th>
                             <th scope="col">Date</th>
-                            <th scope="col">Advertiser Name</th>
+                            <th scope="col">Advertizer Name</th>
                             <th scope="col">Campaign Name</th>
                             <th scope="col">Campaign id</th>
-                            <th scope="col">Advertiser Subid</th>
+                            <th scope="col">Advertizer Subid</th>
                             <th scope="col">Searches</th>
                             <th scope="col">Clicks</th>
                             <th scope="col">TQ</th>
                             <th scope="col">CTR (in %)</th>
-                            <th scope="col">Advertiser CPC</th>
-                            <th scope="col">Advertiser RPM</th>
-                            <th scope="col">Gross Revenue</th>
+                            <th scope="col">Advertizer CPC ($)</th>
+                            <th scope="col">Advertizer RPM ($)</th>
+                            <th scope="col">Gross Revenue ($)</th>
                             <th scope="col">Publisher Name</th>
                             <th scope="col">Publisher Id</th>
                             <th scope="col">Offer Id</th>
-                            <th scope="col">Publisher RPM</th>
-                            <th scope="col">Publisher RPC</th>
-                            <th scope="col">Net Revenue</th>                        
+                            <th scope="col">Publisher RPM ($)</th>
+                            <th scope="col">Publisher RPC ($)</th>
+                            <th scope="col">Net Revenue ($)</th>                        
                             <th scope="col">Country</th>
                         @else
                             <th scope="col">Date</th>
@@ -136,9 +136,9 @@
                              <th scope="col">Total Searches</th>
                              <th scope="col">Ad Clicks</th>
                              <th scope="col">CTR (in %)</th>
-                            <th scope="col">RPC</th>
-                            <th scope="col">RPM</th>
-                             <th scope="col">Net Revenue</th> 
+                            <th scope="col">RPC ($)</th>
+                            <th scope="col">RPM ($)</th>
+                             <th scope="col">Net Revenue ($)</th> 
                              <th scope="col">TQ</th>
                         @endif
                     </tr>
@@ -159,15 +159,15 @@
                                     <td scope="row">{{$record->ad_clicks}}</td>
                                     <td scope="row">{{$record->tq}}</td>
                                     <td scope="row">{{$record->ctr}}</td>
-                                    <td scope="row">{{$record->advertiser_CPC}}</td>
-                                    <td scope="row">{{$record->advertiser_RPM}}</td>
-                                    <td scope="row">{{$record->gross_revenue}}</td>
+                                    <td scope="row">$ {{$record->advertiser_CPC}}</td>
+                                    <td scope="row">$ {{$record->advertiser_RPM}}</td>
+                                    <td scope="row">$ {{$record->gross_revenue}}</td>
                                     <td scope="row">{{$record->publisher_name}}</td>
                                     <td scope="row">{{$record->publisher_id}}</td>
                                     <td scope="row">{{$record->offer_id}}</td>                                
-                                     <td scope="row">{{$record->publisher_RPM}}</td>
-                                    <td scope="row">{{$record->publisher_RPC}}</td>
-                                    <td scope="row">{{$record->revenue}}</td>                                 
+                                     <td scope="row">$ {{$record->publisher_RPM}}</td>
+                                    <td scope="row">$ {{$record->publisher_RPC}}</td>
+                                    <td scope="row">$ {{$record->revenue}}</td>                                 
                                     <td scope="row">{{$record->country}}</td>
                                 @else
                                     <td scope="row">{{$record->date}}</td>
@@ -177,9 +177,9 @@
                                     <td scope="row">{{$record->ad_clicks}}</td>
                                      <td scope="row">{{$record->ctr}}</td>
                                     
-                                    <td scope="row">{{$record->publisher_RPC}}</td> 
-                                     <td scope="row">{{$record->publisher_RPM}}</td>
-                                    <td scope="row">{{$record->revenue}}</td>     
+                                    <td scope="row">$ {{$record->publisher_RPC}}</td> 
+                                     <td scope="row">$ {{$record->publisher_RPM}}</td>
+                                    <td scope="row">$ {{$record->revenue}}</td>     
                                      <td scope="row">{{$record->tq}}</td>
                                 @endif
                             </tr>
@@ -187,9 +187,11 @@
                     @endif
 
                 </tbody>
+              
             </table>
         </div>
     </div>
+      <br/><br/><br/><br/>
     <!-- Display pagination links -->
      {{ $data->appends($query_string)->links() }}
 </div>

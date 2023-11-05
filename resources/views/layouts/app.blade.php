@@ -78,7 +78,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm col-sm-12">
              <div class="col-sm-2">
                     <a  class="navbar-brand" href="{{ url('/') }}">
-                        <img style="height:100%; width:100%;" src="/logo.jpeg" />
+                        <img style="height:100%; width:100%; " src="/logo.jpeg" />
                     </a>
             </div>    
             <div class="container col-sm-10">
@@ -141,28 +141,37 @@
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="list-group list-group-flush">
                     @if( Auth::guard('web')->user()->user_type == "admin")
-                        <a href="/advertiser/list" class="list-group-item list-group-item-action bg-light">Advertiser</a>
+                        <a href="/advertiser/list" class="list-group-item list-group-item-action bg-light">Advertizer</a>
                         <a href="/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign</a>
                         <a href="/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
                         <a href="/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job</a>
+                        <a href="javascript:void(0)"  style="border: 1px solid rgba(0,0,0,.125);" class="parentReport list-group-item list-group-item-action bg-light">
+                            Report<br/>
+
+                        </a>
+                        <ul class="childReport " style="">
+                            <li><a class="" href="{{route('report.list')}}">N2S Report</a></li>
+                            <li><a class="" href="{{route('report.typein_list')}}">Typein Report</a></li>
+                        </ul>
                     @else
-                        <a href="{{route('publisher_token.token_list')}}" class="list-group-item list-group-item-action bg-light">Publisher</a>
+                        <a href="javascript:void(0)"  style="" class="parentReport list-group-item list-group-item-action bg-light">
+                            Report<br/>
+
+                        </a>
+                        <ul class="childReport " style="">
+                            <li><a class="" href="{{route('report.list')}}">N2S Report</a></li>
+                            <li><a class="" href="{{route('report.typein_list')}}">Typein Report</a></li>
+                        </ul>
+                        <a href="{{route('publisher_token.token_list')}}" style="border: 1px solid rgba(0,0,0,.125);" class="list-group-item list-group-item-action bg-light">API</a>
                     @endif
-                    <a href="javascript:void(0)"  style="border: 1px rgba(0,0,0,.125);" class="parentReport list-group-item list-group-item-action bg-light">
-                        Report<br/>
-                    </a>
-                    <ul class="childReport " style="border: 1px solid rgba(0,0,0,.125); display: none">
-				    <li><a class="" href="{{route('report.list')}}">N2S Report</a></li>
-				    <li><a class="" href="{{route('report.typein_list')}}">Typein Report</a></li>
-				</ul>
+                    
                    
 
                 </div>
             </div>
              @endif
-            <!--<button style="height:70px" class="btn btn-primary" id="menu-toggle">Toggle Menu</button>-->
 
-            
+             <i  id="menu-toggle" class="fa fa-bars" style="font-size:35px"></i>
              <!-- Content Body -->
             <div class="container-fluid" style='margin-top: 20px;'>
                 @yield('content')

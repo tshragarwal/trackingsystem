@@ -25,7 +25,7 @@
     </div>
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
-            New Advertiser data successfully saved.
+            New Advertizer data successfully saved.
         </div>
     @endif
      <div class="table-responsive">
@@ -34,7 +34,7 @@
             <tr>
            
               <th scope="col">Campaign Id</th>
-              <th scope="col">Advertiser Name</th>
+              <th scope="col">Advertizer Name</th>
               <th scope="col">Campaign Name</th>
               <th scope="col">Target Count</th>
               <th scope="col">Target Url</th>

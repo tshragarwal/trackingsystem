@@ -21,13 +21,13 @@
     </div>
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
-            New Advertiser data successfully saved.
+            New Advertizer data successfully saved.
         </div>
     @endif
     <table class="table table-hover">
         <thead>
             <tr>
-              <th scope="col">Advertiser Id</th>
+              <th scope="col">Advertizer Id</th>
               <th scope="col">Advertizer Name</th>
               <th scope="col">Advertizer Email</th>
               <th scope="col">Last Updated</th>

@@ -75,6 +75,7 @@
     <!-- Display pagination links -->
     <br/>
      {{ $data->links() }}
+     <br/><br/><br/><br/>
      <br/><br/>
 </div>
 
