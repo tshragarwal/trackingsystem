@@ -169,9 +169,10 @@
 
                 </div>
             </div>
+            <i  id="menu-toggle" class="fa fa-bars" style="font-size:35px"></i>
              @endif
 
-             <i  id="menu-toggle" class="fa fa-bars" style="font-size:35px"></i>
+             
              <!-- Content Body -->
             <div class="container-fluid" style='margin-top: 20px;'>
                 @yield('content')
