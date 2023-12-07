@@ -115,13 +115,13 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/logout"
+                                    <a class="dropdown-item" href="{{route('logout')}}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="/logout" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{route('logout')}}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -141,10 +141,10 @@
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="list-group list-group-flush">
                     @if( Auth::guard('web')->user()->user_type == "admin")
-                        <a href="/advertiser/list" class="list-group-item list-group-item-action bg-light">Advertizer</a>
-                        <a href="/campaign/list" class="list-group-item list-group-item-action bg-light">Campaign</a>
-                        <a href="/publisher/list" class="list-group-item list-group-item-action bg-light">Publisher</a>
-                        <a href="/publisher/job/list" class="list-group-item list-group-item-action bg-light">Publisher Job</a>
+                        <a href="{{route('advertiser.list')}}" class="list-group-item list-group-item-action bg-light">Advertizer</a>
+                        <a href="{{route('campaign.list')}}" class="list-group-item list-group-item-action bg-light">Campaign</a>
+                        <a href="{{route('publisher.list')}}" class="list-group-item list-group-item-action bg-light">Publisher</a>
+                        <a href="{{route('publisher.job.list')}}" class="list-group-item list-group-item-action bg-light">Publisher Job</a>
                         <a href="javascript:void(0)"  style="border: 1px solid rgba(0,0,0,.125);" class="parentReport list-group-item list-group-item-action bg-light">
                             Report<br/>
 
