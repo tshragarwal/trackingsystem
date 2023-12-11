@@ -7,23 +7,15 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="javascript:void(0)">Advertizer List</a></li>
-         
         </ol>
     </nav>
-    <div class="row " style="margin-bottom: 20px">
-    
-        <div class=" offset-md-10">
-    
-            <a href="{{route('advertiser.form')}}" class="btn btn-primary">
-                {{ __('Add New Advertizer') }}
-            </a>
-        </div>
-    </div>
+    <a href="{{route('advertiser.form')}}" class="btn btn-primary" style="margin-bottom:20px;float:right;">{{ __('Add New Advertizer') }}</a>
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
             New Advertizer data successfully saved.
         </div>
     @endif
+    <div class="table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
@@ -33,7 +25,6 @@
               <th scope="col">Last Updated</th>
               <th scope="col">Created At</th>
               <th scope="col">Action</th>
-
             </tr>
         </thead>
         <tbody>
@@ -57,6 +48,7 @@
 
         </tbody>
     </table>
+    </div>
        {{ $data->links() }}
  
 </div>
