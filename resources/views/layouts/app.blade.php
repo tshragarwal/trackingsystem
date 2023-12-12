@@ -7,12 +7,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Tracking System') }}</title>
     <!-- Scripts -->
-    <script src="{{ asset('tracking/js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <!-- Styles -->
-    <link href="{{ asset('tracking/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -88,7 +88,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm col-sm-12">
           <div class="row">
               <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                <div class="topSection"> <a class="logoBox" href="{{ url('/') }}"><img class="img-responsive" src="/tracking/logo.jpeg" alt=""/></a>  </div>
+                <div class="topSection"> <a class="logoBox" href="{{ url('/') }}"><img class="img-responsive" src="/logo.jpeg" alt=""/></a>  </div>
               </div>
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"> 
                 <!--<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}"><span class="navbar-toggler-icon"></span> </button>-->
