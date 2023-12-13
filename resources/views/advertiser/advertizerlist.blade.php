@@ -9,12 +9,35 @@
           <li class="breadcrumb-item"><a href="javascript:void(0)">Advertizer List</a></li>
         </ol>
     </nav>
-    <a href="{{route('advertiser.form')}}" class="btn btn-primary" style="margin-bottom:20px;float:right;">{{ __('Add New Advertizer') }}</a>
+    
+    
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
             New Advertizer data successfully saved.
         </div>
     @endif
+    
+    
+    <a href="{{route('advertiser.form')}}" class="btn btn-primary" style="float:right;">{{ __('Add New Advertizer') }}</a>
+
+       <div class="card card-body col-sm-7" style="margin-bottom: 20px">
+           <form class="form-inline"  action="{{route('advertiser.list')}}">
+             <div class="form-group mx-sm-4">
+               <label for="staticEmail2" class="sr-only"><lable> Filter List </lable></label>
+               <select name="type" class="form-control">
+                   <option  value="0">-- Select --</option>
+                   <option {{!empty($filter) && !empty($filter['type']=='id')?'selected':''}} value="id">Advertizer Id</option>
+                   <option {{!empty($filter) && !empty($filter['type']=='name')?'selected':''}} value="name">Advertizer Name</option>
+               </select>
+             </div>
+             <div class="form-group  mx-sm-5">
+               <input type="text" class="form-control" name="v" value="{{!empty($filter['v'])?$filter['v']:''}}" placeholder="Enter Selected Type Value">
+             </div>
+             <button type="submit" class="btn btn-success mb-2">Filter</button>
+           </form>
+       </div>
+
+    
     <div class="table-responsive">
     <table class="table table-hover">
         <thead>

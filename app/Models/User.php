@@ -42,8 +42,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    public function get_publisher_list($size = 10){
-        return self::where('user_type','publisher')->orderby('id','desc')->paginate($size);
+    public function get_publisher_list($filter, $size = 10){
+         $obj = self::where('user_type','publisher');
+        
+        if(!empty($filter) && !empty($filter['type']) && $filter['type'] =='id' && $filter['v'] !=0){
+             $obj->where($filter['type'], $filter['v']);
+        }else if (!empty($filter) && !empty($filter['type']) && $filter['type'] =='name' && $filter['v'] !=''){
+             $obj->where($filter['type'], 'like','%'.$filter['v'].'%');
+        }
+        
+        return $obj->orderby('id','desc')->paginate($size);
+        
     }
     public function all_publisher_list(){
         return self::select(['id', 'name'])->where('user_type','publisher')->get();

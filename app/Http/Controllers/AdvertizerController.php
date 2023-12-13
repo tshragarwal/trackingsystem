@@ -215,10 +215,12 @@ class AdvertizerController extends Controller
         if(!CommonTrait::is_super_admin()){
             return view('access_denied');
         }
+        $requestData = $request->all();
         $userObj = new AdvertizerRequest();
-        $advertizerList = $userObj->get_publisher_list(100);
+        
+        $advertizerList = $userObj->get_publisher_list($requestData, 250);
        
-        return view('advertiser.advertizerlist', ['data' => $advertizerList, 'success' => $request->s]);
+        return view('advertiser.advertizerlist', ['data' => $advertizerList, 'success' => $request->s, 'filter' => $requestData ]);
     }    
     
     public function destroy(Request $request){

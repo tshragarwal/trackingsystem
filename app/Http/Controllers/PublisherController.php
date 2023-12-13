@@ -17,14 +17,14 @@ class PublisherController extends Controller
        return view('publisher.form');
     }
     
-    public function list(){
+    public function list(Request $request){
         if(!CommonTrait::is_super_admin()){
             return view('access_denied');
         }
+        $requestData = $request->all();
         $userObj = new User();
-        $publisherList = $userObj->get_publisher_list();
-       
-        return view('publisher.list', ['data'=> $publisherList]);
+        $publisherList = $userObj->get_publisher_list($requestData, 200);
+        return view('publisher.list', ['data'=> $publisherList, 'filter' => $requestData]);
     }
     
     public function save(AddPublisherRequest $request){

@@ -21,8 +21,14 @@ class AdvertizerRequest extends Model
        return static::where('id', $id)->first();
     }
     
-    public function get_publisher_list($size = 10){
-        return self::orderby('id','desc')->paginate($size);
+    public function get_publisher_list($filter, $size = 10){
+        if(!empty($filter) && !empty($filter['type']) && $filter['type'] =='id' && $filter['v'] !=0){
+            return self::where($filter['type'], $filter['v'])->orderby('id','desc')->paginate($size);
+        }else if (!empty($filter) && !empty($filter['type']) && $filter['type'] =='name' && $filter['v'] !=''){
+            return self::where($filter['type'], 'like','%'.$filter['v'].'%')->orderby('id','desc')->paginate($size);
+        }else{
+            return self::orderby('id','desc')->paginate($size);
+        }
     }    
     
 //    public function update($data){
