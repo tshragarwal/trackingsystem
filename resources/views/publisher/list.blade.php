@@ -10,21 +10,14 @@
          
         </ol>
     </nav>
-    <div class="row " style="margin-bottom: 20px">
-    
-        <div class=" offset-md-10">
-    
-            <a href="{{route('publisher.form')}}" class="btn btn-primary">
-                {{ __('Add New Publisher') }}
-            </a>
-        </div>
-    </div>
+    <a href="{{route('publisher.form')}}" class="btn btn-primary" style="margin-bottom:20px;float:right;">{{ __('Add New Publisher') }}</a>
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
             New Advertiser data successfully saved.
         </div>
     @endif
     
+    <div class="table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
@@ -58,6 +51,7 @@
 
         </tbody>
     </table>
+    </div>
     <!-- Display pagination links -->
        {{ $data->links() }}
  

@@ -15,14 +15,17 @@
          
         </ol>
     </nav>
-    <div class="row " style="margin-bottom: 20px">
+    <a href="{{route('advertiser.campaign')}}" class="btn btn-primary" style="margin-bottom:20px;float:right;">
+                {{ __('Add New Campaign') }}
+            </a>
+  <!--  <div class="row " style="margin-bottom: 20px">
     
         <div class=" offset-md-10">
              <a href="{{route('advertiser.campaign')}}" class="btn btn-primary">
                 {{ __('Add New Campaign') }}
             </a>
         </div>
-    </div>
+    </div> -->
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
             New Advertizer data successfully saved.
