@@ -12,11 +12,23 @@ class AdvertiserCampaignModel extends Model
     protected $table = 'advertiser_campaigns';
 //    protected $fillable = ['advertiser_id'];
     
-    public function list(array $requestData, int $size = 100){
+    public function list(array $filter, int $size = 100){
         $campaign = static::with('advertiser');
-        if(!empty($requestData) && !empty($requestData['advertizer'])){
-            $campaign->where('advertiser_id', $requestData['advertizer']);
+        if(!empty($filter) && !empty($filter['advertizer'])){
+            $campaign->where('advertiser_id', $filter['advertizer']);
         }
+        
+        if(!empty($filter) && !empty($filter['type']) && $filter['type'] == 'id' && $filter['v'] != 0 ){
+            $campaign->where($filter['type'], $filter['v']);
+        }else if (!empty($filter) && !empty($filter['type']) && $filter['type'] =='campaign_name' && $filter['v'] != '' ){
+             $campaign->where($filter['type'], 'like','%'.$filter['v'].'%');
+        }else if (!empty($filter) && !empty($filter['type']) && $filter['type'] =='adver_name' && $filter['v'] != '' ){
+             $campaign->whereHas('advertiser', function ($query) use ($filter) {
+                    $query->where('name', 'like', '%' . $filter['v'] . '%');
+                });
+        }
+        
+        
         return $campaign->orderBy('updated_at', 'desc')->paginate($size);
        
 //       return static::with('advertiser')->orderBy('updated_at', 'desc')->paginate($size);

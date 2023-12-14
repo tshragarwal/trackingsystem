@@ -116,7 +116,7 @@ class AdvertizerController extends Controller
     }
     
     public function campaignlist(Request $request){
-        $drequestData = $request->all();
+        $requestData = $request->all();
         /*
          * @if(Auth::guard('admin')->check())
     Hello {{Auth::guard('admin')->user()->name}}
@@ -129,8 +129,8 @@ class AdvertizerController extends Controller
         }
         
         $modelObj = new AdvertiserCampaignModel();
-        $result = $modelObj->list($drequestData);
-        return view('advertiser.list', ['data' => $result, 'success' => $request->s??0]);
+        $result = $modelObj->list($requestData);
+        return view('advertiser.list', ['data' => $result, 'success' => $request->s??0, 'filter' => $requestData]);
         
     }
     
