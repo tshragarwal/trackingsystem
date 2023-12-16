@@ -16,10 +16,32 @@ class PublisherJobModel extends Model
     protected $table = 'publisher_jobs';
     
     
-    public function list($publisherId = 0, $size = 10){
+    public function list($filter =[], $publisherId = 0, $size = 10){
        if($publisherId > 0){
            return static::where('publisher_id', $publisherId)->withCount('tracking')->with('publisher')->with('campaign')->orderBy('updated_at', 'desc')->paginate($size);
         }else{
+            if(!empty($filter) && !empty($filter['type'])){
+                $publisherJob = static::orderBy('updated_at', 'desc');
+
+                if($filter['type'] == 'id' && $filter['v'] != 0 ){
+                    $publisherJob->where($filter['type'], $filter['v'])->with('publisher')->with('campaign');
+                }else if ($filter['type'] == 'pub_name' && $filter['v'] != '' ){
+                     $publisherJob->whereHas('publisher', function ($query) use ($filter) {
+                            $query->where('name', 'like', '%' . $filter['v'] . '%');
+                        })->with('campaign');
+                }
+                else if ( $filter['type'] =='campaign_name' && $filter['v'] != '' ){
+                     $publisherJob->whereHas('campaign', function ($query) use ($filter) {
+                            $query->where('campaign_name', 'like', '%' . $filter['v'] . '%');
+                        })->with('publisher');
+                }else if ($filter['type'] =='adver_name' && $filter['v'] != '' ){
+                    $publisherJob->whereHas('campaign.advertiser', function ($query) use ($filter) {
+                            $query->where('name', 'like', '%' . $filter['v'] . '%');
+                        })->with('publisher');
+                }
+                return $publisherJob->withCount('tracking')->paginate($size);
+            }
+            
             return static::with('publisher')->withCount('tracking')->with('campaign')->orderBy('updated_at', 'desc')->paginate($size);
         }
     }

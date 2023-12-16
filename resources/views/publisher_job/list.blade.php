@@ -11,6 +11,26 @@
   @if( !empty($success))
   <div class="alert alert-success" role="alert"> New Advertiser data successfully saved. </div>
   @endif
+  
+  
+    <div class="card card-body col-sm-7" style="margin-bottom: 20px">
+       <form class="form-inline"  action="{{route('publisher.job.list')}}">
+         <div class="form-group mx-sm-4">
+           <label for="staticEmail2" class="sr-only"><lable> Filter List </lable></label>
+           <select name="type" class="form-control">
+               <option  value="0">-- Select --</option>
+               <option {{!empty($filter) && !empty($filter['type']=='id')?'selected':''}} value="id">Job ID</option>
+               <option {{!empty($filter) && !empty($filter['type']=='pub_name')?'selected':''}} value="pub_name">Publisher Name</option>
+               <option {{!empty($filter) && !empty($filter['type']=='adver_name')?'selected':''}} value="adver_name">Advertiser Name</option>
+               <option {{!empty($filter) && !empty($filter['type']=='campaign_name')?'selected':''}} value="campaign_name">Campaign Name</option>
+           </select>
+         </div>
+         <div class="form-group  mx-sm-5">
+           <input type="text" class="form-control" name="v" value="{{!empty($filter['v'])?$filter['v']:''}}" placeholder="Enter Selected Type Value">
+         </div>
+         <button type="submit" class="btn btn-success mb-2">Filter</button>
+       </form>
+   </div>
   <div class="table-responsive">
     <table class="table table-hover">
       <thead>

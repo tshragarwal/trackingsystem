@@ -26,10 +26,10 @@ class PublisherJobController extends Controller
         
         $publisherId = ($user->user_type =='publisher') ? $user->id: (!empty($request->publisher_id)  ?$request->publisher_id : 0 );
         $modelObj = new PublisherJobModel();
-        $result = $modelObj->list($publisherId, 10);
+        $result = $modelObj->list($request->all(), $publisherId, 20);
         
         $domainName = env('APP_DOMAIN');
-        return view('publisher_job.list', ['data' => $result, 'success' => $request->s??0, 'domain' => $domainName, 'user_type' => $user->user_type]);
+        return view('publisher_job.list', ['data' => $result, 'success' => $request->s??0, 'domain' => $domainName, 'user_type' => $user->user_type, 'filter' => $request->all()]);
         
     }
     

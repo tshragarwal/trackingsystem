@@ -12,7 +12,7 @@ class AdvertiserCampaignModel extends Model
     protected $table = 'advertiser_campaigns';
 //    protected $fillable = ['advertiser_id'];
     
-    public function list(array $filter, int $size = 100){
+    public function list(array $filter, int $size = 1000){
         $campaign = static::with('advertiser');
         if(!empty($filter) && !empty($filter['advertizer'])){
             $campaign->where('advertiser_id', $filter['advertizer']);
