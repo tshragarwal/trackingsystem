@@ -78,6 +78,8 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::post($prepix.'/report/uploadcsv', [App\Http\Controllers\ReportController::class, 'uploadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.uploadcsv');
     Route::get($prepix.'/report/download', [App\Http\Controllers\ReportController::class, 'n2s_downloadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.downloadcsv');
     Route::get($prepix.'/report/csv_sample', [App\Http\Controllers\ReportController::class, 'n2s_csv_sample'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_csv_sample');
+    Route::get($prepix.'/report/edit/{id}', [App\Http\Controllers\ReportController::class, 'n2s_report_edit'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_report_edit');
+    Route::post($prepix.'/report/edit/save', [App\Http\Controllers\ReportController::class, 'n2s_report_edit_save'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_report_edit_save');
 
 
     Route::get($prepix.'/report/typein/list', [App\Http\Controllers\ReportController::class, 'typein_list'] )->middleware(['auth', 'checkdomain'])->name('report.typein_list');

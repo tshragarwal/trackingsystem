@@ -16,6 +16,12 @@
       <li class="breadcrumb-item"><a href="javascript:void(0)">N2S Report</a></li>
     </ol>
   </nav>
+    @if (session('success_status'))
+      <h6 class="alert alert-success">{{ session('success_status') }}</h6>
+   @endif
+    @if (session('error_status'))
+      <h6 class="alert alert-danger">{{ session('error_status') }}</h6>
+   @endif
   <div class="card card-body" style="margin-bottom: 20px">
     <form action="{{route('report.list')}}" method='get'>
       <div class="row">
@@ -101,6 +107,7 @@
           <th scope="col">Publisher RPC ($)</th>
           <th scope="col">Net Revenue ($)</th>
           <th scope="col">Country</th>
+          <th scope="col">Action</th>
           @else
           <th scope="col">Date</th>
           <th scope="col">Offer Id</th>
@@ -118,7 +125,7 @@
       
       @if(!empty($data))
       @foreach($data as $record)
-      <tr> @if($adminFlag == true)
+      <tr > @if($adminFlag == true)
         <th scope="row">{{$record->id}}</th>
         <td scope="row">{{$record->date}}</td>
         <td scope="row">{{$record->advertiser_name}}</td>
@@ -139,6 +146,7 @@
         <td scope="row">$ {{$record->publisher_RPC}}</td>
         <td scope="row">$ {{$record->revenue}}</td>
         <td scope="row">{{$record->country}}</td>
+        <td scope="row"><a href="{{route('report.n2s_report_edit', ['id' => $record->id])}}" ><i  class="fa fa-edit "></i></a></td>
         @else
         <td scope="row">{{$record->date}}</td>
         <td scope="row">{{$record->offer_id}}</td>
@@ -157,9 +165,14 @@
       
     </table>
   </div>
+    
+    
+    
   
   <!-- Display pagination links --> 
   {{ $data->appends($query_string)->links() }} </div>
+
+
 <script type="text/javascript">
 $(function() {
 

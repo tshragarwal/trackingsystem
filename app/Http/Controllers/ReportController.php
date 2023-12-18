@@ -438,4 +438,29 @@ class ReportController extends Controller
         $respone = Response::download($filename, $filename, $headers)->deleteFileAfterSend(true);
         return $respone;
     }
+    
+    public function n2s_report_edit(Request $request){
+        if(empty($request['id'])){
+            return ['error' => 'invalid request'];
+        }
+        
+        $doc = ReportN2sModel::where('id', $request['id'])->first();
+        if(empty($doc)){
+            return ['error' => 'Invalid Request'];
+        }
+       
+        return view('reports.n2s_report_edit', ['data' => $doc]);
+    }
+    
+    public function n2s_report_edit_save(Request $request){
+        $data = $request->all();
+        $id = $data['id'];
+        unset($data['_token']);
+        unset($data['id']);
+        
+        $response = ReportN2sModel::where('id', $id)->update($data);
+        if($response) {
+            return redirect()->route('report.list')->with('success_status', 'Report successfully Updated.');
+        }
+    }
 }
