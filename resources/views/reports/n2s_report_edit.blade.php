@@ -66,7 +66,7 @@
                              <div class="row mb-3">
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Searches') }}</label>
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('total_searches') is-invalid @enderror" name="total_searches" value="{{ $data->total_searches }}" required>
+                                     <input id="email" type="text" class="form-control @error('total_searches') is-invalid @enderror" name="total_searches" value="{{ $data->total_searches }}" required>
                                      @error('total_searches')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -79,7 +79,7 @@
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Clicks') }}</label>
 
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('ad_clicks') is-invalid @enderror" name="ad_clicks" value="{{ $data->ad_clicks }}" required>
+                                     <input id="email" type="text" class="form-control @error('ad_clicks') is-invalid @enderror" name="ad_clicks" value="{{ $data->ad_clicks }}" required>
 
                                      @error('ad_clicks')
                                          <span class="invalid-feedback" role="alert">
@@ -92,7 +92,7 @@
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Ctr') }}</label>
 
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('ctr') is-invalid @enderror" name="ctr" value="{{ $data->ctr }}" required>
+                                     <input id="email" type="text" class="form-control @error('ctr') is-invalid @enderror" name="ctr" value="{{ $data->ctr }}" required>
 
                                      @error('ctr')
                                          <span class="invalid-feedback" role="alert">
@@ -106,7 +106,7 @@
                              <div class="row mb-3">
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Tq') }}</label>
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('tq') is-invalid @enderror" name="tq" value="{{ $data->tq }}" required>
+                                     <input id="email" type="text" class="form-control @error('tq') is-invalid @enderror" name="tq" value="{{ $data->tq }}" required>
                                      @error('tq')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -119,7 +119,7 @@
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Advertiser RPM') }}</label>
 
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('advertiser_RPM') is-invalid @enderror" name="advertiser_RPM" value="{{ $data->advertiser_RPM }}" required>
+                                     <input id="email" type="text" class="form-control @error('advertiser_RPM') is-invalid @enderror" name="advertiser_RPM" value="{{ $data->advertiser_RPM }}" required>
 
                                      @error('advertiser_RPM')
                                          <span class="invalid-feedback" role="alert">
@@ -134,7 +134,7 @@
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Advertiser CPC') }}</label>
 
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('advertiser_CPC') is-invalid @enderror" name="advertiser_CPC" value="{{ $data->advertiser_CPC }}" required>
+                                     <input id="email" type="text" class="form-control @error('advertiser_CPC') is-invalid @enderror" name="advertiser_CPC" value="{{ $data->advertiser_CPC }}" required>
 
                                      @error('advertiser_CPC')
                                          <span class="invalid-feedback" role="alert">
@@ -148,7 +148,7 @@
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Gross Revenue') }}</label>
 
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('gross_revenue') is-invalid @enderror" name="gross_revenue" value="{{ $data->gross_revenue }}" required>
+                                     <input id="email" type="text" class="form-control @error('gross_revenue') is-invalid @enderror" name="gross_revenue" value="{{ $data->gross_revenue }}" required>
 
                                      @error('gross_revenue')
                                          <span class="invalid-feedback" role="alert">
@@ -193,7 +193,7 @@
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Publisher RPM') }}</label>
 
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('publisher_RPM') is-invalid @enderror" name="publisher_RPM" value="{{ $data->publisher_RPM }}" required>
+                                     <input id="email" type="text" class="form-control @error('publisher_RPM') is-invalid @enderror" name="publisher_RPM" value="{{ $data->publisher_RPM }}" required>
 
                                      @error('publisher_RPM')
                                          <span class="invalid-feedback" role="alert">
@@ -208,7 +208,7 @@
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Publisher RPC') }}</label>
 
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('publisher_RPC') is-invalid @enderror" name="publisher_RPC" value="{{ $data->publisher_RPC }}" required>
+                                     <input id="email" type="text" class="form-control @error('publisher_RPC') is-invalid @enderror" name="publisher_RPC" value="{{ $data->publisher_RPC }}" required>
 
                                      @error('publisher_RPC')
                                          <span class="invalid-feedback" role="alert">
@@ -225,7 +225,7 @@
                                  <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Net Revenue') }}</label>
 
                                  <div class="col-md-6">
-                                     <input id="email" type="number" class="form-control @error('revenue') is-invalid @enderror" name="revenue" value="{{ $data->revenue }}" required>
+                                     <input id="email" type="text" class="form-control @error('revenue') is-invalid @enderror" name="revenue" value="{{ $data->revenue }}" required>
 
                                      @error('revenue')
                                          <span class="invalid-feedback" role="alert">
