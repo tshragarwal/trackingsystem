@@ -22,8 +22,8 @@
            <label for="staticEmail2" class="sr-only"><lable> Filter List </lable></label>
            <select name="type" class="form-control">
                <option  value="0">-- Select --</option>
-               <option {{!empty($filter) && !empty($filter['type']=='id')?'selected':''}} value="id">Publisher Id</option>
-               <option {{!empty($filter) &&!empty($filter['type']=='name')?'selected':''}} value="name">Publisher Name</option>
+               <option {{!empty($filter) && !empty($filter['type']) && ($filter['type']=='id')?'selected':''}} value="id">Publisher Id</option>
+               <option {{!empty($filter) && !empty($filter['type']) && ($filter['type']=='name')?'selected':''}} value="name">Publisher Name</option>
            </select>
          </div>
          <div class="form-group  mx-sm-5">
