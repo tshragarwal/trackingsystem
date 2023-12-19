@@ -3,6 +3,8 @@
 @section('content')
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<link href="{{ asset('css/tablefixed.css') }}" rel="stylesheet">
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -37,7 +39,7 @@
            </form>
        </div>
 
-    
+    <div class="table-container">
     <div class="table-responsive">
     <table class="table table-hover">
         <thead>
@@ -72,7 +74,12 @@
         </tbody>
     </table>
     </div>
+    </div>
+    <br/>
+    
        {{ $data->links() }}
+    <br/>
+    <br/>
  
 </div>
 

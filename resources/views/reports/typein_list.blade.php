@@ -9,6 +9,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<link href="{{ asset('css/tablefixed.css') }}" rel="stylesheet">
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -76,6 +77,8 @@
       </div>
     </form>
   </div>
+    
+  <div class="table-container">
   <div class="table-responsive">
     <table class="table table-hover">
       <thead>
@@ -160,9 +163,12 @@
       
     </table>
   </div>
-  
+  </div>
+    <br/>
   <!-- Display pagination links --> 
-  {{ $data->appends($query_string)->links() }} </div>
+  {{ $data->appends($query_string)->links() }} 
+<br/><br/><br/>
+</div>
 <script type="text/javascript">
 $(function() {
 $('#publisher_select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {

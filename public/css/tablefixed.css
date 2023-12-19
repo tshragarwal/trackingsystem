@@ -1,0 +1,36 @@
+.table-container {
+  position: relative;
+  overflow-x: auto;
+}
+
+.table-responsive {
+  overflow-y: auto;
+  max-height: 400px; /* Set a max height for vertical scroll (optional) */
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff; /* Adjust to match your design */
+  z-index: 1;
+}
+
+.table tbody {
+  /* Adjust the height if necessary */
+  /* height: 500px; */
+}
+
+.table tbody td,
+.table thead th {
+  white-space: nowrap; /* Prevent wrapping in table cells */
+}
+
+/* Optional styling for table cells */
+.table tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Alternate row background color */
+}
+
+/* Optional styling for hover effect */
+.table tbody tr:hover {
+  background-color: #e0e0e0;
+}

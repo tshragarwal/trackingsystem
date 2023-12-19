@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content') 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link href="{{ asset('css/tablefixed.css') }}" rel="stylesheet">
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -31,6 +32,7 @@
          <button type="submit" class="btn btn-success mb-2">Filter</button>
        </form>
    </div>
+ <div class="table-container">  
   <div class="table-responsive">
     <table class="table table-hover">
       <thead>
@@ -71,8 +73,14 @@
       
     </table>
   </div>
+  </div>
+  <br/>
   <!-- Display pagination links --> 
-  {{ $data->links() }} </div>
+  {{ $data->links() }}
+  <br/>
+  <br/>
+  <br/>
+  
 <!-- Modal -->
 <div class="modal fade" id="deletecamp" tabindex="-1" role="dialog" aria-labelledby="deletecampLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

@@ -8,6 +8,7 @@
         overflow-x: auto;
     }
 </style>
+<link href="{{ asset('css/tablefixed.css') }}" rel="stylesheet">
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -47,8 +48,8 @@
        </form>
    </div>
     
-    
-     <div class="table-responsive">
+    <div class="table-container">
+    <div class="table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
@@ -93,8 +94,13 @@
         </tbody>
     </table>
     </div>
+    </div>
+    <br/>
     <!-- Display pagination links -->
    {{ $data->links() }}
+    <br/>
+    <br/>
+    <br/>
 </div>
 
 
