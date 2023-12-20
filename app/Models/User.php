@@ -42,7 +42,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    public function get_publisher_list($filter, $size = 10){
+    public function get_publisher_list($filter, $size = 1000){
          $obj = self::where('user_type','publisher');
         
         if(!empty($filter) && !empty($filter['type']) && $filter['type'] =='id' && $filter['v'] !=0){
