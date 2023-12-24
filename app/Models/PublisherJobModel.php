@@ -20,27 +20,38 @@ class PublisherJobModel extends Model
        if($publisherId > 0){
            return static::where('publisher_id', $publisherId)->withCount('tracking')->with('publisher')->with('campaign')->orderBy('updated_at', 'desc')->paginate($size);
         }else{
-            if(!empty($filter) && !empty($filter['type'])){
+            
+            
+            
+            if(!empty($filter) && (!empty($filter['id']) || !empty($filter['pub_name']) || !empty($filter['adver_name']) || !empty($filter['campaign_name']))){
                 $publisherJob = static::orderBy('updated_at', 'desc');
 
-                if($filter['type'] == 'id' && $filter['v'] != 0 ){
-                    $publisherJob->where($filter['type'], $filter['v'])->with('publisher')->with('campaign');
-                }else if ($filter['type'] == 'pub_name' && $filter['v'] != '' ){
+                if($filter['id'] != 0 ){
+                    $publisherJob->where('id', $filter['id'])->with('publisher')->with('campaign');
+                }
+                if ($filter['pub_name'] != '' ){
                      $publisherJob->whereHas('publisher', function ($query) use ($filter) {
-                            $query->where('name', 'like', '%' . $filter['v'] . '%');
+                            $query->where('name', 'like', '%' . $filter['pub_name'] . '%');
                         })->with('campaign');
                 }
-                else if ( $filter['type'] =='campaign_name' && $filter['v'] != '' ){
+                
+                if ( $filter['campaign_name'] != '' ){
                      $publisherJob->whereHas('campaign', function ($query) use ($filter) {
-                            $query->where('campaign_name', 'like', '%' . $filter['v'] . '%');
+                            $query->where('campaign_name', 'like', '%' . $filter['campaign_name'] . '%');
                         })->with('publisher');
-                }else if ($filter['type'] =='adver_name' && $filter['v'] != '' ){
+                }
+                if ($filter['adver_name'] != '' ){
                     $publisherJob->whereHas('campaign.advertiser', function ($query) use ($filter) {
-                            $query->where('name', 'like', '%' . $filter['v'] . '%');
+                            $query->where('name', 'like', '%' . $filter['adver_name'] . '%');
                         })->with('publisher');
                 }
                 return $publisherJob->withCount('tracking')->paginate($size);
             }
+            
+            
+            
+            
+            
             
             return static::with('publisher')->withCount('tracking')->with('campaign')->orderBy('updated_at', 'desc')->paginate($size);
         }

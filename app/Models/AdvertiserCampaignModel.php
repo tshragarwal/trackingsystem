@@ -17,17 +17,19 @@ class AdvertiserCampaignModel extends Model
         if(!empty($filter) && !empty($filter['advertizer'])){
             $campaign->where('advertiser_id', $filter['advertizer']);
         }
-        
-        if(!empty($filter) && !empty($filter['type']) && $filter['type'] == 'id' && $filter['v'] != 0 ){
-            $campaign->where($filter['type'], $filter['v']);
-        }else if (!empty($filter) && !empty($filter['type']) && $filter['type'] =='campaign_name' && $filter['v'] != '' ){
-             $campaign->where($filter['type'], 'like','%'.$filter['v'].'%');
-        }else if (!empty($filter) && !empty($filter['type']) && $filter['type'] =='adver_name' && $filter['v'] != '' ){
-             $campaign->whereHas('advertiser', function ($query) use ($filter) {
-                    $query->where('name', 'like', '%' . $filter['v'] . '%');
-                });
+       
+        if(!empty($filter) && !empty($filter['id']) && $filter['id'] > 0 ){
+            $campaign->where('id', $filter['id']);
+        }
+        if (!empty($filter) && !empty($filter['campaign_name']) && $filter['campaign_name'] != '' ){
+             $campaign->where('campaign_name', 'like','%'.$filter['campaign_name'].'%');
         }
         
+        if (!empty($filter) && !empty($filter['adver_name'])  && $filter['adver_name'] != '' ){
+             $campaign->whereHas('advertiser', function ($query) use ($filter) {
+                    $query->where('name', 'like', '%' . $filter['adver_name'] . '%');
+                });
+        }
         
         return $campaign->orderBy('updated_at', 'desc')->paginate($size);
        

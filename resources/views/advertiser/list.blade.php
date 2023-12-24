@@ -30,21 +30,16 @@
         </div>
     @endif
     <a href="{{route('advertiser.campaign')}}" class="btn btn-primary" style="margin-bottom:20px;float:right;"> {{ __('Add New Campaign') }} </a>
-    <div class="card card-body col-sm-7" style="margin-bottom: 20px">
+    <div class="card card-body col-sm-9" style="margin-bottom: 20px">
        <form class="form-inline"  action="{{route('campaign.list')}}">
-         <div class="form-group mx-sm-4">
-           <label for="staticEmail2" class="sr-only"><lable> Filter List </lable></label>
-           <select name="type" class="form-control">
-               <option  value="0">-- Select --</option>
-               <option {{!empty($filter) && !empty($filter['type']) && ($filter['type']=='id')?'selected':''}} value="id">Campaign Id</option>
-               <option {{!empty($filter) && !empty($filter['type']) && ($filter['type']=='adver_name')?'selected':''}} value="adver_name">Advertizer Name</option>
-               <option {{!empty($filter) && !empty($filter['type']) && ($filter['type']=='campaign_name')?'selected':''}} value="campaign_name">Campaign Name</option>
-           </select>
+         <div class="form-group ">
+            <div class='row'>
+              <div class="col"> <input type="text" class="form-control" name="id" value="{{!empty($filter['id'])?$filter['id']:''}}" placeholder="Campaign Id"> </div>
+              <div class="col"> <input type="text" class="form-control" name="adver_name" value="{{!empty($filter['adver_name'])?$filter['adver_name']:''}}" placeholder="Advertizer Name"> </div>
+              <div class="col"> <input type="text" class="form-control" name="campaign_name" value="{{!empty($filter['campaign_name'])?$filter['campaign_name']:''}}" placeholder="Campaign Name"> </div>
+              <div class="col">  <button type="submit" class="btn btn-success mb-2">Filter</button> </div>
+            </div>
          </div>
-         <div class="form-group  mx-sm-5">
-           <input type="text" class="form-control" name="v" value="{{!empty($filter['v'])?$filter['v']:''}}" placeholder="Enter Selected Type Value">
-         </div>
-         <button type="submit" class="btn btn-success mb-2">Filter</button>
        </form>
    </div>
     

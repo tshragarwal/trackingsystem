@@ -13,23 +13,17 @@
   <div class="alert alert-success" role="alert"> New Advertiser data successfully saved. </div>
   @endif
   
-  
-    <div class="card card-body col-sm-7" style="margin-bottom: 20px">
+    <div class="card card-body col-sm-10" style="margin-bottom: 20px">
        <form class="form-inline"  action="{{route('publisher.job.list')}}">
-         <div class="form-group mx-sm-4">
-           <label for="staticEmail2" class="sr-only"><lable> Filter List </lable></label>
-           <select name="type" class="form-control">
-               <option  value="0">-- Select --</option>
-               <option {{!empty($filter) && !empty($filter['type']) && $filter['type']== 'id'? 'selected':''}} value="id">Job ID</option>
-               <option {{!empty($filter) && !empty($filter['type']) && $filter['type']== 'pub_name' ? 'selected':''}} value="pub_name">Publisher Name</option>
-               <option {{!empty($filter) && !empty($filter['type']) && $filter['type']== 'adver_name' ? 'selected':''}} value="adver_name">Advertiser Name</option>
-               <option {{!empty($filter) && !empty($filter['type']) && $filter['type']== 'campaign_name' ? 'selected':''}} value="campaign_name">Campaign Name</option>
-           </select>
-         </div>
-         <div class="form-group  mx-sm-5">
-           <input type="text" class="form-control" name="v" value="{{!empty($filter['v'])?$filter['v']:''}}" placeholder="Enter Selected Type Value">
-         </div>
-         <button type="submit" class="btn btn-success mb-2">Filter</button>
+        <div class="form-group ">
+            <div class='row'>
+              <div class="col"> <input type="text" class="form-control" name="id" value="{{!empty($filter['id'])?$filter['id']:''}}" placeholder="Job ID"> </div>
+              <div class="col"> <input type="text" class="form-control" name="pub_name" value="{{!empty($filter['pub_name'])?$filter['pub_name']:''}}" placeholder="Publisher Name"> </div>
+              <div class="col"> <input type="text" class="form-control" name="adver_name" value="{{!empty($filter['adver_name'])?$filter['adver_name']:''}}" placeholder="Advertiser Name"> </div>
+              <div class="col"> <input type="text" class="form-control" name="campaign_name" value="{{!empty($filter['campaign_name'])?$filter['campaign_name']:''}}" placeholder="Campaign Name"> </div>
+              <div class="col"> <button type="submit" class="btn btn-success mb-2">Filter</button> </div>
+            </div>
+        </div>
        </form>
    </div>
  <div class="table-container">  
