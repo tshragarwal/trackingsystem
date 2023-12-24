@@ -17,6 +17,14 @@
       <li class="breadcrumb-item"><a href="javascript:void(0)">Typein Report</a></li>
     </ol>
   </nav>
+    
+    @if (session('success_status'))
+      <h6 class="alert alert-success">{{ session('success_status') }}</h6>
+    @endif
+    @if (session('error_status'))
+      <h6 class="alert alert-danger">{{ session('error_status') }}</h6>
+    @endif
+    
   <div class="card card-body" style="margin-bottom: 20px">
     <form action="{{route('report.typein_list')}}" method='get'>
       <div class="row">
@@ -73,7 +81,7 @@
         <div class="col">
           <input type='hidden' name='query_string' value="{{http_build_query($query_string)}}" />
           <button target="_blank" type="submit" class="btn btn-success">DOWNLOAD CSV</button>
-          @if($adminFlag == true) <a href="{{route('report.typein_csv')}}" class="btn btn-primary"> {{ __('UPLOAD REPORT') }} </a> @endif </div>
+          @if($adminFlag == true) <a href="{{route('report.typein_csv')}}" class="btn btn-primary"> {{ __('UPLOAD REPORT') }} </a> <a href="#"   data-toggle="modal" data-target="#deletAllReport" class="btn btn-danger delete_report"> {{ __('DELETE REPORT') }} </a> @endif </div>
       </div>
     </form>
   </div>
@@ -104,6 +112,7 @@
           <th scope="col">Publisher RPC ($)</th>
           <th scope="col">Net Revenue ($)</th>
           <th scope="col">Country</th>
+          <th scope="col">Action</th>
           @else
           <th scope="col">Date</th>
           <th scope="col">Offer Id</th>
@@ -122,7 +131,7 @@
       
       @if(!empty($data))
       @foreach($data as $record)
-      <tr> @if($adminFlag == true)
+      <tr  class="typein_{{$record->id}}"> @if($adminFlag == true)
         <th scope="row">{{$record->id}}</th>
         <td scope="row">{{$record->date}}</td>
         <td scope="row">{{$record->advertiser_name}}</td>
@@ -144,6 +153,10 @@
         <td scope="row">$ {{$record->publisher_RPC}}</td>
         <td scope="row">$ {{$record->net_revenue}}</td>
         <td scope="row">{{$record->country}}</td>
+        <td scope="row">
+            <a href="{{route('report.typein_report_edit', ['id' => $record->id])}}" ><i  class="fa fa-edit "></i></a>
+            <a  style="margin-left: 12px;" href="javascript:void(0)" name="{{$record->id}}" data-toggle="modal" data-target="#deletecamp" class="delete_report" id="{{$record->id}}" ><i  class="fa fa-trash-o "></i></a>
+        </td>
         @else
         <td scope="row">{{$record->date}}</td>
         <td scope="row">{{$record->offer_id}}</td>
@@ -169,6 +182,60 @@
   {{ $data->appends($query_string)->links() }} 
 <br/><br/><br/>
 </div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="deletecamp" tabindex="-1" role="dialog" aria-labelledby="deletecampLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Delete Typein Report</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body delete_body">
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger delete_report_confirm" ad_id="">Delete</button>
+      </div>
+        <div class="delet_message">
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="deletAllReport" tabindex="-1" role="dialog" aria-labelledby="deletecampLabel1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" >Delete All Typein Report</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <b>It will Delete All Typein Report Data and Deleted report will not be reverted. Do you want to delete</b>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger delete_all_report_confirm" ad_id="">Delete</button>
+      </div>
+        <div class="delet_message_all">
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <script type="text/javascript">
 $(function() {
 $('#publisher_select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
@@ -212,6 +279,64 @@ $('#advertizer_select').on('changed.bs.select', function (e, clickedIndex, isSel
 });
 
 
+
+
+
+    $('.delete_report').on('click', function(){
+        $('.delete_report_confirm').attr('ad_id', $(this).attr('id'));
+        $('.delete_body').html('Deleting the record will not be reverted. Do you want to delete Id <b>' +$(this).attr('name') +'</b>' );
+        
+    });
+    $('.delete_report_confirm').on('click', function(){
+        var id = $(this).attr('ad_id');
+        $('.delete_message').html('');
+        
+        var token = $('meta[name="csrf-token"]').attr('content');
+         var request = $.ajax({
+            url: '/report/typein/row/delete',
+            type: "POST",
+            dataType: "json",
+            data: {
+                    _token: token, // Include the CSRF token
+                    id: id // Include any other data you need for deletion
+            },
+            success: function(data){
+                if(data.status == 0){
+                    $('.delet_message').html('<div class="alert alert-danger" role="alert">'+ data.message+'</div>');
+                     setTimeout(function () {
+                        var closeButton = $('[data-dismiss="modal"]');
+                                        closeButton.click();
+                     }, 10000); // 10,000 milliseconds (10 seconds)
+                }else{
+                     $('.typein_' + id).remove();
+                     $('.delet_message').html('<div class="alert alert-primary" role="alert">'+ data.message+'</div>');
+                      setTimeout(function () {
+                        var closeButton = $('[data-dismiss="modal"]');
+                                        closeButton.click();
+                     }, 5000); // 10,000 milliseconds (10 seconds)
+                    
+                }
+            }
+        });
+    });
+    
+
+    $('.delete_all_report_confirm').on('click', function(){
+        var token = $('meta[name="csrf-token"]').attr('content');
+         var request = $.ajax({
+            url: '/report/typein/all/delete',
+            type: "POST",
+            dataType: "json",
+            data: { _token: $('meta[name="csrf-token"]').attr('content') },
+            success: function(data){
+                $('.delet_message_all').html('<div class="alert alert-success" role="alert">Data Deleted</div>');
+                      setTimeout(function () {
+                       location.reload();
+                     }, 2000);
+            }
+        });
+    });
+    
 </script>
 
 

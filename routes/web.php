@@ -80,6 +80,8 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::get($prepix.'/report/csv_sample', [App\Http\Controllers\ReportController::class, 'n2s_csv_sample'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_csv_sample');
     Route::get($prepix.'/report/edit/{id}', [App\Http\Controllers\ReportController::class, 'n2s_report_edit'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_report_edit');
     Route::post($prepix.'/report/edit/save', [App\Http\Controllers\ReportController::class, 'n2s_report_edit_save'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_report_edit_save');
+    Route::post($prepix.'/report/n2s/row/delete', [App\Http\Controllers\ReportController::class, 'delete_n2s_report_row'] )->middleware(['auth'])->name('report.delete_n2s_report_row');
+    Route::post($prepix.'/report/n2s/all/delete', [App\Http\Controllers\ReportController::class, 'delete_n2s_report_all'] )->middleware(['auth'])->name('report.delete_n2s_report_all');
 
 
     Route::get($prepix.'/report/typein/list', [App\Http\Controllers\ReportController::class, 'typein_list'] )->middleware(['auth', 'checkdomain'])->name('report.typein_list');
@@ -87,6 +89,10 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::post($prepix.'/report/typein/uploadcsv', [App\Http\Controllers\ReportController::class, 'typein_uploadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.typein_uploadcsv');
     Route::get($prepix.'/report/typein/download', [App\Http\Controllers\ReportController::class, 'typein_downloadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.typein_downloadcsv');
     Route::get($prepix.'/report/typein/csv_sample', [App\Http\Controllers\ReportController::class, 'typein_csv_sample'] )->middleware(['auth', 'checkdomain'])->name('report.typein_csv_sample');
+    Route::get($prepix.'/report/typein/edit/{id}', [App\Http\Controllers\ReportController::class, 'typein_report_edit'] )->middleware(['auth', 'checkdomain'])->name('report.typein_report_edit');
+    Route::post($prepix.'/report/typein/edit/save', [App\Http\Controllers\ReportController::class, 'typein_report_edit_save'] )->middleware(['auth', 'checkdomain'])->name('report.typein_report_edit_save');
+    Route::post($prepix.'/report/typein/row/delete', [App\Http\Controllers\ReportController::class, 'delete_typein_report_row'] )->middleware(['auth'])->name('report.delete_typein_report_row');
+    Route::post($prepix.'/report/typein/all/delete', [App\Http\Controllers\ReportController::class, 'delete_typein_report_all'] )->middleware(['auth'])->name('report.delete_typein_report_all');
 }
 if($domain == env('PUBLISHER_DOMAIN')){
     // --------- Tracking Url --------------- //

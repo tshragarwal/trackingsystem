@@ -463,4 +463,87 @@ class ReportController extends Controller
             return redirect()->route('report.list')->with('success_status', 'Report successfully Updated.');
         }
     }
+
+    
+    public function typein_report_edit(Request $request){
+        if(empty($request['id'])){
+            return ['error' => 'invalid request'];
+        }
+        
+        $doc = ReportTypeinModel::where('id', $request['id'])->first();
+        if(empty($doc)){
+            return ['error' => 'Invalid Request'];
+        }
+       
+        return view('reports.typein_report_edit', ['data' => $doc]);
+    }
+    
+    public function typein_report_edit_save(Request $request) {
+        $data = $request->all();
+        $id = $data['id'];
+        unset($data['_token']);
+        unset($data['id']);
+        
+        $response = ReportTypeinModel::where('id', $id)->update($data);
+        if($response) {
+            return redirect()->route('report.typein_list')->with('success_status', 'Report successfully Updated.');
+        }
+    }
+    
+    
+    public function delete_n2s_report_row(Request $request){
+        $requestData = $request->all();
+
+        if(!empty($requestData['id'])){
+            
+            $record = ReportN2sModel::find($requestData['id']);
+            if ($record) {
+              
+                $record->delete();
+                $message = 'N2S Report Row successfully deleted';
+                
+                return response()->json(['message' => $message, 'status' => 1]);
+            } else {
+                return response()->json(['message' => 'Typein Report Row not found'], 404);
+            }
+        }
+    }      
+    
+    public function delete_typein_report_row(Request $request){
+        $requestData = $request->all();
+
+        if(!empty($requestData['id'])){
+            
+            $record = ReportTypeinModel::find($requestData['id']);
+            if ($record) {
+              
+                $record->delete();
+                $message = 'Typein Report Row successfully deleted';
+                
+                return response()->json(['message' => $message, 'status' => 1]);
+            } else {
+                return response()->json(['message' => 'Typein Report Row not found'], 404);
+            }
+        }
+    }   
+    
+    public function delete_n2s_report_all(){
+        $record = ReportN2sModel::truncate();
+        if ($record) {
+            $message = 'Data Deleted';
+            return response()->json(['message' => $message, 'status' => 1]);
+        } else {
+            return response()->json(['message' => 'Data Not Deleted'], 404);
+        }
+    }  
+    
+    public function delete_typein_report_all(){
+        $record = ReportTypeinModel::truncate();
+        if ($record) {
+            $message = 'Data Deleted';
+            return response()->json(['message' => $message, 'status' => 1]);
+        } else {
+            return response()->json(['message' => 'Data Not Deleted'], 404);
+        }
+    }      
 }

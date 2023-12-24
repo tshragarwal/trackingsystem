@@ -80,7 +80,7 @@
         <div class="col">
           <input type='hidden' name='query_string' value="{{http_build_query($query_string)}}" />
           <button target="_blank" type="submit" class="btn btn-success">DOWNLOAD CSV</button>
-          @if( Auth::guard('web')->user()->user_type == "admin") <a href="{{route('report.csv')}}" class="btn btn-primary"> {{ __('UPLOAD REPORT') }} </a> @endif </div>
+          @if( Auth::guard('web')->user()->user_type == "admin") <a href="{{route('report.csv')}}" class="btn btn-primary"> {{ __('UPLOAD REPORT') }} </a> <a href="#"   data-toggle="modal" data-target="#deletAllReport" class="btn btn-danger delete_report"> {{ __('DELETE REPORT') }} </a> @endif </div>
       </div>
     </form>
   </div>
@@ -127,7 +127,7 @@
       
       @if(!empty($data))
       @foreach($data as $record)
-      <tr > @if($adminFlag == true)
+      <tr class="n2s_{{$record->id}}"> @if($adminFlag == true)
         <th scope="row">{{$record->id}}</th>
         <td scope="row">{{$record->date}}</td>
         <td scope="row">{{$record->advertiser_name}}</td>
@@ -148,7 +148,10 @@
         <td scope="row">$ {{$record->publisher_RPC}}</td>
         <td scope="row">$ {{$record->revenue}}</td>
         <td scope="row">{{$record->country}}</td>
-        <td scope="row"><a href="{{route('report.n2s_report_edit', ['id' => $record->id])}}" ><i  class="fa fa-edit "></i></a></td>
+        <td scope="row">
+            <a href="{{route('report.n2s_report_edit', ['id' => $record->id])}}" ><i  class="fa fa-edit "></i></a>
+            <a  style="margin-left: 12px;" href="javascript:void(0)" name="{{$record->id}}" data-toggle="modal" data-target="#deletecamp" class="delete_report" id="{{$record->id}}" ><i  class="fa fa-trash-o "></i></a>
+        </td>
         @else
         <td scope="row">{{$record->date}}</td>
         <td scope="row">{{$record->offer_id}}</td>
@@ -179,6 +182,54 @@
 </div>
   
 
+
+
+<!-- Modal -->
+<div class="modal fade" id="deletecamp" tabindex="-1" role="dialog" aria-labelledby="deletecampLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Delete N2S Report</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body delete_body">
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger delete_report_confirm" ad_id="">Delete</button>
+      </div>
+        <div class="delet_message">
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deletAllReport" tabindex="-1" role="dialog" aria-labelledby="deletecampLabel1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" >Delete All N2S Report</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <b>It will Delete All N2S Report Data and Deleted report will not be reverted. Do you want to delete</b>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger delete_all_report_confirm" ad_id="">Delete</button>
+      </div>
+        <div class="delet_message_all">
+        </div>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
 $(function() {
@@ -222,6 +273,25 @@ $('#advertizer_select').on('changed.bs.select', function (e, clickedIndex, isSel
     var selectedValues = $('#advertizer_select').val();
     $('#advertizers_name').val(selectedValues);
 });
+
+
+
+    $('.delete_all_report_confirm').on('click', function(){
+        var token = $('meta[name="csrf-token"]').attr('content');
+         var request = $.ajax({
+            url: '/report/n2s/all/delete',
+            type: "POST",
+            dataType: "json",
+            data: { _token: $('meta[name="csrf-token"]').attr('content') },
+            success: function(data){
+                $('.delet_message_all').html('<div class="alert alert-success" role="alert">Data Deleted</div>');
+                      setTimeout(function () {
+                       location.reload();
+                     }, 2000);
+            }
+        });
+    });
+    
 </script>
 
 
