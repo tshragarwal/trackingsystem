@@ -23,7 +23,7 @@ class PublisherController extends Controller
         }
         $requestData = $request->all();
         $userObj = new User();
-        $publisherList = $userObj->get_publisher_list($requestData, 200);
+        $publisherList = $userObj->get_publisher_list($requestData, 1000);
         return view('publisher.list', ['data'=> $publisherList, 'filter' => $requestData]);
     }
     

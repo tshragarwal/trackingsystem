@@ -41,14 +41,14 @@
 
     <div class="table-container">
     <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover" id='advertiser_list_table'>
         <thead>
             <tr>
-              <th scope="col">Advertizer Id</th>
-              <th scope="col">Advertizer Name</th>
-              <th scope="col">Advertizer Email</th>
-              <th scope="col">Last Updated</th>
-              <th scope="col">Created At</th>
+              <th data-field="id" data-sortable="true" scope="col">Advertizer Id <i class="fa fa-sort"></i></th>
+              <th data-field="name" data-sortable="true" scope="col">Advertizer Name <i class="fa fa-sort"></i></th>
+              <th data-field="manual_email" data-sortable="true" scope="col">Advertizer Email <i class="fa fa-sort"></i></th>
+              <th data-field="updated_at" data-sortable="true" scope="col">Last Updated <i class="fa fa-sort"></i></th>
+              <th data-field="created_at" data-sortable="true" scope="col">Created At <i class="fa fa-sort"></i></th>
               <th scope="col">Action</th>
             </tr>
         </thead>
@@ -154,4 +154,11 @@
     
 </script>
 
+
+<script>
+    $(document).ready(function() {
+        $('#advertiser_list_table').bootstrapTable();
+        $('.fixed-table-loading').css('display', 'none');
+    });
+</script>
 @endsection

@@ -34,14 +34,14 @@
    </div>
      <div class="table-container">
     <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover" id='publisher_list_table'>
         <thead>
             <tr>
-              <th scope="col">Publisher Id</th>
-              <th scope="col">Publisher Name</th>
-              <th scope="col">Publisher Email</th>
-              <th scope="col">Last Updated</th>
-              <th scope="col">Created At</th>
+              <th data-field="id" data-sortable="true"  scope="col">Publisher Id <i class="fa fa-sort"></i></th>
+              <th data-field="name" data-sortable="true"  scope="col">Publisher Name <i class="fa fa-sort"></i></th>
+              <th data-field="email" data-sortable="true"  scope="col">Publisher Email <i class="fa fa-sort"></i></th>
+              <th data-field="updated_at" data-sortable="true"  scope="col">Last Updated <i class="fa fa-sort"></i></th>
+              <th data-field="created_at" data-sortable="true"  scope="col">Created At <i class="fa fa-sort"></i></th>
               <th scope="col">Action</th>
 
             </tr>
@@ -151,5 +151,12 @@
     
 </script>
 
+
+<script>
+    $(document).ready(function() {
+        $('#publisher_list_table').bootstrapTable();
+        $('.fixed-table-loading').css('display', 'none');
+    });
+</script>
 
 @endsection

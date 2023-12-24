@@ -218,7 +218,7 @@ class AdvertizerController extends Controller
         $requestData = $request->all();
         $userObj = new AdvertizerRequest();
         
-        $advertizerList = $userObj->get_publisher_list($requestData, 250);
+        $advertizerList = $userObj->get_publisher_list($requestData, 1000);
        
         return view('advertiser.advertizerlist', ['data' => $advertizerList, 'success' => $request->s, 'filter' => $requestData ]);
     }    
