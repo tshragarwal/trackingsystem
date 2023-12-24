@@ -45,19 +45,19 @@
     
     <div class="table-container">
     <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover" id='campaign_list_table'>
         <thead>
             <tr>
            
-              <th scope="col">Campaign Id</th>
-              <th scope="col">Advertizer Name</th>
-              <th scope="col">Campaign Name</th>
-              <th scope="col">Target Count</th>
-              <th scope="col">Target Url</th>
+              <th data-field="id" data-sortable="true"  scope="col">Campaign Id <i class="fa fa-sort"></i></th>
+              <th data-field="advertiser_name" data-sortable="true"  scope="col">Advertizer Name <i class="fa fa-sort"></i></th>
+              <th data-field="campaign_name" data-sortable="true"  scope="col">Campaign Name <i class="fa fa-sort"></i></th>
+              <th  data-field="target_count" data-sortable="true" scope="col">Target Count <i class="fa fa-sort"></i></th>
+              <th  data-field="target_url" data-sortable="true" scope="col">Target Url <i class="fa fa-sort"></i></th>
             
-              <th scope="col">Status</th>
-              <th scope="col">Last Updated</th>
-              <th scope="col">Created At</th>
+              <th  data-field="status" data-sortable="true" scope="col">Status <i class="fa fa-sort"></i></th>
+              <th  data-field="updated_at" data-sortable="true" scope="col">Last Updated <i class="fa fa-sort"></i></th>
+              <th  data-field="created_at" data-sortable="true" scope="col">Created At <i class="fa fa-sort"></i></th>
               <th scope="col">Action</th>
             </tr>
         </thead>
@@ -169,5 +169,10 @@
     
     
 </script>
-
+<script>
+    $(document).ready(function() {
+        $('#campaign_list_table').bootstrapTable();
+        $('.fixed-table-loading').css('display', 'none');
+    });
+</script>
 @endsection
