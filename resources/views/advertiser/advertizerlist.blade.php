@@ -8,19 +8,19 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="javascript:void(0)">Advertizer List</a></li>
+          <li class="breadcrumb-item"><a href="javascript:void(0)">Advertiser List</a></li>
         </ol>
     </nav>
     
     
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
-            New Advertizer data successfully saved.
+            New Advertiser data successfully saved.
         </div>
     @endif
     
     
-    <a href="{{route('advertiser.form')}}" class="btn btn-primary" style="float:right;">{{ __('Add New Advertizer') }}</a>
+    <a href="{{route('advertiser.form')}}" class="btn btn-primary" style="float:right;">{{ __('Add New Advertiser') }}</a>
 
        <div class="card card-body col-sm-7" style="margin-bottom: 20px">
            <form class="form-inline"  action="{{route('advertiser.list')}}">
@@ -28,8 +28,8 @@
                <label for="staticEmail2" class="sr-only"><lable> Filter List </lable></label>
                <select name="type" class="form-control">
                    <option  value="0">-- Select --</option>
-                   <option {{!empty($filter) && !empty($filter['type']) && ($filter['type']=='id')?'selected':''}} value="id">Advertizer Id</option>
-                   <option {{!empty($filter) && !empty($filter['type']) && ($filter['type']=='name')?'selected':''}} value="name">Advertizer Name</option>
+                   <option {{!empty($filter) && !empty($filter['type']) && ($filter['type']=='id')?'selected':''}} value="id">Advertiser Id</option>
+                   <option {{!empty($filter) && !empty($filter['type']) && ($filter['type']=='name')?'selected':''}} value="name">Advertiser Name</option>
                </select>
              </div>
              <div class="form-group  mx-sm-5">
@@ -44,9 +44,9 @@
     <table class="table table-hover" id='advertiser_list_table'>
         <thead>
             <tr>
-              <th data-field="id" data-sortable="true" scope="col">Advertizer Id <i class="fa fa-sort"></i></th>
-              <th data-field="name" data-sortable="true" scope="col">Advertizer Name <i class="fa fa-sort"></i></th>
-              <th data-field="manual_email" data-sortable="true" scope="col">Advertizer Email <i class="fa fa-sort"></i></th>
+              <th data-field="id" data-sortable="true" scope="col">Advertiser Id <i class="fa fa-sort"></i></th>
+              <th data-field="name" data-sortable="true" scope="col">Advertiser Name <i class="fa fa-sort"></i></th>
+              <th data-field="manual_email" data-sortable="true" scope="col">Advertiser Email <i class="fa fa-sort"></i></th>
               <th data-field="updated_at" data-sortable="true" scope="col">Last Updated <i class="fa fa-sort"></i></th>
               <th data-field="created_at" data-sortable="true" scope="col">Created At <i class="fa fa-sort"></i></th>
               <th scope="col">Action</th>
@@ -89,7 +89,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" >Delete Advertizer</h5>
+        <h5 class="modal-title" >Delete Advertiser</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

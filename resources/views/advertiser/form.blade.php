@@ -8,20 +8,20 @@
         <div class="col-md-8">
             <div class="card">
                 @if(!empty($advertizer))
-                    <div class="card-header">{{ __('Edit Advertizer Detail') }}</div>
+                    <div class="card-header">{{ __('Edit Advertiser Detail') }}</div>
                 @else
-                    <div class="card-header">{{ __('Add New Advertizer Detail') }}</div>
+                    <div class="card-header">{{ __('Add New Advertiser Detail') }}</div>
                 @endif
 
                 <div class="card-body">
                     
-                    <!-- START Advertizer Form for adding new request--> 
+                    <!-- START Advertiser Form for adding new request--> 
                     
                    <form method="POST" action="{{ route('advertiser.formsave') }}">
                         @csrf
                         <input type="hidden" name="advertizer_id" value="{{$advertizer['id']??0}}" />
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Advertizer Name') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Advertiser Name') }}</label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"  name="name" value="{{ $advertizer['name']??old('name') }}" required autocomplete="name" autofocus>
@@ -35,7 +35,7 @@
                         </div>
                         
                         <div class="row mb-3">
-                            <label for="manual_email" class="col-md-4 col-form-label text-md-end">{{ __('Advertizer Email') }}</label>
+                            <label for="manual_email" class="col-md-4 col-form-label text-md-end">{{ __('Advertiser Email') }}</label>
 
                             <div class="col-md-6">
                                 <input id="manual_email" type="text" class="form-control @error('manual_email') is-invalid @enderror" name="manual_email" value="{{ $advertizer['manual_email']??old('manual_email') }}"  autocomplete="name" autofocus>
@@ -58,7 +58,7 @@
                         </div>
                     </form>
                     
-                     <!-- END Advertizer Form for adding new request--> 
+                     <!-- END Advertiser Form for adding new request--> 
                     
                     
                 </div>

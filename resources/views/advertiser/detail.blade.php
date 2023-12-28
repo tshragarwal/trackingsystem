@@ -16,7 +16,7 @@
                                 
                             </div>
                      @elseif(!empty($data))
-                    <!--  Advertizer Detail Form --> 
+                    <!--  Advertiser Detail Form --> 
                    
                         <form method="POST" action="{{ route('campaign.update') }}">
                                                              
@@ -30,7 +30,7 @@
                              @csrf
                              <input id="id" type="hidden" class="form-control  is-invalid " name="id" value="{{ $data->id }}">
                              <div class="row mb-3">
-                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Advertizer Name') }}</label>
+                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Advertiser Name') }}</label>
                                  
                                  <div class="col-md-6">
                                      <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" readonly="readonly" name="name" value="{{ $data->advertiser->name }}  ({{ $data->advertiser->manual_email}})" required autocomplete="name" autofocus>
@@ -200,7 +200,7 @@
                          </form>
                     @endif
                     
-                     <!-- END Advertizer Form for adding new request--> 
+                     <!-- END Advertiser Form for adding new request--> 
                     
                     
                 </div>

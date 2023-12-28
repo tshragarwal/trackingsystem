@@ -16,7 +16,7 @@
                                 
                             </div>
                      @elseif(!empty($data))
-                    <!--  Advertizer Detail Form --> 
+                    <!--  Advertiser Detail Form --> 
                    
                         <form method="POST" action="{{ route('publisher.update') }}">
                                                              
@@ -84,7 +84,7 @@
                          </form>
                     @endif
                     
-                     <!-- END Advertizer Form for adding new request--> 
+                     <!-- END Advertiser Form for adding new request--> 
                     
                     
                 </div>

@@ -28,20 +28,20 @@
    </div>
  <div class="table-container">  
   <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover" id='publisher_job_list_table'>
       <thead>
         <tr>
-          <th scope="col">Job Id</th>
-          <th scope="col">Publisher Name</th>
-          <th scope="col">Advertizer name</th>
-          <th scope="col">Campaign name</th>
-          <th scope="col">Campaign Target Url</th>
-          <th scope="col">Link</th>
-          <th scope="col">Target Count</th>
-          <th scope="col">Tracking Count</th>
-          <th scope="col">Updated At</th>
-          <th scope="col">Created At</th>
-          <th scope="col">Action</th>
+          <th data-field="id" data-sortable="true" scope="col">Job Id <i class="fa fa-sort"></i></th>
+          <th data-field="publisher_name" data-sortable="true" scope="col">Publisher Name <i class="fa fa-sort"></i></th>
+          <th data-field="advertiser_name" data-sortable="true" scope="col">Advertiser name <i class="fa fa-sort"></i></th>
+          <th data-field="campaign_name" data-sortable="true" scope="col">Campaign name <i class="fa fa-sort"></i></th>
+          <th data-field="target_url" data-sortable="true" scope="col">Campaign Target Url <i class="fa fa-sort"></i></th>
+          <th data-field="proxy_url" data-sortable="true" scope="col">Link <i class="fa fa-sort"></i></th>
+          <th data-field="target_count" data-sortable="true" scope="col">Target Count <i class="fa fa-sort"></i></th>
+          <th data-field="tracking_count" data-sortable="true" scope="col">Tracking Count <i class="fa fa-sort"></i></th>
+          <th data-field="updated_at" data-sortable="true" scope="col">Updated At <i class="fa fa-sort"></i></th>
+          <th data-field="created_at" data-sortable="true" scope="col">Created At <i class="fa fa-sort"></i></th>
+          <th  scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -128,4 +128,11 @@
         });
     });
 </script> 
+
+<script>
+    $(document).ready(function() {
+        $('#publisher_job_list_table').bootstrapTable();
+        $('.fixed-table-loading').css('display', 'none');
+    });
+</script>
 @endsection

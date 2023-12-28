@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/bootstrap-table.min.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/bootstrap-table.min.js"></script>    
     <script>
         jQuery(document).ready(function($){
             $("#menu-toggle").click(function(e) {
@@ -125,7 +125,7 @@
           <div class="bg-light border-right" id="sidebar-wrapper">
             <div class="list-group list-group-flush"> @if( Auth::guard('web')->user()->user_type == "admin")
               <ul>
-                <li><a href="{{route('advertiser.list')}}" class="list-group-item list-group-item-action bg-light"><em class="fa  fa-desktop"></em> Advertizer</a></li>
+                <li><a href="{{route('advertiser.list')}}" class="list-group-item list-group-item-action bg-light"><em class="fa  fa-desktop"></em> Advertiser</a></li>
                 <li><a href="{{route('campaign.list')}}" class="list-group-item list-group-item-action bg-light"><em class="fa fa-calendar"></em>Campaign</a></li>
                 <li><a href="{{route('publisher.list')}}" class="list-group-item list-group-item-action bg-light"><em class="fa fa-address-card-o"></em>Publisher</a></li>
                 <li><a href="{{route('publisher.job.list')}}" class="list-group-item list-group-item-action bg-light"><em class="fa fa-list-alt"></em>Publisher Job</a></li>

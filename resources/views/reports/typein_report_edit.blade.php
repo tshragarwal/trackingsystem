@@ -53,7 +53,7 @@
                                  </div>
                              </div>
                              <div class="row mb-3">
-                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Advertizer Name') }}</label>
+                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Advertiser Name') }}</label>
                                  <div class="col-md-6">
                                      <input id="name" type="text" class="form-control @error('advertiser_name') is-invalid @enderror"  name="advertiser_name" value="{{ $data->advertiser_name }}" required autocomplete="name" autofocus>
                                      @error('advertiser_name')
@@ -76,7 +76,7 @@
                              </div>
                              
                              <div class="row mb-3">
-                                 <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Advertizer Subid') }}</label>
+                                 <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Advertiser Subid') }}</label>
 
                                  <div class="col-md-6">
                                      <input id="email" type="text" class="form-control @error('subid') is-invalid @enderror" name="subid" value="{{ $data->subid }}" required>

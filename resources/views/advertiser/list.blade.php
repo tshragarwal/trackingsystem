@@ -26,7 +26,7 @@
     </div> -->
      @if( !empty($success))
         <div class="alert alert-success" role="alert">
-            New Advertizer data successfully saved.
+            New Advertiser data successfully saved.
         </div>
     @endif
     <a href="{{route('advertiser.campaign')}}" class="btn btn-primary" style="margin-bottom:20px;float:right;"> {{ __('Add New Campaign') }} </a>
@@ -35,7 +35,7 @@
          <div class="form-group ">
             <div class='row'>
               <div class="col"> <input type="text" class="form-control" name="id" value="{{!empty($filter['id'])?$filter['id']:''}}" placeholder="Campaign Id"> </div>
-              <div class="col"> <input type="text" class="form-control" name="adver_name" value="{{!empty($filter['adver_name'])?$filter['adver_name']:''}}" placeholder="Advertizer Name"> </div>
+              <div class="col"> <input type="text" class="form-control" name="adver_name" value="{{!empty($filter['adver_name'])?$filter['adver_name']:''}}" placeholder="Advertiser Name"> </div>
               <div class="col"> <input type="text" class="form-control" name="campaign_name" value="{{!empty($filter['campaign_name'])?$filter['campaign_name']:''}}" placeholder="Campaign Name"> </div>
               <div class="col">  <button type="submit" class="btn btn-success mb-2">Filter</button> </div>
             </div>
@@ -50,7 +50,7 @@
             <tr>
            
               <th data-field="id" data-sortable="true"  scope="col">Campaign Id <i class="fa fa-sort"></i></th>
-              <th data-field="advertiser_name" data-sortable="true"  scope="col">Advertizer Name <i class="fa fa-sort"></i></th>
+              <th data-field="advertiser_name" data-sortable="true"  scope="col">Advertiser Name <i class="fa fa-sort"></i></th>
               <th data-field="campaign_name" data-sortable="true"  scope="col">Campaign Name <i class="fa fa-sort"></i></th>
               <th  data-field="target_count" data-sortable="true" scope="col">Target Count <i class="fa fa-sort"></i></th>
               <th  data-field="target_url" data-sortable="true" scope="col">Target Url <i class="fa fa-sort"></i></th>

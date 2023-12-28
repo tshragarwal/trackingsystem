@@ -123,7 +123,7 @@ class ReportController extends Controller
         $requestData['advertizers_name'] = !empty($requestData['advertizers_name'])? explode(',', $requestData['advertizers_name']): [];
         
         
-        $size = 50;
+        $size = 1000;
         $reportN2sModel = new ReportN2sModel();
         $data = $reportN2sModel->reportList($requestData, $size);
         return view('reports.list', ['data' => $data, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list, 'adminFlag' => $admin]);

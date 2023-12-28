@@ -11,7 +11,7 @@
 
                 <div class="card-body">
                     
-                    <!-- START Advertizer Form for adding new request--> 
+                    <!-- START Advertiser Form for adding new request--> 
                     
                    <form method="POST" action="{{ route('advertiser.campaignsave') }}">
                         @csrf
@@ -24,7 +24,7 @@
                            @endif
                         
                         <div class="row mb-3">
-                            <label for="advertiser_id" class="col-md-4 col-form-label text-md-end">{{ __('Select Advertizer') }}</label>
+                            <label for="advertiser_id" class="col-md-4 col-form-label text-md-end">{{ __('Select Advertiser') }}</label>
 
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -152,7 +152,7 @@
                         </div>
                     </form>
                     
-                     <!-- END Advertizer Form for adding new request--> 
+                     <!-- END Advertiser Form for adding new request--> 
                     
                     
                 </div>

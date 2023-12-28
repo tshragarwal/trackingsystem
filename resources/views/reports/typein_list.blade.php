@@ -3,7 +3,7 @@
 @section('content')
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>-->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -60,7 +60,7 @@
         
         @if(!empty($publisher_advertizer_list) && !empty($publisher_advertizer_list['advertizer_list']))
         <div class="col-sm-4">
-          <lable> Advertizer </lable>
+          <lable> Advertiser </lable>
           <select id="advertizer_select" class="selectpicker form-control" multiple data-live-search="true">
                 @foreach($publisher_advertizer_list['advertizer_list'] as $advert)
             <option value="{{$advert['name']}}">{{$advert['name']}}</option>
@@ -88,43 +88,43 @@
     
   <div class="table-container">
   <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover"  id="typein_report_list_table">
       <thead>
         <tr> @if($adminFlag == true)
           <th scope="col">#</th>
-          <th scope="col">Date</th>
-          <th scope="col">Advertizer Name</th>
-          <th scope="col">Campaign Name</th>
-          <th scope="col">Campaign id</th>
-          <th scope="col">Advertizer Subid</th>
-          <th scope="col">Total Searches</th>
-          <th scope="col">Monetized Searches</th>
-          <th scope="col">Ad Clicks</th>
-          <th scope="col">Ad Coverage</th>
-          <th scope="col">CTR</th>
-          <th scope="col">CPC ($)</th>
-          <th scope="col">RPM ($)</th>
-          <th scope="col">Gross Revenue ($)</th>
-          <th scope="col">Publisher Name</th>
-          <th scope="col">Publisher Id</th>
-          <th scope="col">Offer Id</th>
-          <th scope="col">Publisher RPM ($)</th>
-          <th scope="col">Publisher RPC ($)</th>
-          <th scope="col">Net Revenue ($)</th>
-          <th scope="col">Country</th>
+          <th data-field="date" data-sortable="true" scope="col">Date  <i class="fa fa-sort"></i></th>
+          <th data-field="advertiser_name" data-sortable="true" scope="col">Advertiser Name  <i class="fa fa-sort"></i></th>
+          <th data-field="campaign_name" data-sortable="true" scope="col">Campaign Name  <i class="fa fa-sort"></i></th>
+          <th data-field="campaign_id" data-sortable="true" scope="col">Campaign id  <i class="fa fa-sort"></i></th>
+          <th data-field="subid" data-sortable="true" scope="col">Advertiser Subid  <i class="fa fa-sort"></i></th>
+          <th data-field="total_searches" data-sortable="true" scope="col">Total Searches  <i class="fa fa-sort"></i></th>
+          <th data-field="monetized_searches" data-sortable="true" scope="col">Monetized Searches  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Ad Clicks  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Ad Coverage  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">CTR  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">CPC ($)  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">RPM ($)  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Gross Revenue ($)  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Publisher Name  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Publisher Id  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Offer Id  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Publisher RPM ($)  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Publisher RPC ($)  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Net Revenue ($)  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Country  <i class="fa fa-sort"></i></th>
           <th scope="col">Action</th>
           @else
-          <th scope="col">Date</th>
-          <th scope="col">Offer Id</th>
-          <th scope="col">Country</th>
-          <th scope="col">Total Searches</th>
-          <th scope="col">Monetized Searches</th>
-          <th scope="col">Ad Clicks</th>
-          <th scope="col">Ad Coverage</th>
-          <th scope="col">CTR</th>
-          <th scope="col"> RPC ($)</th>
-          <th scope="col"> RPM ($)</th>
-          <th scope="col">Net Revenue ($)</th>
+          <th data-field="date" data-sortable="true" scope="col">Date  <i class="fa fa-sort"></i></th>
+          <th data-field="offer_id" data-sortable="true" scope="col">Offer Id  <i class="fa fa-sort"></i></th>
+          <th data-field="country" data-sortable="true" scope="col">Country  <i class="fa fa-sort"></i></th>
+          <th data-field="total_searches" data-sortable="true" scope="col">Total Searches  <i class="fa fa-sort"></i></th>
+          <th data-field="monetized_searches" data-sortable="true" scope="col">Monetized Searches  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Ad Clicks  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Ad Coverage  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">CTR  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col"> RPC ($)  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col"> RPM ($)  <i class="fa fa-sort"></i></th>
+          <th data-field="id" data-sortable="true" scope="col">Net Revenue ($)  <i class="fa fa-sort"></i></th>
           @endif </tr>
       </thead>
       <tbody>
@@ -235,7 +235,12 @@
 
 
 
-
+<script>
+    $(document).ready(function() {
+        $('#typein_report_list_table').bootstrapTable();
+        $('.fixed-table-loading').css('display', 'none');
+    });
+</script>
 <script type="text/javascript">
 $(function() {
 $('#publisher_select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
