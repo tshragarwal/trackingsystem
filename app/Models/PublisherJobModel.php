@@ -14,6 +14,9 @@ class PublisherJobModel extends Model
 {
     use HasFactory;
     protected $table = 'publisher_jobs';
+     protected $fillable = [
+        'status',
+    ];
     
     
     public function list($filter =[], $publisherId = 0, $size = 10){

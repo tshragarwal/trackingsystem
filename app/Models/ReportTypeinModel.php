@@ -21,9 +21,7 @@ class ReportTypeinModel extends Model
         if(isset($requestData['end_date']) && !empty($requestData['end_date'])){
             $model =  $model->where('date', '<=', $requestData['end_date']);
         }
-        if(isset($requestData['end_date']) && !empty($requestData['end_date'])){
-            $model =  $model->where('date', '<=', $requestData['end_date']);
-        }
+
         if(!empty($requestData['publishers_id'])) {
             $model =  $model->whereIn('publisher_id', $requestData['publishers_id']);
         }

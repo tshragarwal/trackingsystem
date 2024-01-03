@@ -59,7 +59,8 @@
         <td>{{$record->tracking_count}}</td>
         <td>{{$record->updated_at}}</td>
         <td>{{$record->created_at}}</td>
-        <td><a href="javascript:void(0)" data-toggle="modal" data-target="#deletecamp" class="delete_camp" id="{{$record->id}}" ><i  class="fa fa-trash-o "></i></a></td>
+        <td> <span class="active_inactive_toggle" status="{{$record->status}}" id="{{$record->id}}" style="font-size: 20px;cursor: pointer;margin-right:5px"> <i class="fa fa-solid {{$record->status == 1? 'fa-toggle-on': 'fa-toggle-off'}}"> </i> </span>
+                <a style="font-size: 18px" href="javascript:void(0)" data-toggle="modal" data-target="#deletecamp" class="delete_camp" id="{{$record->id}}" > <i  class="fa fa-trash-o "></i></a></td>
       </tr>
       @endforeach
       @endif
@@ -92,11 +93,40 @@
     </div>
   </div>
 </div>
+
+
 <script>
-    $('.delete_camp').on('click', function(){
-        $('.delete_camp_confirm').attr('ad_id', $(this).attr('id'));
-        $('.delete_body').html('Deleting the Joblisher Job will not be reverted.'); 
-    });
+    $(document).ready(function() {
+        $('#publisher_job_list_table').bootstrapTable();
+        $('.fixed-table-loading').css('display', 'none');
+        
+        $('.delete_camp').on('click', function(){
+            $('.delete_camp_confirm').attr('ad_id', $(this).attr('id'));
+            $('.delete_body').html('Deleting the Joblisher Job will not be reverted.'); 
+        });
+        
+        
+        $('.active_inactive_toggle').on('click', function(){
+            var id = $(this).attr('id');
+            var token = $('meta[name="csrf-token"]').attr('content');
+             var request = $.ajax({
+                url: "/publisher/job/update/status",
+                type: "POST",
+                dataType: "json",
+                data: {
+                        _token: token, // Include the CSRF token
+                        id: id,
+                        status: $(this).attr('status'),
+                },
+                success: function(data){
+                     location.reload();
+                }
+            });
+        });
+    
+    
+    
+
     $('.delete_camp_confirm').on('click', function(){
         var publisher_job_id = $(this).attr('ad_id');
         $('.delete_message').html('');
@@ -127,12 +157,8 @@
             }
         });
     });
+  });
 </script> 
 
-<script>
-    $(document).ready(function() {
-        $('#publisher_job_list_table').bootstrapTable();
-        $('.fixed-table-loading').css('display', 'none');
-    });
-</script>
+
 @endsection

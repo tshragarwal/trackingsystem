@@ -101,8 +101,14 @@ class PublisherJobController extends Controller
                 // ------ save data into Tracking table ----------//
                 $tableObj = new TrackingPublisherJobModel();
                 $tableObj->publisher_job_id = $publisherJobObj->id;
+                $tableObj->publisher_id = $publisherJobObj->publisher_id;
+                $tableObj->campaign_id = $publisherJobObj->campaign->id;
+                $tableObj->advertiser_id = $publisherJobObj->campaign->advertiser_id;
+                $tableObj->subid = $publisherJobObj->campaign->subid;
                 $tableObj->ip = $request->ip();
                 $tableObj->created_at = date('Y-m-d H:i:s');
+                $tableObj->keyword = $request->q;
+                $tableObj->date =  date('Y-m-d');
                 $tableObj->save();
 
 
@@ -152,5 +158,21 @@ class PublisherJobController extends Controller
                 return response()->json(['message' => 'Publisher not found'], 404);
             }
         }
-    }    
+    } 
+    
+    public function status_update(Request $request){
+        
+        $requestData = $request->all();
+        
+        if( !empty($requestData) && !empty($requestData['id']) && in_array($requestData['status'], [0,1]) ) {
+            $obj = PublisherJobModel::find($requestData['id']);
+            if($obj){
+                $status= $requestData['status']==1? 0:1;
+                $obj->update(['status' => $status]);
+            }
+            return true;
+        }
+        
+        return false;
+    }
 }
