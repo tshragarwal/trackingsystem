@@ -38,19 +38,16 @@ class TrackingKeywordModel extends Model
             if(isset($filter['offer_id']) && !empty($filter['offer_id'])){
                 $trackingKeyword->where('publisher_job_id', $filter['offer_id']);
             }
-            if(isset($filter['publisher_id']) && !empty($filter['publisher_id'])){
-                $trackingKeyword->where('publisher_id', $filter['publisher_id']);
+            if(isset($filter['publishers_id']) && !empty($filter['publishers_id'])){
+                $trackingKeyword->whereIn('publisher_id', explode(",", $filter['publishers_id']));
             }
             if(isset($filter['subid']) && !empty($filter['subid'])){
                 $trackingKeyword->where('subid', $filter['subid']);
             }
-           
             if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
-                $trackingKeyword->where('advertiser_id', $filter['advertiser_id']);
+                $trackingKeyword->whereIn('advertiser_id',  explode(",",$filter['advertiser_id']));
             }
-            if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
-                $trackingKeyword->where('advertiser_id', $filter['advertiser_id']);
-            }
+            
             
             return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'subid', 'keyword')
                     ->with('publisher')->with('advertiser')->with('campaign')
@@ -77,19 +74,17 @@ class TrackingKeywordModel extends Model
         if(isset($filter['publisher_job_id']) && !empty($filter['publisher_job_id'])){
             $trackingKeyword->where('publisher_job_id', $filter['publisher_job_id']);
         }
-        if(isset($filter['publisher_id']) && !empty($filter['publisher_id'])){
-            $trackingKeyword->where('publisher_id', $filter['publisher_id']);
+        if(isset($filter['publishers_id']) && !empty($filter['publishers_id'])){
+            $trackingKeyword->whereIn('publisher_id', explode(",",$filter['publishers_id']));
         }
         if(isset($filter['subid']) && !empty($filter['subid'])){
             $trackingKeyword->where('subid', $filter['subid']);
         }
 
         if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
-            $trackingKeyword->where('advertiser_id', $filter['advertiser_id']);
+            $trackingKeyword->whereIn('advertiser_id', explode(",",$filter['advertiser_id']));
         }
-        if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
-            $trackingKeyword->where('advertiser_id', $filter['advertiser_id']);
-        }
+     
 
         return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'subid')
                 ->with('publisher')->with('advertiser')->with('campaign')
