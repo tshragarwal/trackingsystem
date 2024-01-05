@@ -95,7 +95,8 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::post($prepix.'/report/typein/row/delete', [App\Http\Controllers\ReportController::class, 'delete_typein_report_row'] )->middleware(['auth'])->name('report.delete_typein_report_row');
     Route::post($prepix.'/report/typein/all/delete', [App\Http\Controllers\ReportController::class, 'delete_typein_report_all'] )->middleware(['auth'])->name('report.delete_typein_report_all');
     
-    Route::get($prepix.'/tracking/keyword/list', [App\Http\Controllers\TrackingKeywordController::class, 'list'] )->middleware(['auth', 'checkdomain'])->name('report.typein_list');
+    Route::get($prepix.'/traffic/keyword/list', [App\Http\Controllers\TrackingKeywordController::class, 'keyword_list'] )->middleware(['auth', 'checkdomain'])->name('traffic.keyword_list');
+    Route::get($prepix.'/traffic/count/list', [App\Http\Controllers\TrackingKeywordController::class, 'count_list'] )->middleware(['auth', 'checkdomain'])->name('traffic.count_list');
     
 }
 if($domain == env('PUBLISHER_DOMAIN')){

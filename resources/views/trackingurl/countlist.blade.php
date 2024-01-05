@@ -14,12 +14,12 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="#">Traffic Report</a></li>
-      <li class="breadcrumb-item"><a href="javascript:void(0)">Keyword</a></li>
+      <li class="breadcrumb-item"><a href="javascript:void(0)">Count</a></li>
     </ol>
   </nav>
   
   <div class="card card-body" style="margin-bottom: 20px">
-    <form action="{{route('traffic.keyword_list')}}" method='get'>
+    <form action="{{route('traffic.count_list')}}" method='get'>
       <div class="row">
         <div class="col-md-12 col-lg-4">
           <lable> Date Range</lable>
@@ -57,8 +57,8 @@
         @endif
         
         <div class="col-md-12 col-lg-4">
-          <lable> Offer Id</lable>
-          <input type="text" class="form-control" name="offer_id" value="{{$query_string['offer_id']??''}}" placeholder="" aria-label="offer_id">
+          <lable> Job Id</lable>
+          <input type="text" class="form-control" name="publisher_job_id" value="{{$query_string['publisher_job_id']??''}}" placeholder="" aria-label="offer_id">
         </div>
         
         <div class="col-md-12 col-lg-4">
@@ -70,7 +70,8 @@
           <button type="submit" class="btn btn-primary">Filter</button>
         </div>
       </div>
-    </form><br/>
+    </form>
+      <br/>
   </div>
 
     <div class="table-container">  
@@ -79,12 +80,11 @@
       <thead>
         <tr> 
         
-          <th data-field="offr_id" data-sortable="true" scope="col">Offer Id <i class="fa fa-sort"></i></th>
+          <th data-field="offr_id" data-sortable="true" scope="col">Job Id <i class="fa fa-sort"></i></th>
           <th data-field="advertiser_name" data-sortable="true" scope="col">Advertiser Name <i class="fa fa-sort"></i></th>
           <th data-field="campaign_name" data-sortable="true" scope="col">Campaign Name <i class="fa fa-sort"></i></th>
           <th data-field="pub_name" data-sortable="true" scope="col">Publisher Name <i class="fa fa-sort"></i></th>
           <th data-field="subid" data-sortable="true" scope="col">Advertiser Subid <i class="fa fa-sort"></i></th>
-          <th data-field="keyword" data-sortable="true" scope="col">Keyword <i class="fa fa-sort"></i></th>
           <th data-field="count" data-sortable="true" scope="col">Count <i class="fa fa-sort"></i></th>
          
        </tr>
@@ -98,7 +98,6 @@
                  <td scope="row"> {{$record->campaign->campaign_name}} </td>
                  <td scope="row"> {{$record->publisher->name}} </td>
                  <td scope="row"> {{$record->subid}} </td>
-                <td scope="row"> {{$record->keyword}} </td>
                  <td scope="row"> {{$record->total_count}}  </td>
                 </tr>
             @endforeach

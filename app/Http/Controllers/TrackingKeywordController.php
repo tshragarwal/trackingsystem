@@ -11,15 +11,26 @@ use App\Http\Traits\CommonTrait;
 class TrackingKeywordController extends Controller
 {
     use CommonTrait;
-    public function list(Request $request){
+    public function keyword_list(Request $request){
         $data = $request->all();
         $model = new TrackingKeywordModel();
-        $result = $model->list($data, 1000);
+        $result = $model->keyword_list($data, 1000);
         
         
          $publisher_advertizer_list = $this->get_advertizer_publisher_list();
         
         return view('trackingurl.keywordlist', ['data' => $result, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list,]);
+    }
+    public function count_list(Request $request){
+        
+        $data = $request->all();
+        $model = new TrackingKeywordModel();
+        $result = $model->count_list($data, 1000);
+        
+        
+         $publisher_advertizer_list = $this->get_advertizer_publisher_list();
+        
+        return view('trackingurl.countlist', ['data' => $result, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list,]);
     }
    
     private function get_advertizer_publisher_list(): array {

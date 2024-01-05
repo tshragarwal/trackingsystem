@@ -133,7 +133,8 @@
                   <ul class="childReport">
                     <li><a href="{{route('report.list')}}">N2S Report</a></li>
                     <li><a href="{{route('report.typein_list')}}">Typein Report</a></li>
-                    <li><a href="{{route('report.typein_list', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">Keyword Traffic Report</a></li>
+                    <li><a href="{{route('traffic.count_list', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">Count Traffic Report</a></li>
+                    <li><a href="{{route('traffic.keyword_list', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">Keyword Traffic Report</a></li>
                   </ul>
                 </li>
                 @else
