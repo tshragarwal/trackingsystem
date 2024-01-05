@@ -94,9 +94,9 @@
             @foreach($data as $record)
                 <tr>
                  <td scope="row">{{$record->publisher_job_id}}  </td>
-                 <td scope="row"> {{$record->advertiser->name}} </td>
-                 <td scope="row"> {{$record->campaign->campaign_name}} </td>
-                 <td scope="row"> {{$record->publisher->name}} </td>
+                 <td scope="row"> {{$record->advertiser->name??''}} </td>
+                 <td scope="row"> {{$record->campaign->campaign_name??''}} </td>
+                 <td scope="row"> {{$record->publisher->name??''}} </td>
                  <td scope="row"> {{$record->subid}} </td>
                 <td scope="row"> {{$record->keyword}} </td>
                  <td scope="row"> {{$record->total_count}}  </td>
