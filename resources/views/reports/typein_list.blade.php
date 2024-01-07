@@ -178,6 +178,10 @@
   </div>
   </div>
     <br/>
+    
+    @if(!empty($data) && $data->total() > 0)
+      <div>Per Page Records : {{$data->perPage()}} and <b>Total Records : {{$data->total()}}</b></div>
+    @endif
   <!-- Display pagination links --> 
   {{ $data->appends($query_string)->links() }} 
 <br/><br/><br/>
