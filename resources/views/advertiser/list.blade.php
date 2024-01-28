@@ -65,7 +65,7 @@
             @if(!empty($data))
                 @foreach($data as $record)
                   
-                    <tr>
+                <tr class="camp_{{$record->id}}">
                       <td>{{$record->id}}</td>
                       <td>{{$record->advertiser->name}} ({{$record->advertiser->id}})</td>
                       <td>{{$record->campaign_name}}</td>
@@ -125,11 +125,7 @@
 
 
 <script>
-    $('.delete_camp').on('click', function(){
-        $('.delete_camp_confirm').attr('ad_id', $(this).attr('id'));
-        $('.delete_body').html('Deleting the record will not be reverted. Do you want to delete <h5>' +$(this).attr('name') + '</h5>');
-        
-    });
+
     $('.delete_camp_confirm').on('click', function(){
         var campaign_id = $(this).attr('ad_id');
         $('.delete_message').html('');
@@ -150,14 +146,14 @@
                      setTimeout(function () {
                         var closeButton = $('[data-dismiss="modal"]');
                                         closeButton.click();
-                     }, 10000); // 10,000 milliseconds (10 seconds)
+                     }, 3000); // 10,000 milliseconds (10 seconds)
                 }else{
-                     $('.adver_'+advertizer_id).remove();
+                     $('.camp_'+campaign_id).remove();
                      $('.delet_message').html('<div class="alert alert-primary" role="alert">'+ data.message+'</div>');
                       setTimeout(function () {
                         var closeButton = $('[data-dismiss="modal"]');
                                         closeButton.click();
-                     }, 5000); // 10,000 milliseconds (10 seconds)
+                     }, 3000); // 10,000 milliseconds (10 seconds)
                     
                 }
                 
@@ -173,6 +169,11 @@
     $(document).ready(function() {
         $('#campaign_list_table').bootstrapTable();
         $('.fixed-table-loading').css('display', 'none');
+        
+        $('.delete_camp').on('click', function(){
+            $('.delete_camp_confirm').attr('ad_id', $(this).attr('id'));
+            $('.delete_body').html('Deleting the record will not be reverted. Do you want to delete <h5>' +$(this).attr('name') + '</h5>');
+        });
     });
 </script>
 @endsection
