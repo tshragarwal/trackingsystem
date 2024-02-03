@@ -200,14 +200,14 @@
             },
             success: function(data) {
                 if(data.status == 0){
-                    $('.delet_message').html('<div class="alert alert-danger" role="alert">'+ data.message+'</div>');
+                    $('.sync_message').html('<div class="alert alert-danger" role="alert">'+ data.message+'</div>');
                      setTimeout(function () {
                         var closeButton = $('[data-dismiss="modal"]');
                                         closeButton.click();
                      }, 3000); // 10,000 milliseconds (10 seconds)
                 }else{
                      $('.camp_'+campaign_id).remove();
-                     $('.delet_message').html('<div class="alert alert-primary" role="alert">'+ data.message+'</div>');
+                     $('.sync_message').html('<div class="alert alert-primary" role="alert">'+ data.message+'</div>');
                       setTimeout(function () {
                         var closeButton = $('[data-dismiss="modal"]');
                                         closeButton.click();
@@ -230,6 +230,7 @@
         });
         $('.sync_Geo_Location').on('click', function(){
             $('.sync_camp_confirm').attr('ad_id', $(this).attr('id'));
+            $('.sync_message').html('');
         });
     });
 </script>
