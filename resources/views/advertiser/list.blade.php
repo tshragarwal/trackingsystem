@@ -206,7 +206,7 @@
                                         closeButton.click();
                      }, 3000); // 10,000 milliseconds (10 seconds)
                 }else{
-                     $('.camp_'+campaign_id).remove();
+                    
                      $('.sync_message').html('<div class="alert alert-primary" role="alert">'+ data.message+'</div>');
                       setTimeout(function () {
                         var closeButton = $('[data-dismiss="modal"]');
