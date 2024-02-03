@@ -11,7 +11,8 @@ use App\Models\AdvertiserCampaignModel;
 use App\Http\Traits\CommonTrait;
 use Illuminate\Support\Facades\Validator;
 use App\Models\PublisherJobModel;
-
+use App\Models\TrackingPublisherJobModel;
+use DB;
 
 
 class AdvertizerController extends Controller
@@ -277,4 +278,87 @@ class AdvertizerController extends Controller
             }
         }
     }    
+    
+   
+    public function sync_geolocation(Request $request){
+        ini_set('max_execution_time', 0);
+        $requestData = $request->all();
+        if(!empty($requestData['campaign_id'])){
+           
+            $record = AdvertiserCampaignModel::find($requestData['campaign_id']);
+            if ($record) {
+                
+                // -- check is there campaign assign to it or not ------//
+                $modelObj = new TrackingPublisherJobModel();
+                $records = $modelObj->get_non_sync_geo_location($requestData['campaign_id']);
+                $chunksRecord = $records->chunk(80);
+                
+                foreach($chunksRecord as $chunk) {
+                    $ipData = $idData = [];
+                    foreach($chunk as $data) {
+                        $ipData[] = $data->ip;
+                        $idData[] = $data->id;
+                    }
+                    
+                    $ipDetail = $this->getIPDetails($ipData);
+                    if($this->filterIAndInsertpData($ipDetail)){
+                         TrackingPublisherJobModel::whereIn('id', $idData)->update(['geo_location_updated' => 1]);
+                    }
+                }
+                
+                return response()->json(['message' => "Geo Location Updated", 'status' => 1]);
+            } else {
+                return response()->json(['message' => 'Campaign not found'], 404);
+            }
+        }
+    } 
+    
+    
+    private function getIPDetails($ips){
+        $endpoint = 'http://ip-api.com/batch';
+
+        $options = [
+                'http' => [
+                        'method' => 'POST',
+                        'user_agent' => 'Batch-Example/1.0',
+                        'header' => 'Content-Type: application/json',
+                        'content' => json_encode($ips)
+                ]
+        ];
+        $response = file_get_contents($endpoint, false, stream_context_create($options));
+
+        // Decode the response and print it
+        $array = json_decode($response, true);
+        return $array;
+    }
+    
+    private function filterIAndInsertpData($ipDetail){
+        if(!empty($ipDetail)){
+            
+            $geoData = [];
+            foreach($ipDetail as $data){
+                $geo_location = [];
+                if($data['status'] == 'success') {
+                    $geo_location['ip'] = $data['query'];
+                    $geo_location['country'] = $data['country'];
+                    $geo_location['countryCode'] = $data['countryCode'];
+                    $geo_location['region'] = $data['region'];
+                    $geo_location['regionName'] = $data['regionName'];
+                    $geo_location['city'] = $data['city'];
+                    $geo_location['zip'] = $data['zip'];
+                    $geo_location['lat'] = $data['lat'];
+                    $geo_location['lon'] = $data['lon'];
+                    $geo_location['timezone'] = $data['timezone'];
+                    
+                    $geoData[] = $geo_location;
+                }
+            }
+            if(!empty($geoData)){
+                DB::table('geo_location')->insertOrIgnore($geoData);
+                return true;
+            }
+            
+        }
+        return false;
+    }
 }

@@ -51,6 +51,7 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::post($prepix.'/campaign/update', [App\Http\Controllers\AdvertizerController::class, 'campaignupdate'] )->middleware(['auth'])->name('campaign.update');
     Route::get($prepix.'/campaign/detail/{id}', [App\Http\Controllers\AdvertizerController::class, 'campaigndetail'] )->middleware(['auth'])->name('advertiser.detail');
     Route::post($prepix.'/campaign/delete', [App\Http\Controllers\AdvertizerController::class, 'delete_campaign'] )->middleware(['auth'])->name('advertiser.delete_campaign');
+    Route::post($prepix.'/campaign/sync/geolocation', [App\Http\Controllers\AdvertizerController::class, 'sync_geolocation'] )->middleware(['auth'])->name('advertiser.sync_geolocation');
 
 
 

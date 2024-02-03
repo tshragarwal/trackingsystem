@@ -80,6 +80,7 @@
                             <a style="margin-left:5px" href="{{route('publisher.job.form', ['campaign_id' => $record->id])}}"><i class="fa fa-tasks" aria-hidden="true"></a></i>
                           @endif
                           <a  style="margin-left: 5px;" href="javascript:void(0)" name="{{$record->campaign_name}}" data-toggle="modal" data-target="#deletecamp" class="delete_camp" id="{{$record->id}}" ><i  class="fa fa-trash-o "></i></a>
+                          <a  style="margin-left: 5px;" href="javascript:void(0)" name="" data-toggle="modal" data-target="#syncGeoLocation" class="sync_Geo_Location" id="{{$record->id}}" ><i  class="fa fa-location-arrow"></i></a>
                       </td>
                       
                     </tr>
@@ -116,6 +117,28 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-danger delete_camp_confirm" ad_id="">Delete</button>
+      </div>
+        <div class="delet_message">
+        </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="syncGeoLocation" tabindex="-1" role="dialog" aria-labelledby="syncGeoLocationLavel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Sync Geo Location</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body delete_body">
+       <h5>Geo Location Syncing will be take 10 mins for updating data</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary sync_camp_confirm" ad_id="">Sync</button>
       </div>
         <div class="delet_message">
         </div>
@@ -164,6 +187,37 @@
     });
     
     
+    $('.sync_camp_confirm').on('click', function(){
+        var campaign_id = $(this).attr('ad_id');
+        var token = $('meta[name="csrf-token"]').attr('content');
+         var request = $.ajax({
+            url: "/campaign/sync/geolocation/",
+            type: "POST",
+            dataType: "json",
+            data: {
+                    _token: token, // Include the CSRF token
+                    campaign_id: campaign_id // Include any other data you need for deletion
+            },
+            success: function(data) {
+                if(data.status == 0){
+                    $('.delet_message').html('<div class="alert alert-danger" role="alert">'+ data.message+'</div>');
+                     setTimeout(function () {
+                        var closeButton = $('[data-dismiss="modal"]');
+                                        closeButton.click();
+                     }, 3000); // 10,000 milliseconds (10 seconds)
+                }else{
+                     $('.camp_'+campaign_id).remove();
+                     $('.delet_message').html('<div class="alert alert-primary" role="alert">'+ data.message+'</div>');
+                      setTimeout(function () {
+                        var closeButton = $('[data-dismiss="modal"]');
+                                        closeButton.click();
+                     }, 3000); // 10,000 milliseconds (10 seconds)
+                    
+                }
+            }
+        });
+    });
+    
 </script>
 <script>
     $(document).ready(function() {
@@ -173,6 +227,9 @@
         $('.delete_camp').on('click', function(){
             $('.delete_camp_confirm').attr('ad_id', $(this).attr('id'));
             $('.delete_body').html('Deleting the record will not be reverted. Do you want to delete <h5>' +$(this).attr('name') + '</h5>');
+        });
+        $('.sync_Geo_Location').on('click', function(){
+            $('.sync_camp_confirm').attr('ad_id', $(this).attr('id'));
         });
     });
 </script>
