@@ -10,7 +10,7 @@ class AdvertiserCampaignModel extends Model
 {
     use HasFactory;
     protected $table = 'advertiser_campaigns';
-//    protected $fillable = ['advertiser_id'];
+    protected $fillable = ['enable_referer_redirection'];
     
     public function list(array $filter, int $size = 1000){
         $campaign = static::with('advertiser');

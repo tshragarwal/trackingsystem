@@ -98,6 +98,11 @@ class PublisherJobController extends Controller
                     return response()->json(['message' => 'Campaign already Completed.'], 200);
                 }
                 
+//                dd($publisherJobObj->campaign, $_SERVER);
+                if(isset($_SERVER['HTTP_REFERER']) && !($publisherJobObj->campaign->enable_referer_redirection)) {
+                     return response()->json(['message' => 'Referer Not Allowed'], 406);
+                }
+                
                 $user_agent = $this->getBrowser();
                 
                 // ------ save data into Tracking table ----------//

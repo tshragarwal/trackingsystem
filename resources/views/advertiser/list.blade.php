@@ -56,6 +56,7 @@
               <th  data-field="target_url" data-sortable="true" scope="col">Target Url <i class="fa fa-sort"></i></th>
             
               <th  data-field="status" data-sortable="true" scope="col">Status <i class="fa fa-sort"></i></th>
+              <th  data-field="referer_status" data-sortable="true" scope="col">Allow Referer Redirection <i class="fa fa-sort"></i></th>
               <th  data-field="updated_at" data-sortable="true" scope="col">Last Updated <i class="fa fa-sort"></i></th>
               <th  data-field="created_at" data-sortable="true" scope="col">Created At <i class="fa fa-sort"></i></th>
               <th scope="col">Action</th>
@@ -72,6 +73,9 @@
                       <td>{{$record->target_count}}</td>
                       <td>{{$record->target_url}}</td>
                       <td>{{ ($record->status == 1)? 'Active': (($record->status == 2)? 'Paused': 'Completed') }}</td>
+                      
+                      <td><span class="active_inactive_toggle" status="{{$record->enable_referer_redirection}}" id="{{$record->id}}" style="font-size: 20px;cursor: pointer;margin-right:5px"> <i class="fa fa-solid {{$record->enable_referer_redirection == 1? 'fa-toggle-on': 'fa-toggle-off'}}"> </i> </span></td>
+                      
                       <td>{{$record->updated_at}}</td>
                       <td>{{$record->created_at}}</td>
                       <td>
@@ -231,6 +235,24 @@
         $('.sync_Geo_Location').on('click', function(){
             $('.sync_camp_confirm').attr('ad_id', $(this).attr('id'));
             $('.sync_message').html('');
+        });
+        
+        $('.active_inactive_toggle').on('click', function(){
+            var id = $(this).attr('id');
+            var token = $('meta[name="csrf-token"]').attr('content');
+             var request = $.ajax({
+                url: "/campaign/referer_status",
+                type: "POST",
+                dataType: "json",
+                data: {
+                        _token: token, // Include the CSRF token
+                        id: id,
+                        status: $(this).attr('status'),
+                },
+                success: function(data){
+                     location.reload();
+                }
+            });
         });
     });
 </script>

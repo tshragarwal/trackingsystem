@@ -361,4 +361,20 @@ class AdvertizerController extends Controller
         }
         return false;
     }
+    
+    public function status_update(Request $request) {
+        
+        $requestData = $request->all();
+        
+        if( !empty($requestData) && !empty($requestData['id']) && in_array($requestData['status'], [0,1]) ) {
+            $obj = AdvertiserCampaignModel::find($requestData['id']);
+            if($obj){
+                $status = $requestData['status'] == 1? 0: 1;
+                $obj->update(['enable_referer_redirection' => $status]);
+            }
+            return true;
+        }
+        
+        return false;
+    }
 }
