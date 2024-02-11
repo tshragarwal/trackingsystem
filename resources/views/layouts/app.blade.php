@@ -135,6 +135,8 @@
                     <li><a href="{{route('report.typein_list')}}">Typein Report</a></li>
                     <li><a href="{{route('traffic.count_list', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">Count Traffic Report</a></li>
                     <li><a href="{{route('traffic.keyword_list', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">Keyword Traffic Report</a></li>
+                    <li><a href="{{route('traffic.agent_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">User Agent Report</a></li>
+                    <li><a href="{{route('traffic.location_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">Location Report</a></li>
                   </ul>
                 </li>
                 @else

@@ -98,6 +98,8 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     
     Route::get($prepix.'/traffic/keyword/list', [App\Http\Controllers\TrackingKeywordController::class, 'keyword_list'] )->middleware(['auth', 'checkdomain'])->name('traffic.keyword_list');
     Route::get($prepix.'/traffic/count/list', [App\Http\Controllers\TrackingKeywordController::class, 'count_list'] )->middleware(['auth', 'checkdomain'])->name('traffic.count_list');
+    Route::get($prepix.'/report/agent/list', [App\Http\Controllers\TrackingKeywordController::class, 'agent_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.agent_report');
+    Route::get($prepix.'/report/location/list', [App\Http\Controllers\TrackingKeywordController::class, 'location_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.location_report');
     
 }
 if($domain == env('PUBLISHER_DOMAIN')){

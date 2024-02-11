@@ -48,4 +48,28 @@ class TrackingKeywordController extends Controller
         
         return ['advertizer_list' => $advertizer_list, 'publisher_list' => $publisher_list];
     }
+    
+    
+    public function agent_report(Request $request){
+        $data = $request->all();
+        $model = new TrackingKeywordModel();
+        $result = $model->agent_report($data, 1000);
+        
+        
+         $publisher_advertizer_list = $this->get_advertizer_publisher_list();
+        
+        return view('trackingurl.user_agent_report', ['data' => $result, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list,]);
+    }
+    
+    
+    public function location_report(Request $request){
+        $data = $request->all();
+        $model = new TrackingKeywordModel();
+        $result = $model->location_wise_report($data, 1000);
+        
+        
+         $publisher_advertizer_list = $this->get_advertizer_publisher_list();
+        
+        return view('trackingurl.location_report', ['data' => $result, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list,]);
+    }
 }
