@@ -13,6 +13,7 @@ use App\Models\TrackingPublisherJobModel;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Jenssegers\Agent\Agent;
 
 class PublisherJobController extends Controller
 {
@@ -103,7 +104,7 @@ class PublisherJobController extends Controller
                      return response()->json(['message' => 'Referer Not Allowed'], 406);
                 }
                 
-                $user_agent = $this->getBrowser();
+                $user_agent = $this->getUserAgentDetails(); //$this->getBrowser();
                 
                 // ------ save data into Tracking table ----------//
                 $tableObj = new TrackingPublisherJobModel();
@@ -116,8 +117,14 @@ class PublisherJobController extends Controller
                 $tableObj->created_at = date('Y-m-d H:i:s');
                 $tableObj->keyword = $request->q;
                 $tableObj->date =  date('Y-m-d');
-                $tableObj->browser =  $user_agent['name'];
                 $tableObj->user_agent =  $user_agent['userAgent'];
+                $tableObj->browser =  $user_agent['browser'];
+                $tableObj->browser_version = $user_agent['browser_version'];
+                $tableObj->platform = $user_agent['platform'];
+                $tableObj->platform_version = $user_agent['platform_version'];
+                $tableObj->is_mobile = $user_agent['is_mobile'];
+                $tableObj->is_tablet = $user_agent['is_tablet'];
+                $tableObj->device = $user_agent['device'];
                 $tableObj->save();
 
 
@@ -257,6 +264,42 @@ class PublisherJobController extends Controller
           'platform'  => $platform,
           'pattern'    => $pattern
         );
+    }
+
+    public function getUserAgentDetails() {
+      $agent = new Agent();
+
+      // Get the browser name
+      $browser = $agent->browser();
+
+      // Get the browser version
+      $version = $agent->version($browser);
+
+      // Get the platform name (Operating System)
+      $platform = $agent->platform();
+
+      // Get the platform version
+      $platformVersion = $agent->version($platform);
+
+      // Check if the device is mobile
+      $isMobile = $agent->isMobile();
+
+      // Check if the device is a tablet
+      $isTablet = $agent->isTablet();
+
+      // Get device name
+      $device = $agent->device();
+
+      return [
+          'browser' => $browser,
+          'browser_version' => $version,
+          'platform' => $platform,
+          'platform_version' => $platformVersion,
+          'is_mobile' => $isMobile,
+          'is_tablet' => $isTablet,
+          'device' => $device,
+          'userAgent' => $_SERVER['HTTP_USER_AGENT'],
+      ];
     }
 
 }
