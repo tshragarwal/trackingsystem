@@ -142,7 +142,7 @@ class TrackingKeywordModel extends Model
             }
             
             
-            return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'subid', 'browser')
+            return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id',  'browser')
                     ->with('publisher')->with('advertiser')->with('campaign')
                     ->orderBy('date', 'desc')->paginate($size);
     }    
@@ -238,7 +238,7 @@ class TrackingKeywordModel extends Model
             }
             
             
-            return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'subid', 'device')
+            return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'device')
                     ->with('publisher')->with('advertiser')->with('campaign')
                     ->orderBy('date', 'desc')->paginate($size);
     }    
