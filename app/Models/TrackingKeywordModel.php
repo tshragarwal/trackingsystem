@@ -273,7 +273,7 @@ class TrackingKeywordModel extends Model
             }
             
             
-            return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'subid', 'ip')
+            return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'ip')
                     ->with('publisher')->with('advertiser')->with('campaign')
                     ->orderBy('date', 'desc')->paginate($size);
     }    
