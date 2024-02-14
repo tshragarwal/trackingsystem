@@ -139,6 +139,7 @@
                     <li><a href="{{route('traffic.location_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">Location Report</a></li>
                     <li><a href="{{route('traffic.device_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">Device Report</a></li>
                     <li><a href="{{route('traffic.ip_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">IP Report</a></li>
+                    <li><a href="{{route('traffic.platform_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d')])}}">Platform Report</a></li>
                   </ul>
                 </li>
                 @else

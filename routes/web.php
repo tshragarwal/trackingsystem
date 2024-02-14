@@ -102,6 +102,7 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::get($prepix.'/report/location/list', [App\Http\Controllers\TrackingKeywordController::class, 'location_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.location_report');
     Route::get($prepix.'/report/device/list', [App\Http\Controllers\TrackingKeywordController::class, 'device_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.device_report');
     Route::get($prepix.'/report/ip/list', [App\Http\Controllers\TrackingKeywordController::class, 'ip_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.ip_report');
+    Route::get($prepix.'/report/platform/list', [App\Http\Controllers\TrackingKeywordController::class, 'platform_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.platform_report');
     
 }
 if($domain == env('PUBLISHER_DOMAIN')){
