@@ -83,4 +83,14 @@ class TrackingKeywordController extends Controller
         
         return view('trackingurl.device_report', ['data' => $result, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list,]);
     }
+    
+    public function ip_report(Request $request){
+        $data = $request->all();
+        $model = new TrackingKeywordModel();
+        $result = $model->ip_wise_report($data, 1000);
+        
+         $publisher_advertizer_list = $this->get_advertizer_publisher_list();
+        
+        return view('trackingurl.ip_report', ['data' => $result, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list,]);
+    }
 }
