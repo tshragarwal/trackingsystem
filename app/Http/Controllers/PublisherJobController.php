@@ -106,6 +106,18 @@ class PublisherJobController extends Controller
                 
                 $user_agent = $this->getUserAgentDetails(); //$this->getBrowser();
                 
+                
+                if( !$publisherJobObj->allow_tablet && (($user_agent['is_mobile'] == 1) && ($user_agent['is_tablet'] == 1)) ){
+                    return response()->json(['message' => 'Tablet Not Allowed'], 406);
+                }
+                if(!$publisherJobObj->allow_mobile && ($user_agent['is_mobile'] == 1 && ($user_agent['is_tablet'] == 0) )){
+                    return response()->json(['message' => 'Mobile Not Allowed'], 406);
+                }
+                if(!$publisherJobObj->allow_desktop && ($user_agent['is_mobile'] == 0 && $user_agent['is_tablet'] == 0 )){
+                    return response()->json(['message' => 'Desktop Not Allowed'], 406);
+                }
+                
+                
                 // ------ save data into Tracking table ----------//
                 $tableObj = new TrackingPublisherJobModel();
                 $tableObj->publisher_job_id = $publisherJobObj->id;

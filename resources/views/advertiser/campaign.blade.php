@@ -142,6 +142,71 @@
                             </div>
                         </div>
                         
+                        <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Allow Referer Redirection') }}</label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <select class="form-control" name="enable_referer_redirection" id="enable_referer_redirection" >
+                                        <option value="1" selected="selected">Enable</option>
+                                        <option value="0">Disable</option>
+                                    </select>
+                                </div>
+                                @error('enable_referer_redirection')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Allow Mobile') }}</label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <select class="form-control" name="allow_mobile" id="allow_mobile" >
+                                        <option value="1" selected="selected">Enable</option>
+                                        <option value="0">Disable</option>
+                                    </select>
+                                </div>
+                                @error('allow_mobile')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Allow Tablet') }}</label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <select class="form-control" name="allow_tablet" id="allow_tablet" >
+                                        <option value="1" selected="selected">Enable</option>
+                                        <option value="0">Disable</option>
+                                    </select>
+                                </div>
+                                @error('allow_tablet')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Allow Desktop') }}</label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <select class="form-control" name="allow_desktop" id="allow_desktop" >
+                                        <option value="1" selected="selected">Enable</option>
+                                        <option value="0">Disable</option>
+                                    </select>
+                                </div>
+                                @error('allow_desktop')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">

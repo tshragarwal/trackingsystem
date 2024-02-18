@@ -182,6 +182,113 @@
                                     @enderror
                                 </div>
                             </div> 
+
+                            <div class="row mb-3">
+                                <label for="status" class="col-md-4 col-form-label text-md-end">{{ __('Allow Referer Redirection') }}</label>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <select class="form-control" name="enable_referer_redirection" id="enable_referer_redirection" >
+                                            @if ($data->enable_referer_redirection == "1")
+                                                <option value="1"  Selected > Enable</option>
+                                            @else
+                                                <option value="1"> Enable</option>
+                                            @endif
+                                            
+                                            @if ($data->enable_referer_redirection == "0")
+                                                <option value="0"  Selected > Disable</option>
+                                            @else
+                                                <option value="0"> Disable</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    @error('status')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div> 
+                             
+
+                            <div class="row mb-3">
+                                <label for="status" class="col-md-4 col-form-label text-md-end">{{ __('Allow Mobile') }}</label>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <select class="form-control" name="allow_mobile" id="allow_mobile" >
+                                            @if ($data->allow_mobile == "1")
+                                                <option value="1"  Selected > Enable</option>
+                                            @else
+                                                <option value="1"> Enable</option>
+                                            @endif
+                                            
+                                            @if ($data->allow_mobile == "0")
+                                                <option value="0"  Selected > Disable</option>
+                                            @else
+                                                <option value="0"> Disable</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    @error('status')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div> 
+                             
+
+                            <div class="row mb-3">
+                                <label for="status" class="col-md-4 col-form-label text-md-end">{{ __('Allow Tablet') }}</label>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <select class="form-control" name="allow_tablet" id="allow_tablet" >
+                                            @if ($data->allow_tablet == "1")
+                                                <option value="1"  Selected > Enable</option>
+                                            @else
+                                                <option value="1"> Enable</option>
+                                            @endif
+                                            
+                                            @if ($data->allow_tablet == "0")
+                                                <option value="0"  Selected > Disable</option>
+                                            @else
+                                                <option value="0"> Disable</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    @error('status')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div> 
+                             
+
+                            <div class="row mb-3">
+                                <label for="status" class="col-md-4 col-form-label text-md-end">{{ __('Allow Desktop') }}</label>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <select class="form-control" name="allow_desktop" id="allow_desktop" >
+                                            @if ($data->allow_desktop == "1")
+                                                <option value="1"  Selected > Enable</option>
+                                            @else
+                                                <option value="1"> Enable</option>
+                                            @endif
+                                            
+                                            @if ($data->allow_desktop == "0")
+                                                <option value="0"  Selected > Disable</option>
+                                            @else
+                                                <option value="0"> Disable</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    @error('status')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div> 
                              
                              <div class="row mb-0">
                                  <div class="col-md-6 offset-md-4">

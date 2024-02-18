@@ -57,6 +57,9 @@
             
               <th  data-field="status" data-sortable="true" scope="col">Status <i class="fa fa-sort"></i></th>
               <th  data-field="referer_status" data-sortable="true" scope="col">Allow Referer Redirection <i class="fa fa-sort"></i></th>
+              <th  data-field="allow_mobile" data-sortable="true" scope="col">Allow Mobile <i class="fa fa-sort"></i></th>
+              <th  data-field="allow_tablet" data-sortable="true" scope="col">Allow Tablet <i class="fa fa-sort"></i></th>
+              <th  data-field="allow_desktop" data-sortable="true" scope="col">Allow Desktop <i class="fa fa-sort"></i></th>
               <th  data-field="updated_at" data-sortable="true" scope="col">Last Updated <i class="fa fa-sort"></i></th>
               <th  data-field="created_at" data-sortable="true" scope="col">Created At <i class="fa fa-sort"></i></th>
               <th scope="col">Action</th>
@@ -74,7 +77,10 @@
                       <td>{{$record->target_url}}</td>
                       <td>{{ ($record->status == 1)? 'Active': (($record->status == 2)? 'Paused': 'Completed') }}</td>
                       
-                      <td><span class="active_inactive_toggle" status="{{$record->enable_referer_redirection}}" id="{{$record->id}}" style="font-size: 20px;cursor: pointer;margin-right:5px"> <i class="fa fa-solid {{$record->enable_referer_redirection == 1? 'fa-toggle-on': 'fa-toggle-off'}}"> </i> </span></td>
+                      <td><span  style="font-size: 20px;cursor: pointer;margin-right:5px"> <i class="fa fa-solid {{$record->enable_referer_redirection == 1? 'fa-toggle-on': 'fa-toggle-off'}}"> </i> </span></td>
+                      <td><span style="font-size: 20px;cursor: pointer;margin-right:5px"> <i class="fa fa-solid {{$record->allow_mobile == 1? 'fa-toggle-on': 'fa-toggle-off'}}"> </i> </span></td>
+                      <td><span style="font-size: 20px;cursor: pointer;margin-right:5px"> <i class="fa fa-solid {{$record->allow_tablet == 1? 'fa-toggle-on': 'fa-toggle-off'}}"> </i> </span></td>
+                      <td><span style="font-size: 20px;cursor: pointer;margin-right:5px"> <i class="fa fa-solid {{$record->allow_desktop == 1? 'fa-toggle-on': 'fa-toggle-off'}}"> </i> </span></td>
                       
                       <td>{{$record->updated_at}}</td>
                       <td>{{$record->created_at}}</td>

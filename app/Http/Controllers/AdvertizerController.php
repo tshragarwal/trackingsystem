@@ -108,6 +108,10 @@ class AdvertizerController extends Controller
                 $tableObj->target_url = $requestData['target_url'];
 //                $tableObj->query_string = $requestData['query_string'];
                 $tableObj->target_count = $requestData['target_count'];
+                $tableObj->enable_referer_redirection = $requestData['enable_referer_redirection'] ?? 1;
+                $tableObj->allow_mobile = $requestData['allow_mobile'] ?? 1;
+                $tableObj->allow_tablet = $requestData['allow_tablet'] ?? 1;
+                $tableObj->allow_desktop = $requestData['allow_desktop'] ?? 1;
                 $tableObj->updated_at = date('Y-m-d H:i:s');
                 $tableObj->save();
 
@@ -180,6 +184,12 @@ class AdvertizerController extends Controller
 //                $dbObj->query_string = $requestData['query_string'];
                 $dbObj->target_count = $requestData['target_count'];
                 $dbObj->status = $requestData['status'];
+
+                $dbObj->enable_referer_redirection = $requestData['enable_referer_redirection'];
+                $dbObj->allow_mobile = $requestData['allow_mobile'];
+                $dbObj->allow_tablet = $requestData['allow_tablet'];
+                $dbObj->allow_desktop = $requestData['allow_desktop'];
+                
                 $dbObj->updated_at = date('Y-m-d H:i:s');
                 $dbObj->update();
                 
