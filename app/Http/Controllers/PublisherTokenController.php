@@ -11,6 +11,7 @@ use App\Http\Requests\PublisherTokenDataRequest;
 use App\Http\Resources\PublihserTokenN2SJson;
 use App\Http\Traits\CommonTrait;
 use Illuminate\Support\Facades\Response;
+use App\Models\TrackingPublisherJobModel;
 
 
 class PublisherTokenController extends Controller
@@ -204,5 +205,20 @@ class PublisherTokenController extends Controller
         }
         
         return ['status' =>'success', 'data' => $finalFieldArray];
+    }
+    
+    public function lead_verify(Request $request) {
+        $data = $request->all();
+       
+        if(!empty($data['id'])){
+            $trackingId = base64_decode($data['id']);
+          
+            $response = TrackingPublisherJobModel::where('id', $trackingId)->first();
+            if(!empty($response)){
+               $response->update(['lead_verify' => 1]);
+               return response()->json(['message' => 'Successfully Processed.'], 200);
+            }
+        }
+        return response()->json(['message' => 'Inactive Job.'], 406);
     }
 }

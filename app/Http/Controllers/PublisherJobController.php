@@ -14,6 +14,7 @@ use App\Models\TrackingPublisherJobModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Jenssegers\Agent\Agent;
+use Illuminate\Support\Facades\Crypt;
 
 class PublisherJobController extends Controller
 {
@@ -90,7 +91,7 @@ class PublisherJobController extends Controller
         if(!empty($request->code)){
             $publisherJobModel = new PublisherJobModel();
             $publisherJobObj = $publisherJobModel->get_record_of_proxy_url($request->code);
-           
+                
             if(!empty($publisherJobObj->id) && $publisherJobObj->status == 1 && !empty($publisherJobObj->campaign) && !empty($publisherJobObj->campaign->id)){
                 
                 if($publisherJobObj->campaign->status == 2){
@@ -149,14 +150,11 @@ class PublisherJobController extends Controller
                 
                 
                 $finalRedirectUrl = str_replace('{keyword}', $requestData['q'], $publisherJobObj->campaign->target_url);
+                
+                if (strpos($publisherJobObj->campaign->target_url, '{clkid}') !== false) {
+                    $finalRedirectUrl = str_replace('{clkid}', base64_encode($tableObj->id), $finalRedirectUrl);
+                }
                 unset($requestData['q']);
-                
-//                $finalRedirectUrl = (!empty($requestData))? ($finalRedirectUrl. '&'. http_build_query($requestData)): $finalRedirectUrl;
-                
-//                $final_queryString = http_build_query(array_merge($queryParams, $requestData));
-//                $result = strstr($publisherJobObj->campaign->target_url, '?', true);
-//                $finalRedirectUrl = ($result !== false ? $result : $publisherJobObj->campaign->target_url).  '?'. $final_queryString;
-                
                 
                 if (strpos($finalRedirectUrl, 'http://') !== 0 && strpos($finalRedirectUrl, 'https://') !== 0) {
                     $finalRedirectUrl = 'http://'.$finalRedirectUrl;

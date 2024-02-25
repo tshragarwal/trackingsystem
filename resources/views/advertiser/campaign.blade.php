@@ -89,7 +89,7 @@
                             <div class="col-md-6">
                                 <!--<input id="target_url" type="textarea" class="form-control @error('target_url') is-invalid @enderror" name="target_url" value="{{ old('target_url') }}" required autocomplete="target_url" autofocus>-->
                                 <textarea class="form-control" name="target_url" id="target_url" rows="3" required autocomplete="target_url" autofocus>{{ old('target_url') }}</textarea>
-                                <span style='font-size: 10px;color: red;'>Target Url required '{keyword}' </span>
+                                <span style='font-size: 10px;color: red;'>Target Url required '{keyword}' and if you want to verify lead then add tracking={clkid} in target url. In tracking={clkid}, you can replace 'target' with desired value but '{clkid}' must be fixed<br/> </span>
                                 @error('target_url')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

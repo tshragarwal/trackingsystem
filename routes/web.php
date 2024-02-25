@@ -108,9 +108,10 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
 if($domain == env('PUBLISHER_DOMAIN')){
     // --------- Tracking Url --------------- //
     Route::get($prepix.'/search', [App\Http\Controllers\PublisherJobController::class, 'tracking_url']);
-
+    
 }
 
 if($domain == env('PUBLISHER_API_DOMAIN')){
     Route::get($prepix.'/publisher/token/data', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_data'] )->name('publisher_token.token_data');
+    Route::get($prepix.'/lead/verify', [App\Http\Controllers\PublisherTokenController::class, 'lead_verify'])->name('lead.verify');
 }

@@ -13,8 +13,8 @@
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#">Traffic Report</a></li>
-      <li class="breadcrumb-item"><a href="javascript:void(0)">IP</a></li>
+      <li class="breadcrumb-item"><a href="#"> Report</a></li>
+      <li class="breadcrumb-item"><a href="javascript:void(0)">Platform</a></li>
     </ol>
   </nav>
   
