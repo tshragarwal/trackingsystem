@@ -210,8 +210,8 @@ class PublisherTokenController extends Controller
     public function lead_verify(Request $request) {
         $data = $request->all();
        
-        if(!empty($data['id'])){
-            $trackingId = base64_decode($data['id']);
+        if(!empty($data['clkid'])){
+            $trackingId = base64_decode($data['clkid']);
           
             $response = TrackingPublisherJobModel::where('id', $trackingId)->first();
             if(!empty($response)){
