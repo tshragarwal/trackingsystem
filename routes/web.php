@@ -53,7 +53,7 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::post($prepix.'/campaign/delete', [App\Http\Controllers\AdvertizerController::class, 'delete_campaign'] )->middleware(['auth'])->name('advertiser.delete_campaign');
     Route::post($prepix.'/campaign/sync/geolocation', [App\Http\Controllers\AdvertizerController::class, 'sync_geolocation'] )->middleware(['auth'])->name('advertiser.sync_geolocation');
     Route::post($prepix.'/campaign/referer_status', [App\Http\Controllers\AdvertizerController::class, 'status_update'] )->middleware(['auth'])->name('campaign.status_update');
-
+    Route::get($prepix.'/campaign/publisher/list/{campaign_id}', [App\Http\Controllers\AdvertizerController::class, 'campaign_publisher_list'] )->middleware(['auth']);
 
 
     //--------- Publisher  ----------------- //
@@ -73,7 +73,10 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::post($prepix.'/publisher/job/save', [App\Http\Controllers\PublisherJobController::class, 'save'] )->middleware(['auth'])->name('publisher.job.save');
     Route::post($prepix.'/publisher/job/delete', [App\Http\Controllers\PublisherJobController::class, 'delete_publisher_job'] )->middleware(['auth'])->name('publisher.delete_publisher_job');
     Route::post($prepix.'/publisher/job/update/status', [App\Http\Controllers\PublisherJobController::class, 'status_update'] )->middleware(['auth'])->name('publisher.status_update');
-
+    
+    
+    
+    
     // ---------- CSV && Report
     Route::get($prepix.'/report/list', [App\Http\Controllers\ReportController::class, 'list'] )->middleware(['auth', 'checkdomain'])->name('report.list');
     Route::get($prepix.'/report/csv', [App\Http\Controllers\ReportController::class, 'csv'] )->middleware(['auth', 'checkdomain'])->name('report.csv');
@@ -103,6 +106,7 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::get($prepix.'/report/device/list', [App\Http\Controllers\TrackingKeywordController::class, 'device_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.device_report');
     Route::get($prepix.'/report/ip/list', [App\Http\Controllers\TrackingKeywordController::class, 'ip_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.ip_report');
     Route::get($prepix.'/report/platform/list', [App\Http\Controllers\TrackingKeywordController::class, 'platform_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.platform_report');
+    Route::get($prepix.'/report/tracking', [App\Http\Controllers\TrackingKeywordController::class, 'tracking_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.tracking_report');
     
 }
 if($domain == env('PUBLISHER_DOMAIN')){

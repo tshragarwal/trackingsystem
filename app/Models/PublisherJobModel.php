@@ -81,4 +81,7 @@ class PublisherJobModel extends Model
     public function get_all_campaign_publisher_job_count($advertizer_campaign_id){
         return static::where('advertiser_campaign_id', $advertizer_campaign_id)->count();
     }
+    public function get_campaign_publisherlist($advertizer_campaign_id){
+        return static::where('advertiser_campaign_id', $advertizer_campaign_id)->with('publisher')->get();
+    }
 }

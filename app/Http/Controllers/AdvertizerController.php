@@ -387,4 +387,21 @@ class AdvertizerController extends Controller
         
         return false;
     }
+    
+    public function campaign_publisher_list($campaign_id){
+        if(!empty($campaign_id)){
+            $model = new PublisherJobModel();
+            $result = $model->get_campaign_publisherlist($campaign_id);
+            $response = [];
+            foreach($result as $data){
+                $d['id'] = $data->publisher_id;
+                $d['publisher_name'] = $data->publisher->name;
+                $response[] = $d;
+            }
+            return $response;
+        }
+        return [];
+    }
+    
+    
 }

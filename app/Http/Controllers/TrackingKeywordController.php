@@ -103,4 +103,42 @@ class TrackingKeywordController extends Controller
         
         return view('trackingurl.platform_report', ['data' => $result, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list,]);
     }
+    
+    public function tracking_report(Request $request){
+        $data = $request->all();
+        $model = new TrackingKeywordModel();
+        
+        $publisher_advertizer_list = $this->get_advertizer_publisher_list();
+        
+        $type = $data['type']?? 'count';
+        
+        
+        $result = [];
+        switch($type) {
+            case 'count':
+                $result = $model->count_list($data, 1000);
+                break;
+            case 'keyword':
+                $result = $model->keyword_list($data, 1000);
+                break;
+            case 'browser':
+                $result = $model->agent_report($data, 1000);
+                break;
+            case 'location':
+                $result = $model->location_wise_report($data, 1000);
+                break;
+            case 'device':
+                $result = $model->device_wise_report($data, 1000);
+                break;
+            case 'ip':
+                $result = $model->ip_wise_report($data, 1000);
+                break;
+            case 'platform':
+                $result = $model->platform_wise_report($data, 1000);
+                break;
+            
+        }
+//        dd($result);
+        return view('trackingurl.tracking_report', ['data' => $result, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list, 'type' => $type]);
+    }
 }

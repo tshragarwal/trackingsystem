@@ -48,6 +48,9 @@ class TrackingKeywordModel extends Model
             if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
                 $trackingKeyword->whereIn('advertiser_id',  explode(",",$filter['advertiser_id']));
             }
+            if(isset($filter['campaign_id']) && !empty($filter['campaign_id'])){
+                $trackingKeyword->whereIn('campaign_id',  explode(",",$filter['campaign_id']));
+            }
             
             
             return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'subid', 'keyword')
@@ -56,7 +59,6 @@ class TrackingKeywordModel extends Model
     }
     
     public function count_list($filter =[], $size = 100){
-            
         $trackingKeyword = static::select('id', 'publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'subid', 'date', DB::raw('count(*) as total_count'));
 
         if(empty($filter['start_date'])){
@@ -84,6 +86,9 @@ class TrackingKeywordModel extends Model
 
         if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
             $trackingKeyword->whereIn('advertiser_id', explode(",",$filter['advertiser_id']));
+        }
+        if(isset($filter['campaign_id']) && !empty($filter['campaign_id'])){
+            $trackingKeyword->whereIn('campaign_id',  explode(",",$filter['campaign_id']));
         }
      
 
@@ -140,7 +145,9 @@ class TrackingKeywordModel extends Model
             if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
                 $trackingKeyword->whereIn('advertiser_id',  explode(",",$filter['advertiser_id']));
             }
-            
+            if(isset($filter['campaign_id']) && !empty($filter['campaign_id'])){
+                $trackingKeyword->whereIn('campaign_id',  explode(",",$filter['campaign_id']));
+            }
             
             return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id',  'browser')
                     ->with('publisher')->with('advertiser')->with('campaign')
@@ -197,6 +204,9 @@ class TrackingKeywordModel extends Model
             if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
                 $trackingKeyword->whereIn('advertiser_id',  explode(",",$filter['advertiser_id']));
             }
+            if(isset($filter['campaign_id']) && !empty($filter['campaign_id'])){
+                $trackingKeyword->whereIn('campaign_id',  explode(",",$filter['campaign_id']));
+            }
             $trackingKeyword->where('geo_location_updated',  1);
             
             
@@ -237,6 +247,9 @@ class TrackingKeywordModel extends Model
                 $trackingKeyword->whereIn('advertiser_id',  explode(",",$filter['advertiser_id']));
             }
             
+            if(isset($filter['campaign_id']) && !empty($filter['campaign_id'])){
+                $trackingKeyword->whereIn('campaign_id',  explode(",",$filter['campaign_id']));
+            }
             
             return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'device')
                     ->with('publisher')->with('advertiser')->with('campaign')
@@ -271,7 +284,9 @@ class TrackingKeywordModel extends Model
             if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
                 $trackingKeyword->whereIn('advertiser_id',  explode(",",$filter['advertiser_id']));
             }
-            
+            if(isset($filter['campaign_id']) && !empty($filter['campaign_id'])){
+                $trackingKeyword->whereIn('campaign_id',  explode(",",$filter['campaign_id']));
+            }
             
             return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'ip')
                     ->with('publisher')->with('advertiser')->with('campaign')
@@ -306,7 +321,9 @@ class TrackingKeywordModel extends Model
             if(isset($filter['advertiser_id']) && !empty($filter['advertiser_id'])){
                 $trackingKeyword->whereIn('advertiser_id',  explode(",",$filter['advertiser_id']));
             }
-            
+            if(isset($filter['campaign_id']) && !empty($filter['campaign_id'])){
+                $trackingKeyword->whereIn('campaign_id',  explode(",",$filter['campaign_id']));
+            }
             
             return $trackingKeyword->groupBy('publisher_job_id', 'publisher_id', 'campaign_id', 'advertiser_id', 'platform')
                     ->with('publisher')->with('advertiser')->with('campaign')
