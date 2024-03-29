@@ -41,7 +41,8 @@ class LocationProcessData extends Command
      */
     public function handle()
     {
-        $trackRecord = TrackingKeywordModel::select('ip','id')->where('geo_location_updated', 0)->orderBy('id', 'desc')->limit(3000)->get();
+        $trackRecord = TrackingKeywordModel::select('ip','id')->where('campaign_id','>', 0)->where('geo_location_updated', 0)->orderBy('id', 'desc')->limit(3000)->get();
+        dd($trackRecord);
         $ipData = $idData = [];
         if($trackRecord->count()){
             $chunksRecord = $trackRecord->chunk(80);
