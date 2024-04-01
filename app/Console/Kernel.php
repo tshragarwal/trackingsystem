@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('process_location:data')->everyFifteenMinutes();
+         $schedule->command('process_location:data')->everyHour();
     }
 
     /**
