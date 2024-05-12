@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\DB;
 use DateTime;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
-use App\Models\AdvertizerRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use League\Csv\Writer;
 
 
@@ -91,14 +91,28 @@ class ReportController extends Controller
         $file = $request->file('csv_file');
         $filePath = $file->getRealPath();
 
+        $headers = CommonTrait::n2s_csv_mapping_header();
+        if($type === 'typein') {
+            $headers = CommonTrait::typein_csv_mapping_header();
+        }
+
         // Use a CSV parsing library (e.g., League\Csv) to read and import data
         $csv = \League\Csv\Reader::createFromPath($filePath);
 
         $i = 0;
-        $batch = $firstRow = [];
+        $firstRow = $csv->first();
+        $foundDiff = array_diff(array_keys($headers), $firstRow);
+        
+        if(!empty($foundDiff)) {
+            throw ValidationException::withMessages(['csv_file' => 'Incorrect file headers.' . implode(",", $foundDiff)]);
+        }
+
+
+        $batch = [];
         foreach ($csv->getRecords() as $record) {
             if ($i == 0){
-                $firstRow = $record;
+                $i++;
+                continue;
             }else{
                 $batch[] = array_combine($firstRow, $record);
             }
@@ -140,16 +154,17 @@ class ReportController extends Controller
             $newDoc['updated_at'] = date('Y-m-d H:i:s');
             $finalBatch[] = $newDoc;
         }
-        
+
         if(!empty($finalBatch)){
             if($type === 'n2s') {
                 return DB::table('report_n2s')->upsert($finalBatch, ['company_id','date', 'subid', 'campaign_id', 'publisher_id'],
                     ['company_id', 'advertiser_name', 'publisher_name', 'offer_id', 'campaign_name', 'country', 'total_searches', 'ad_clicks', 'ctr', 'tq', 'revenue', 'publisher_RPM',
                         'publisher_RPC', 'advertiser_RPM', 'advertiser_CPC', 'gross_revenue','updated_at']);
             } else if($type === 'typein') {
-                return DB::table('report_typein')->upsert($finalBatch, ['company_id','date', 'subid', 'campaign_id', 'publisher_id'],
-                    ['company_id', 'advertiser_name', 'publisher_name', 'offer_id', 'campaign_name', 'country', 'total_searches', 'ad_clicks', 'ctr', 'tq', 'revenue', 'publisher_RPM',
-                        'publisher_RPC', 'advertiser_RPM', 'advertiser_CPC', 'gross_revenue','updated_at']);
+                return DB::table('report_typein')->upsert($finalBatch, 
+                    ['company_id', 'date', 'subid', 'campaign_id', 'publisher_id'],
+                    ['company_id', 'advertiser_name', 'publisher_name', 'campaign_name', 'country', 'total_searches','monetized_searches', 'ad_clicks','ad_coverage', 
+                        'ctr', 'cpc', 'rpm','gross_revenue','offer_id', 'publisher_RPM', 'publisher_RPC','net_revenue','updated_at']);
             }
         }
         return false;

@@ -36,6 +36,7 @@
                         value="{{ !empty($filter['v']) ? $filter['v'] : '' }}" placeholder="Enter Selected Type Value">
                 </div>
                 <button type="submit" class="btn btn-success mb-2">Filter</button>
+                <a href="{{ route('publisher.list', ['company_id' => $companyID]) }}" class="btn btn-danger mb-2 " style="margin: 0 0 0 5px;" >Reset</a>
             </form>
         </div>
         <div class="table-container">
@@ -70,7 +71,7 @@
                                         <a href="{{ route('publisher.edit', ['id' => $record->id, 'company_id' => $companyID]) }}"><i
                                                 class="fa fa-edit"></i></a>
                                         <a style='margin-left: 12px'
-                                            href="{{ route('publisher.job.list', ['publisher_id' => $record->id, 'company_id' => $companyID]) }}"><i
+                                            href="{{ route('publisherJob.list', ['publisher_id' => $record->id, 'company_id' => $companyID]) }}"><i
                                                 class="fa fa-eye"></i></a>
                                         <a style="margin-left: 12px;" href="javascript:void(0)" name="{{ $record->name }}"
                                             data-toggle="modal" data-target="#deletecamp" class="delete_camp"
@@ -159,7 +160,7 @@
                             setTimeout(function() {
                                 var closeButton = $('[data-dismiss="modal"]');
                                 closeButton.click();
-                            }, 10000); // 10,000 milliseconds (10 seconds)
+                            }, 5000); // 10,000 milliseconds (10 seconds)
                         } else {
                             $('.publisher_' + publisher_id).remove();
                             $('.delet_message').html('<div class="alert alert-primary" role="alert">' + data
@@ -170,8 +171,15 @@
                             }, 5000); // 10,000 milliseconds (10 seconds)
 
                         }
-
-
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        message = JSON.parse(XMLHttpRequest.responseText);
+                        $('.delet_message').html('<div class="alert alert-danger" role="alert">' + message.message + '</div>');
+                        setTimeout(function() {
+                            var closeButton = $('[data-dismiss="modal"]');
+                            closeButton.click();
+                        }, 5000); // 10,000 milliseconds (10 seconds)
+                        
                     }
                 });
 

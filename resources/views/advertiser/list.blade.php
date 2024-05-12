@@ -42,6 +42,7 @@
                         value="{{ !empty($filter['v']) ? $filter['v'] : '' }}" placeholder="Enter Selected Type Value">
                 </div>
                 <button type="submit" class="btn btn-success mb-2">Filter</button>
+                <a href="{{ route('advertiser.list', ['company_id' => $companyID]) }}" class="btn btn-danger mb-2" style="margin: 0 0 0 10px;" >Reset</a>
             </form>
         </div>
 
@@ -129,6 +130,7 @@
         var companyID = {!! $companyID !!}
 
         function setMyAttribute(elem) {
+            $('.delet_message').html('');
             $('.delete_advertizer_confirm').attr('ad_id', $(elem).attr('id'));
             $('.delete_body').html('Deleting the record will not be reverted. Do you want to delete <h5>' + $(this)
                 .attr('name') + '</h5>');
@@ -142,12 +144,11 @@
 
             var token = $('meta[name="csrf-token"]').attr('content');
             var request = $.ajax({
-                url: "/" + companyID + "/advertiser/delete",
+                url: "/" + companyID + "/advertiser/" + advertizer_id,
                 type: "DELETE",
                 dataType: "json",
                 data: {
                     _token: token, // Include the CSRF token
-                    advertizer_id: advertizer_id // Include any other data you need for deletion
                 },
                 success: function(data) {
                     if (data.status == 0) {
@@ -167,8 +168,15 @@
                         }, 5000); // 10,000 milliseconds (10 seconds)
 
                     }
-
-
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        message = JSON.parse(XMLHttpRequest.responseText);
+                        $('.delet_message').html('<div class="alert alert-danger" role="alert">' + message.message + '</div>');
+                        setTimeout(function() {
+                            var closeButton = $('[data-dismiss="modal"]');
+                            closeButton.click();
+                        }, 5000); // 10,000 milliseconds (10 seconds)
+                        
                 }
             });
 

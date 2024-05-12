@@ -58,13 +58,8 @@ class AdvertiserCampaignModel extends Model
 //       return static::where('status', '!=', 3)->with('advertiser')->orderBy('updated_at', 'desc')->paginate(5);
     }
     
-    public function get_advertiser_campaigns($advertiserId){
-        return static::where('advertiser_id', $advertiserId)->orderBy('updated_at', 'desc')->get();
-    }
-    
-    
-    public function get_advertizer_campaign_count($advertiserId){
-        return static::where('advertiser_id', $advertiserId)->count();
+    public function get_advertizer_campaign_count($advertiserId, int $companyID){
+        return static::where(['advertiser_id' => $advertiserId, 'company_id' => $companyID])->count();
     }
     
 }

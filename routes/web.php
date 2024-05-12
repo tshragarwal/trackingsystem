@@ -52,7 +52,7 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
             Route::patch('/advertiser/{id}', [App\Http\Controllers\AdvertizerController::class, 'update'] )->name('advertiser.update');
 
             // Destroy
-            Route::post('/advertiser/delete', [App\Http\Controllers\AdvertizerController::class, 'destroy'] )->name('advertiser.delete');
+            Route::delete('/advertiser/{id}', [App\Http\Controllers\AdvertizerController::class, 'destroy'] )->name('advertiser.delete');
 
             //--------- Campaign  ----------------- //
             // List
@@ -150,7 +150,6 @@ if($domain == env('PUBLISHER_DOMAIN')){
     
 }
 
-Route::get('/publisher/token/data', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_data'] )->name('publisher_token.token_data');
 if($domain == env('PUBLISHER_API_DOMAIN')){
     Route::get('/publisher/token/data', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_data'] )->name('publisher_token.token_data');
     Route::get('/lead/verify', [App\Http\Controllers\PublisherTokenController::class, 'lead_verify'])->name('lead.verify');

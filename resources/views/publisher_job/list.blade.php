@@ -9,7 +9,7 @@
             </ol>
         </nav>
         @if ($user_type == 'admin')
-            <a href="{{ route('publisher.job.form', ['company_id' => $companyID]) }}" class="btn btn-primary"
+            <a href="{{ route('publisherJob.create', ['company_id' => $companyID]) }}" class="btn btn-primary"
                 style="margin-bottom:20px;float:right;">{{ __('Assign Publisher Job') }}</a>
         @endif
         @if (!empty($success))
@@ -31,7 +31,10 @@
                         <div class="col"> <input type="text" class="form-control" name="campaign_name"
                                 value="{{ !empty($filter['campaign_name']) ? $filter['campaign_name'] : '' }}"
                                 placeholder="Campaign Name"> </div>
-                        <div class="col"> <button type="submit" class="btn btn-success mb-2">Filter</button> </div>
+                        <div class="col"> 
+                            <button type="submit" class="btn btn-success mb-2">Filter</button> 
+                            <a href="{{ route('publisherJob.list', ['company_id' => $companyID]) }}" class="btn btn-danger mb-2">Reset</a>
+                        </div>
                     </div>
                 </div>
             </form>

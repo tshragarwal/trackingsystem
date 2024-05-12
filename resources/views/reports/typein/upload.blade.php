@@ -35,7 +35,7 @@
                 <button type="submit" class="btn btn-success">Download Sample CSV</button>
             </form>
         </div>
-        <form action="{{ route('report.saveCSV', ['company_id' => $companyID, 'type' => 'typeins']) }}" method="POST"
+        <form action="{{ route('report.saveCSV', ['company_id' => $companyID, 'type' => 'typein']) }}" method="POST"
             enctype="multipart/form-data" style="width: 50%">
             @csrf
             <div class="mb-3">

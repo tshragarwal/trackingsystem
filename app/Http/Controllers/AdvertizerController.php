@@ -21,7 +21,7 @@ class AdvertizerController extends Controller
         
         $advertizerList = $userObj->get_publisher_list($requestData, 20);
        
-        return view('advertiser.advertizerlist', ['data' => $advertizerList, 'success' => $request->s, 'filter' => $requestData ]);
+        return view('advertiser.list', ['data' => $advertizerList, 'success' => $request->s, 'filter' => $requestData ]);
     }
 
     public function create() {
@@ -61,36 +61,32 @@ class AdvertizerController extends Controller
         return redirect()->route('advertiser.list', ['company_id' => $companyID]);
     }
 
-    public function destroy(Request $request, int $companyID){
-        $requestData = $request->all();
-        if(!empty($requestData['advertizer_id'])){
-            
-            $record = Advertiser::find($requestData['advertizer_id']);
-
-            if($record->company_id !== $companyID) {
-                abort(403, "Invalid operation");
-            }
-
-            if ($record) {
-                
-                // -- check is there campaign assign to it or not ------//
-                $modelObj = new AdvertiserCampaignModel();
-                $count = $modelObj->get_advertizer_campaign_count($requestData['advertizer_id']);
-                $s = 1;
-                if( $count > 0){
-                    $message = "Avertizer can not be deleted because $count campaign is assigned it advertizer. Please first delete all associated campaign then Advertizer. ";
-                    $s = 0;
-                }else{
-                    $record->delete();
-                    $message = 'Advertizer deleted successfully';
-                }
-                
-                
-                return response()->json(['message' => $message, 'status' => $s]);
-            } else {
-                return response()->json(['message' => 'Advertizer not found'], 404);
-            }
+    public function destroy(int $companyID, int $id){     
+        $record = Advertiser::find($id);
+        if(empty($record)) {
+            return response()->json(['message' => 'Advertizer not found'], 404);
         }
+
+        if($record->company_id !== $companyID) {
+            return response()->json(['message' => 'Invalid operation'], 403);
+        }
+
+            
+            // -- check is there campaign assign to it or not ------//
+        $modelObj = new AdvertiserCampaignModel();
+        $count = $modelObj->get_advertizer_campaign_count($id, $companyID);
+        $s = 1;
+        if( $count > 0){
+            $message = "Avertizer can not be deleted because $count campaign is assigned it advertizer. Please first delete all associated campaign then Advertizer. ";
+            $s = 0;
+        }else{
+            $record->delete();
+            $message = 'Advertizer deleted successfully';
+        }
+        
+        
+        return response()->json(['message' => $message, 'status' => $s]);
+        
     }
     
 }

@@ -36,7 +36,10 @@
                         <div class="col"> <input type="text" class="form-control" name="campaign_name"
                                 value="{{ !empty($filter['campaign_name']) ? $filter['campaign_name'] : '' }}"
                                 placeholder="Campaign Name"> </div>
-                        <div class="col"> <button type="submit" class="btn btn-success mb-2">Filter</button> </div>
+                        <div class="col"> 
+                            <button type="submit" class="btn btn-success mb-2">Filter</button> 
+                            <a href="{{ route('campaign.list', ['company_id' => $companyID]) }}" class="btn btn-danger mb-2 " >Reset</a>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -255,7 +258,6 @@
                     dataType: "json",
                     data: {
                         _token: token, // Include the CSRF token
-                        campaign_id: campaign_id // Include any other data you need for deletion
                     },
                     success: function(data) {
                         if (data.status == 0) {
@@ -275,9 +277,17 @@
                             }, 3000); // 10,000 milliseconds (10 seconds)
 
                         }
-
-
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        message = JSON.parse(XMLHttpRequest.responseText);
+                        $('.delet_message').html('<div class="alert alert-danger" role="alert">' + message.message + '</div>');
+                        setTimeout(function() {
+                            var closeButton = $('[data-dismiss="modal"]');
+                            closeButton.click();
+                        }, 5000); // 10,000 milliseconds (10 seconds)
+                        
                     }
+
                 });
 
             });

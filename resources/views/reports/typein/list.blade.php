@@ -419,8 +419,8 @@
             $('.delete_all_report_confirm').on('click', function() {
                 var token = $('meta[name="csrf-token"]').attr('content');
                 var request = $.ajax({
-                    url: '/report/typein/all/delete',
-                    type: "POST",
+                    url: '/' + companyID + '/report/typein/flush-data',
+                    type: "DELETE",
                     dataType: "json",
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content')
