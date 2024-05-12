@@ -25,7 +25,7 @@ class AddPublisherRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'email', "unique:users,email"],
             'password' => ['required', 'string']
         ];
     }

@@ -18,9 +18,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'company_id',
         'name',
         'email',
         'password',
+        'user_type',
     ];
 
     /**
@@ -42,19 +44,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    public function get_publisher_list($filter, $size = 1000){
-         $obj = self::where('user_type','publisher');
+    public function scopePublisherList($query, $filter, $size = 1000){
+        $query = $query->where(['user_type' => 'publisher', 'company_id' => $filter['company_id']]);
         
-        if(!empty($filter) && !empty($filter['type']) && $filter['type'] =='id' && $filter['v'] !=0){
-             $obj->where($filter['type'], $filter['v']);
-        }else if (!empty($filter) && !empty($filter['type']) && $filter['type'] =='name' && $filter['v'] !=''){
-             $obj->where($filter['type'], 'like','%'.$filter['v'].'%');
+        if(!empty($filter['type'])){
+            if($filter['type'] =='id' && $filter['v'] !=0) {
+                $query->where($filter['type'], $filter['v']);
+            } else if ($filter['type'] =='name' && $filter['v'] !='') {
+                $query->where($filter['type'], 'like','%'.$filter['v'].'%');
+            }
         }
-        
-        return $obj->orderby('id','desc')->paginate($size);
-        
+
+        return $query->orderby('id','desc')->paginate($size);
     }
-    public function all_publisher_list(){
-        return self::select(['id', 'name'])->where('user_type','publisher')->get();
+
+    public function all_publisher_list(int $companyID){
+        return self::select(['id', 'name'])->where(['user_type' => 'publisher', 'company_id' => $companyID])->get();
     }
 }

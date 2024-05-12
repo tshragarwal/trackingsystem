@@ -3,242 +3,74 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\AdvertizerFormSaveRequest;
-use App\Http\Requests\CampaignDetailUpdateRequest;
-use App\Http\Requests\CampaignSaveRequest;
-use App\Models\AdvertizerRequest;
+use App\Http\Requests\AdvertiserRequest;
+use App\Models\Advertiser;
 use App\Models\AdvertiserCampaignModel;
 use App\Http\Traits\CommonTrait;
-use Illuminate\Support\Facades\Validator;
 use App\Models\PublisherJobModel;
-use App\Models\TrackingPublisherJobModel;
-use DB;
 
 
 class AdvertizerController extends Controller
 {
     use CommonTrait;
-    
-    public function form(Request $request){
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
-        $advertizer = [];
-        if(!empty($request->adv_id)){
-            $advertizerObj = AdvertizerRequest::find($request->adv_id);
-            $advertizer = $advertizerObj->toArray();
-        }
-        
-        return view('advertiser.form', ['advertizer' => $advertizer]);
-    }
-    
-    public function form_save(AdvertizerFormSaveRequest $request){
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }      
-        
-        $requestData = $request->post();
-        if(!empty($requestData['manual_email'])){
-            $validator = Validator::make($requestData, [
-                'manual_email' => 'email',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-        }
-        
-        if(!empty($requestData['advertizer_id'])){
-            $advertizerObj = AdvertizerRequest::find( $requestData['advertizer_id']);
-           
-            $advertizerObj->name =  $requestData['name'];
-            $advertizerObj->manual_email =  $requestData['manual_email'];
-            $advertizerObj->save();
-//            return redirect('/tracking/advertiser/list?s=1');
-            return redirect()->route('advertiser.list', ['s' => 1]);
-        }
-        
-        if(!empty($requestData['name'])){
-        
-            $modelObj = new AdvertizerRequest();
-            $modelObj->name = $requestData['name'];
-            if(!empty($requestData['manual_email'])){
-                $modelObj->manual_email = $requestData['manual_email'];
-            }
 
-            $modelObj->save();
-//            return redirect('/tracking/advertiser/list?s=1');
-            return redirect()->route('advertiser.list', ['s' => 1]);
-        }
-        
-    }
-
-    
-    public function campaign(){
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
-        $allAdvertiserList = AdvertizerRequest::all();
-
-        return view('advertiser.campaign', ['advertiserObj'=> $allAdvertiserList]);
-    }
-    public function campaignsave(CampaignSaveRequest $request){
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
-        
-        $requestData = $request->post();
-        if(!empty($requestData) && !empty($requestData['advertiser_id']) && !empty($requestData['target_url']) && !empty($requestData['target_count'])){
-            
-            // --- validation for {keyword} in target url -----//
-            if (strpos($requestData['target_url'], '{keyword}') === false) {
-                return redirect()->back()->with('error_status',"Target Url required '{keyword}'");
-            }
-            
-             $dbObj = AdvertizerRequest::find($requestData['advertiser_id']);
-            
-             if(!empty($dbObj)){
-                 
-                $tableObj = new AdvertiserCampaignModel();
-                $tableObj->advertiser_id = $requestData['advertiser_id'];
-                $tableObj->campaign_name = $requestData['campaign_name'];
-                if(!empty($requestData['subid'])){
-                    $tableObj->subid = $requestData['subid'];
-                }
-                $tableObj->link_type = $requestData['link_type'];
-                $tableObj->target_url = $requestData['target_url'];
-//                $tableObj->query_string = $requestData['query_string'];
-                $tableObj->target_count = $requestData['target_count'];
-                $tableObj->enable_referer_redirection = $requestData['enable_referer_redirection'] ?? 1;
-                $tableObj->allow_mobile = $requestData['allow_mobile'] ?? 1;
-                $tableObj->allow_tablet = $requestData['allow_tablet'] ?? 1;
-                $tableObj->allow_desktop = $requestData['allow_desktop'] ?? 1;
-                $tableObj->updated_at = date('Y-m-d H:i:s');
-                $tableObj->save();
-
-                return redirect()->back()->with('success_status','Campaign Details Added Successfully');
-             }
-        }
-    }
-    
-    public function campaignlist(Request $request){
+    public function index(Request $request, int $companyID){
+        $request->merge(['companyID' => $companyID]);
         $requestData = $request->all();
-        /*
-         * @if(Auth::guard('admin')->check())
-    Hello {{Auth::guard('admin')->user()->name}}
-@elseif(Auth::guard('user')->check())
-    Hello {{Auth::guard('user')->user()->name}}
-@endif
-         */
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
+        $userObj = new Advertiser();
         
-        $modelObj = new AdvertiserCampaignModel();
-        $result = $modelObj->list($requestData);
-        return view('advertiser.list', ['data' => $result, 'success' => $request->s??0, 'filter' => $requestData]);
-        
-    }
-    
-    public function campaigndetail(Request $request){
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
-        if(!empty($request) && !empty($request->id) && is_numeric($request->id)){
-            $modelObj = new AdvertiserCampaignModel();
-            $result = $modelObj->detail($request->id);
-            if(empty($result)){
-                return view('advertiser.detail', ['error' => "Invalid Detail", 'data' => '']);
-            }
-           
-
-            return view('advertiser.detail', ['data' => $result, 'error' => '']);
-        }
-    }
-    
-    public function campaignupdate(CampaignDetailUpdateRequest $request){
-        
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
-        $requestData = $request->post();
-      
-        if(!empty($requestData) && !empty($requestData['id'])){
-             $dbObj = AdvertiserCampaignModel::find($requestData['id']);
-            
-             if(!empty($dbObj)){
-                
-                
-                // --- validation for {keyword} in target url -----//
-                if (strpos($requestData['target_url'], '{keyword}') === false) {
-                    return redirect()->back()->with('error_status',"Target Url required '{keyword}'");
-                }
-                $dbObj->target_url = $requestData['target_url'];
-                
-                
-                $dbObj->campaign_name = $requestData['campaign_name'];
-                if(!empty($requestData['subid'])){
-                    $dbObj->subid = $requestData['subid'];
-                }
-                $dbObj->link_type = $requestData['link_type'];
-                
-//                $dbObj->query_string = $requestData['query_string'];
-                $dbObj->target_count = $requestData['target_count'];
-                $dbObj->status = $requestData['status'];
-
-                $dbObj->enable_referer_redirection = $requestData['enable_referer_redirection'];
-                $dbObj->allow_mobile = $requestData['allow_mobile'];
-                $dbObj->allow_tablet = $requestData['allow_tablet'];
-                $dbObj->allow_desktop = $requestData['allow_desktop'];
-                
-                $dbObj->updated_at = date('Y-m-d H:i:s');
-                $dbObj->update();
-                
-                return redirect()->back()->with('success_status','Campaign data Updated Successfully');
-                 
-             }
-        }
-    }
-    
-    public function advertiser_campaign_list($advertiser_id){
-        if(!empty($advertiser_id)){
-            $model = new AdvertiserCampaignModel();
-            $result = $model->get_advertiser_campaigns($advertiser_id);
-           
-            $response = [];
-            foreach($result as $data){
-                $d['id'] = $data->id;
-                $d['campaign_name'] = $data->campaign_name;
-                $d['subid'] = $data->subid;
-                $d['link_type'] = $data->link_type;
-                $d['target_url'] = $data->target_url;
-                $d['target_count'] = $data->target_count;
-//                $d['query_string'] = $data->query_string;
-                $d['status'] = $data->status;
-                
-                $response[] = $d;
-            }
-            return $response;
-        }
-        return [];
-    }
-    
-    public function list(Request $request){
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
-        $requestData = $request->all();
-        $userObj = new AdvertizerRequest();
-        
-        $advertizerList = $userObj->get_publisher_list($requestData, 1000);
+        $advertizerList = $userObj->get_publisher_list($requestData, 20);
        
         return view('advertiser.advertizerlist', ['data' => $advertizerList, 'success' => $request->s, 'filter' => $requestData ]);
-    }    
-    
-    public function destroy(Request $request){
+    }
+
+    public function create() {
+        return view('advertiser.create');
+    }
+
+    public function store(AdvertiserRequest $request, int $companyID) {
+        Advertiser::create([
+            'name' => $request->get('name'),
+            'manual_email' => $request->get('manual_email') ?? '',
+            'company_id' => $companyID
+        ]);
+
+        return redirect()->route('advertiser.list', ['company_id' => $companyID]);
+    }
+
+    public function edit(int $companyID, int $id) {
+        $advertiser = Advertiser::findOrFail($id);
+
+        if($advertiser->company_id !== $companyID) {
+            abort(403, "Invalid operation");
+        }
+        return view('advertiser.edit', ['advertiser' => $advertiser]);
+    }
+
+    public function update(AdvertiserRequest $request, int $companyID, int $id) {
+        $advertiser = Advertiser::findOrFail($id);
+
+        if($advertiser->company_id !== $companyID) {
+            abort(403, "Invalid operation");
+        }
+
+        $advertiser->name = $request->get('name');
+        $advertiser->manual_email = $request->get('manual_email');
+        $advertiser->save();
+
+        return redirect()->route('advertiser.list', ['company_id' => $companyID]);
+    }
+
+    public function destroy(Request $request, int $companyID){
         $requestData = $request->all();
         if(!empty($requestData['advertizer_id'])){
             
-            $record = AdvertizerRequest::find($requestData['advertizer_id']);
+            $record = Advertiser::find($requestData['advertizer_id']);
+
+            if($record->company_id !== $companyID) {
+                abort(403, "Invalid operation");
+            }
+
             if ($record) {
                 
                 // -- check is there campaign assign to it or not ------//
@@ -260,148 +92,5 @@ class AdvertizerController extends Controller
             }
         }
     }
-    
-   
-    public function delete_campaign(Request $request){
-        $requestData = $request->all();
-        if(!empty($requestData['campaign_id'])){
-            
-            $record = AdvertiserCampaignModel::find($requestData['campaign_id']);
-            if ($record) {
-                
-                // -- check is there campaign assign to it or not ------//
-                $modelObj = new PublisherJobModel();
-                $count = $modelObj->get_all_campaign_publisher_job_count($requestData['campaign_id']);
-                $s = 1;
-                if( $count > 0){
-                    $message = "Campaign can not be deleted because $count Publisher Job is assigned with this Campaign. Please firstly delete all associated Publisher Job.";
-                    $s = 0;
-                }else{
-                    $record->delete();
-                    $message = 'Campaign deleted successfully';
-                }
-                
-                
-                return response()->json(['message' => $message, 'status' => $s]);
-            } else {
-                return response()->json(['message' => 'Campaign not found'], 404);
-            }
-        }
-    }    
-    
-   
-    public function sync_geolocation(Request $request){
-        ini_set('max_execution_time', 0);
-        $requestData = $request->all();
-        if(!empty($requestData['campaign_id'])){
-           
-            $record = AdvertiserCampaignModel::find($requestData['campaign_id']);
-            if ($record) {
-                
-                // -- check is there campaign assign to it or not ------//
-                $modelObj = new TrackingPublisherJobModel();
-                $records = $modelObj->get_non_sync_geo_location($requestData['campaign_id']);
-                $chunksRecord = $records->chunk(80);
-                
-                foreach($chunksRecord as $chunk) {
-                    $ipData = $idData = [];
-                    foreach($chunk as $data) {
-                        $ipData[] = $data->ip;
-                        $idData[] = $data->id;
-                    }
-                    
-                    $ipDetail = $this->getIPDetails($ipData);
-                    if($this->filterIAndInsertpData($ipDetail)){
-                         TrackingPublisherJobModel::whereIn('id', $idData)->update(['geo_location_updated' => 1]);
-                    }
-                }
-                
-                return response()->json(['message' => "Geo Location Updated", 'status' => 1]);
-            } else {
-                return response()->json(['message' => 'Campaign not found'], 404);
-            }
-        }
-    } 
-    
-    
-    private function getIPDetails($ips){
-        $endpoint = 'http://ip-api.com/batch';
-
-        $options = [
-                'http' => [
-                        'method' => 'POST',
-                        'user_agent' => 'Batch-Example/1.0',
-                        'header' => 'Content-Type: application/json',
-                        'content' => json_encode($ips)
-                ]
-        ];
-        $response = file_get_contents($endpoint, false, stream_context_create($options));
-
-        // Decode the response and print it
-        $array = json_decode($response, true);
-        return $array;
-    }
-    
-    private function filterIAndInsertpData($ipDetail){
-        if(!empty($ipDetail)){
-            
-            $geoData = [];
-            foreach($ipDetail as $data){
-                $geo_location = [];
-                if($data['status'] == 'success') {
-                    $geo_location['ip'] = $data['query'];
-                    $geo_location['country'] = $data['country'];
-                    $geo_location['countryCode'] = $data['countryCode'];
-                    $geo_location['region'] = $data['region'];
-                    $geo_location['regionName'] = $data['regionName'];
-                    $geo_location['city'] = $data['city'];
-                    $geo_location['zip'] = $data['zip'];
-                    $geo_location['lat'] = $data['lat'];
-                    $geo_location['lon'] = $data['lon'];
-                    $geo_location['timezone'] = $data['timezone'];
-                    
-                    $geoData[] = $geo_location;
-                }
-            }
-            if(!empty($geoData)){
-                DB::table('geo_location')->insertOrIgnore($geoData);
-                return true;
-            }
-            
-        }
-        return false;
-    }
-    
-    public function status_update(Request $request) {
-        
-        $requestData = $request->all();
-        
-        if( !empty($requestData) && !empty($requestData['id']) && in_array($requestData['status'], [0,1]) ) {
-            $obj = AdvertiserCampaignModel::find($requestData['id']);
-            if($obj){
-                $status = $requestData['status'] == 1? 0: 1;
-                $obj->update(['enable_referer_redirection' => $status]);
-            }
-            return true;
-        }
-        
-        return false;
-    }
-    
-    public function campaign_publisher_list($campaign_id){
-        if(!empty($campaign_id)){
-            $model = new PublisherJobModel();
-            $result = $model->get_campaign_publisherlist($campaign_id);
-            $response = [];
-            foreach($result as $data){
-                $d['id'] = $data->publisher_id;
-                $d['publisher_name'] = $data->publisher->name;
-                $response[] = $d;
-            }
-            return $response;
-        }
-        return [];
-    }
-    
     
 }

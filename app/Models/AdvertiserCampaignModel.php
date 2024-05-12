@@ -14,31 +14,34 @@ class AdvertiserCampaignModel extends Model
     
     public function list(array $filter, int $size = 1000){
         $campaign = static::with('advertiser');
-        if(!empty($filter) && !empty($filter['advertizer'])){
-            $campaign->where('advertiser_id', $filter['advertizer']);
-        }
-       
-        if(!empty($filter) && !empty($filter['id']) && $filter['id'] > 0 ){
-            $campaign->where('id', $filter['id']);
-        }
-        if (!empty($filter) && !empty($filter['campaign_name']) && $filter['campaign_name'] != '' ){
-             $campaign->where('campaign_name', 'like','%'.$filter['campaign_name'].'%');
-        }
-        
-        if (!empty($filter) && !empty($filter['adver_name'])  && $filter['adver_name'] != '' ){
-             $campaign->whereHas('advertiser', function ($query) use ($filter) {
-                    $query->where('name', 'like', '%' . $filter['adver_name'] . '%');
-                });
+        $campaign->where('company_id', $filter['companyID']);
+
+        if(!empty($filter)) {
+            if(!empty($filter['advertizer'])){
+                $campaign->where('advertiser_id', $filter['advertizer']);
+            }
+           
+            if(!empty($filter['id']) && $filter['id'] > 0 ){
+                $campaign->where('id', $filter['id']);
+            }
+
+            if (!empty($filter['campaign_name']) && $filter['campaign_name'] != '' ){
+                 $campaign->where('campaign_name', 'like','%'.$filter['campaign_name'].'%');
+            }
+            
+            if (!empty($filter['adver_name'])  && $filter['adver_name'] != '' ){
+                 $campaign->whereHas('advertiser', function ($query) use ($filter) {
+                        $query->where('name', 'like', '%' . $filter['adver_name'] . '%');
+                    });
+            }
         }
         
         return $campaign->orderBy('updated_at', 'desc')->paginate($size);
-       
-//       return static::with('advertiser')->orderBy('updated_at', 'desc')->paginate($size);
     }
     
     
     public function advertiser(){
-        return $this->belongsTo(AdvertizerRequest::class);
+        return $this->belongsTo(Advertiser::class);
     }
     
     public function detail($id){

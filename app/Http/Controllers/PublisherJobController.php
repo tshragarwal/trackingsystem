@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Traits\CommonTrait;
 use App\Models\AdvertiserCampaignModel;
-use App\Models\AdvertizerRequest;
+use App\Models\Advertiser;
 use App\Models\User;
 use App\Http\Requests\AssignPublisherJob;
 use App\Models\PublisherJobModel;
@@ -18,74 +18,88 @@ use Illuminate\Support\Facades\Crypt;
 
 class PublisherJobController extends Controller
 {
-    public function list(Request $request){
+    public function index(Request $request, int $companyID) {
+      $user = Auth()->user();
+      $request->merge(['company_id' => $companyID]);
 
-        
-//        if(!CommonTrait::is_super_admin()){
-//            return view('access_denied');
-//        }
-        $user = Auth::guard('web')->user();
-        
-        $publisherId = ($user->user_type =='publisher') ? $user->id: (!empty($request->publisher_id)  ?$request->publisher_id : 0 );
-        $modelObj = new PublisherJobModel();
-        $result = $modelObj->list($request->all(), $publisherId, 1000);
-        
-        $domainName = env('APP_DOMAIN');
-        return view('publisher_job.list', ['data' => $result, 'success' => $request->s??0, 'domain' => $domainName, 'user_type' => $user->user_type, 'filter' => $request->all()]);
-        
+      $jobs = new PublisherJobModel();
+      $result = $jobs->list($request->all(), 20);
+      
+      $domainName = env('APP_DOMAIN');
+      return view('publisher_job.list', ['data' => $result, 'success' => $request->s??0, 'domain' => $domainName, 'user_type' => $user->user_type, 'filter' => $request->all()]);
+
+    }
+
+    public function create(int $companyID, int $campaignID = 0) {
+      $publisherList = User::publisherList(['company_id' => $companyID]);
+
+      // when redirected from campaign page
+      $campaignDetails = [];
+      if($campaignID > 0) {
+        $campaignDetails = AdvertiserCampaignModel::with('advertiser')->where(['company_id' => $companyID, 'id' => $campaignID])->first();
+      }
+      
+      $advertisers = Advertiser::all();
+      return view('publisher_job.create', ['publisher' => $publisherList, 'advertisers' => $advertisers, 'optionalCampaignDetails' => $campaignDetails]);
+    
+    }
+
+    public function store(AssignPublisherJob $request, int $companyID) {
+      $uid = $this->getUniqueURLCode();
+
+      $job = PublisherJobModel::create([
+        'company_id' => $companyID,
+        'publisher_id' => $request->get('publisher_id'),
+        'advertiser_campaign_id' => $request->get('advertiser_campaign_id'),
+        'proxy_url' => $uid,
+        'target_count' => $request->get('target_count'),
+      ]);
+      
+      $id = $job->id;
+      $url = env('APP_DOMAIN').'/search?code='.$uid.'&offerid='.$id.'&q={keyword}';
+      
+      return redirect()->back()->with(['success_status' => 'Successfully Campaign is assigned to Publisher', 'link_url' => $url]);
+    }
+
+    private function getUniqueURLCode() : string {
+      
+      do {
+          $uid = uniqid().time();
+          $existsUrl = PublisherJobModel::where('proxy_url', $uid)->first();
+      }while(!empty($existsUrl));
+
+      return $uid;
     }
     
-    public function form(Request $request){
-//        if(!CommonTrait::is_super_admin()){
-//            return view('access_denied');
-//        }
-        $requestData = $request->all();
-        $userObj = new User();
-        $publisherList = $userObj->get_publisher_list(10000);
-        
-        $campaign_id = $requestData['campaign_id']??0;
-        $modelObj = new AdvertiserCampaignModel();
-        $advertiserCampaign = $modelObj->active_list($campaign_id, 50);
-        
-        $allAdvertiserObj = AdvertizerRequest::all();
-        
-        $camArray = [];
-        if(!empty($campaign_id) && !empty($advertiserCampaign->first()) ) {
-            $campInfo = $advertiserCampaign->first();
-            $camArray['advertiser_id'] = $campInfo->advertiser->id;
-            $camArray['advertizer_name'] = $campInfo->advertiser->name;
-            $camArray['advertizer_email'] = $campInfo->advertiser->manual_email;
-            $camArray['campaign_id'] = $campInfo->id;
-            $camArray['campaign_name'] = $campInfo->campaign_name;
-        }
-        return view('publisher_job.form', ['publisher' => $publisherList, 'advertiserCampaign' => $advertiserCampaign, 'advertiserObj' => $allAdvertiserObj, 'camp_array' => $camArray]);
-    }
     
-    public function save(AssignPublisherJob $request){
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }        
-        $requestData = $request->post();
+    public function updateStatus(Request $request, int $companyID, int $id){
         
-        do {
-            $uid = uniqid().time();
-            $existsUrl = PublisherJobModel::where('proxy_url', $uid)->first();
-        }while(!empty($existsUrl));
-        
-        
-        $tableObj = new PublisherJobModel();
-        $tableObj->publisher_id = $requestData['publisher_id'];
-        $tableObj->advertiser_campaign_id = $requestData['advertiser_campaign_id'];
-        $tableObj->proxy_url = $uid;
-        $tableObj->target_count = $requestData['target_count']??0;
-        $tableObj->save();
-        
-        $id = $tableObj->id;
-        $url = env('APP_DOMAIN').'/search?code='.$uid.'&offerid='.$id.'&q={keyword}';
-        
-        return redirect()->back()->with(['success_status' => 'Successfully Campaign is assigned to Publisher', 'link_url' => $url]);
-        
+      $requestData = $request->all();
+      $job = PublisherJobModel::where(['company_id' => $companyID, 'id' => $id])->first();
+
+      if(empty($job)) {
+        return response()->json(['message' => 'Job not found'], 404);
+      }
+
+      $job->status = !$job->status;
+      $job->save();
+
+      return response()->json(['message' => 'Status updated successfully'], 200);
+  }
+
+  public function destroy(int $companyID, int $id) {
+            
+    $job = PublisherJobModel::where(['company_id' => $companyID, 'id' => $id])->first();
+
+    if(empty($job)) {
+      return response()->json(['message' => 'Job not found'], 404);
     }
+
+    $job->delete();
+    return response()->json(['message' => 'Publisher Job deleted successfully', 'status' => 1]);    
+  }
+    
+    
     
     public function tracking_url(request $request){
         if(!empty($request->code)){
@@ -170,113 +184,6 @@ class PublisherJobController extends Controller
         return response()->json(['message' => 'Inactive Job'], 406);
     }
     
-    public function delete_publisher_job(Request $request){
-        $requestData = $request->all();
-
-        if(!empty($requestData['publisher_job_id'])){
-            
-            $record = PublisherJobModel::find($requestData['publisher_job_id']);
-            if ($record) {
-                $record->delete();
-                $message = 'Publisher Job deleted successfully';
-                
-                return response()->json(['message' => $message, 'status' => 1]);
-            } else {
-                return response()->json(['message' => 'Publisher not found'], 404);
-            }
-        }
-    } 
-    
-    public function status_update(Request $request){
-        
-        $requestData = $request->all();
-        
-        if( !empty($requestData) && !empty($requestData['id']) && in_array($requestData['status'], [0,1]) ) {
-            $obj = PublisherJobModel::find($requestData['id']);
-            if($obj){
-                $status= $requestData['status']==1? 0:1;
-                $obj->update(['status' => $status]);
-            }
-            return true;
-        }
-        
-        return false;
-    }
-    
-    function getBrowser() { 
-        $u_agent = $_SERVER['HTTP_USER_AGENT'];
-        $bname = 'Unknown';
-        $platform = 'Unknown';
-        $version= "";
-
-        //First get the platform?
-        if (preg_match('/linux/i', $u_agent)) {
-          $platform = 'linux';
-        }elseif (preg_match('/macintosh|mac os x/i', $u_agent)) {
-          $platform = 'mac';
-        }elseif (preg_match('/windows|win32/i', $u_agent)) {
-          $platform = 'windows';
-        }
-
-        // Next get the name of the useragent yes seperately and for good reason
-        if(preg_match('/MSIE/i',$u_agent) && !preg_match('/Opera/i',$u_agent)){
-          $bname = 'Internet Explorer';
-          $ub = "MSIE";
-        }elseif(preg_match('/Firefox/i',$u_agent)){
-          $bname = 'Mozilla Firefox';
-          $ub = "Firefox";
-        }elseif(preg_match('/OPR/i',$u_agent)){
-          $bname = 'Opera';
-          $ub = "Opera";
-        }elseif(preg_match('/Chrome/i',$u_agent) && !preg_match('/Edge/i',$u_agent)){
-          $bname = 'Google Chrome';
-          $ub = "Chrome";
-        }elseif(preg_match('/Safari/i',$u_agent) && !preg_match('/Edge/i',$u_agent)){
-          $bname = 'Apple Safari';
-          $ub = "Safari";
-        }elseif(preg_match('/Netscape/i',$u_agent)){
-          $bname = 'Netscape';
-          $ub = "Netscape";
-        }elseif(preg_match('/Edge/i',$u_agent)){
-          $bname = 'Edge';
-          $ub = "Edge";
-        }elseif(preg_match('/Trident/i',$u_agent)){
-          $bname = 'Internet Explorer';
-          $ub = "MSIE";
-        }
-
-        // finally get the correct version number
-        $known = array('Version', $ub, 'other');
-        $pattern = '#(?<browser>' . join('|', $known) .
-      ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
-        if (!preg_match_all($pattern, $u_agent, $matches)) {
-          // we have no matching number just continue
-        }
-        $i = count($matches['browser']);
-        if ($i != 1) {
-          //we will have two since we are not using 'other' argument yet
-          //see if version is before or after the name
-          if (strripos($u_agent,"Version") < strripos($u_agent,$ub)){
-              $version= $matches['version'][0];
-          }else {
-              $version= $matches['version'][1];
-          }
-        }else {
-          $version= $matches['version'][0];
-        }
-
-        // check if we have a number
-        if ($version==null || $version=="") {$version="?";}
-
-        return array(
-          'userAgent' => $u_agent,
-          'name'      => $bname,
-          'version'   => $version,
-          'platform'  => $platform,
-          'pattern'    => $pattern
-        );
-    }
-
     public function getUserAgentDetails() {
       $agent = new Agent();
 

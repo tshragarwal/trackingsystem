@@ -8,12 +8,11 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Add Campaign') }}</div>
-
                 <div class="card-body">
                     
                     <!-- START Advertiser Form for adding new request--> 
                     
-                   <form method="POST" action="{{ route('advertiser.campaignsave') }}">
+                   <form method="POST" action="{{ route('campaign.store', ['company_id' => $companyID]) }}">
                         @csrf
 
                              @if (session('success_status'))
@@ -38,7 +37,7 @@
                                 </div>
 
                                 @error('advertiser_id')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -53,7 +52,7 @@
                             <div class="col-md-6">
                                 <input id="campaign_name" type="text" class="form-control @error('campaign_name') is-invalid @enderror" name="campaign_name" value="{{ old('campaign_name') }}" required autocomplete="campaign_name" autofocus>
                                 @error('campaign_name')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -76,7 +75,7 @@
                                 </div>
 
                                 @error('link_type')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -84,14 +83,14 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Target Url') }}</label>
+                            <label for="target_url" class="col-md-4 col-form-label text-md-end">{{ __('Target Url') }}</label>
 
                             <div class="col-md-6">
                                 <!--<input id="target_url" type="textarea" class="form-control @error('target_url') is-invalid @enderror" name="target_url" value="{{ old('target_url') }}" required autocomplete="target_url" autofocus>-->
                                 <textarea class="form-control" name="target_url" id="target_url" rows="3" required autocomplete="target_url" autofocus>{{ old('target_url') }}</textarea>
                                 <span style='font-size: 10px;color: red;'>Target Url required '{keyword}' and if you want to verify lead then add tracking={clkid} in target url. In tracking={clkid}, you can replace 'target' with desired key but '{clkid}' must be fixed<br/> </span>
                                 @error('target_url')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -106,7 +105,7 @@
                                 <input id="subid" type="text" class="form-control @error('subid') is-invalid @enderror" name="subid" value="{{ old('subid') }}" required autocomplete="subid" autofocus>
                                 
                                 @error('subid')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -129,13 +128,13 @@
                         </div>-->
                         
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Target Count') }}</label>
+                            <label for="target_count" class="col-md-4 col-form-label text-md-end">{{ __('Target Count') }}</label>
 
                             <div class="col-md-6">
                                 <input id="target_count" type="number" class="form-control @error('target_count') is-invalid @enderror" name="target_count" value="{{ old('target_count') }}" required autocomplete="target_count" autofocus>
 
                                 @error('target_count')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -143,7 +142,7 @@
                         </div>
                         
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Allow Referer Redirection') }}</label>
+                            <label for="enable_referer_redirection" class="col-md-4 col-form-label text-md-end">{{ __('Allow Referer Redirection') }}</label>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <select class="form-control" name="enable_referer_redirection" id="enable_referer_redirection" >
@@ -152,14 +151,14 @@
                                     </select>
                                 </div>
                                 @error('enable_referer_redirection')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Allow Mobile') }}</label>
+                            <label for="allow_mobile" class="col-md-4 col-form-label text-md-end">{{ __('Allow Mobile') }}</label>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <select class="form-control" name="allow_mobile" id="allow_mobile" >
@@ -168,14 +167,14 @@
                                     </select>
                                 </div>
                                 @error('allow_mobile')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Allow Tablet') }}</label>
+                            <label for="allow_tablet" class="col-md-4 col-form-label text-md-end">{{ __('Allow Tablet') }}</label>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <select class="form-control" name="allow_tablet" id="allow_tablet" >
@@ -184,14 +183,14 @@
                                     </select>
                                 </div>
                                 @error('allow_tablet')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Allow Desktop') }}</label>
+                            <label for="allow_desktop" class="col-md-4 col-form-label text-md-end">{{ __('Allow Desktop') }}</label>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <select class="form-control" name="allow_desktop" id="allow_desktop" >
@@ -200,7 +199,7 @@
                                     </select>
                                 </div>
                                 @error('allow_desktop')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror

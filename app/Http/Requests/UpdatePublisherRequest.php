@@ -24,10 +24,9 @@ class UpdatePublisherRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'numeric'],
             'email' => ['required', 'string', 'email'],
             'name' => ['required', 'string'],
-//            'password' => ['required', 'string'],
+            'password' => ['nullable', 'string'],
         ];
     }
 }
