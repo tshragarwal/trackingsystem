@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$domain = "sandbox.trackingsystem.com:8088"; //filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING);
+$domain = filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING);
 if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     Route::get('/', function () {
         return redirect('/login');

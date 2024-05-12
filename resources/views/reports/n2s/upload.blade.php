@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="">
-                    <form action="{{ route('report.uploadcsv', ['company_id' => $companyID]) }}" method="POST"
+                    <form action="{{ route('report.saveCSV', ['company_id' => $companyID, 'type' => 'n2s']) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
