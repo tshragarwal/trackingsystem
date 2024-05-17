@@ -10,9 +10,7 @@ class RnmatriksPublisherJobModel extends Model
     use HasFactory;
     protected $table = 'rnmatriks_publisher_jobs';
     public $timestamps = false;
-      protected $fillable = [
-        'lead_verify',
-    ];
+      protected $fillable = ['*'];
       
       
     //geo_location_updated

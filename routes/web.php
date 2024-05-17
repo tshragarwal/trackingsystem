@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Askk2knowSearchController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\TrckWinnersSearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$domain = filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING);
-if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
+$host = request()->getHttpHost();
+$adminAppDomain = explode(',', env('ADMIN_APP_DOMAIN'));
+$adminPublisherDomain = explode(',', env('PUBLISHER_DOMAIN'));
+
+
+if(in_array($host, array_merge($adminAppDomain, $adminPublisherDomain))){
     Route::get('/', function () {
         return redirect('/login');
     });
@@ -144,13 +150,20 @@ if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
     });
 
 }
-if($domain == env('PUBLISHER_DOMAIN')){
+
+if($host == env('TRCKWINNERS_DOMAIN')){
     // --------- Tracking Url --------------- //
-    Route::get('/search', [App\Http\Controllers\PublisherJobController::class, 'tracking_url']);
+    Route::get('/search', [TrckWinnersSearchController::class, 'search']);
     
 }
 
-if($domain == env('PUBLISHER_API_DOMAIN')){
+if($host == env('ASKK2KNOW_DOMAIN')){
+    // --------- Tracking Url --------------- //
+    Route::get('/search/{token}', [Askk2knowSearchController::class, 'search']);
+    
+}
+
+if(in_array($host, [env('SEARCHOSS_API_DOMAIN'), env('RNMATRIKS_API_DOMAIN')])){
     Route::get('/publisher/token/data', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_data'] )->name('publisher_token.token_data');
     Route::get('/lead/verify', [App\Http\Controllers\PublisherTokenController::class, 'lead_verify'])->name('lead.verify');
 }

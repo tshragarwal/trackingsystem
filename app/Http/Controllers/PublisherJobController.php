@@ -25,7 +25,11 @@ class PublisherJobController extends Controller
       $jobs = new PublisherJobModel();
       $result = $jobs->list($request->all(), 20);
       
-      $domainName = env('APP_DOMAIN');
+      $domainName = env('TRCKWINNERS_DOMAIN');
+      if($companyID === 2) {
+        $domainName = env('ASKK2KNOW_DOMAIN');
+      }
+
       return view('publisher_job.list', ['data' => $result, 'success' => $request->s??0, 'domain' => $domainName, 'user_type' => $user->user_type, 'filter' => $request->all()]);
 
     }
@@ -56,13 +60,13 @@ class PublisherJobController extends Controller
       ]);
 
       $id = $job->id;
-      $url = env('APP_DOMAIN').'/search?code='.$uid.'&offerid='.$id.'&q={keyword}';
+      $url = env('TRCKWINNERS_DOMAIN').'/search?code='.$uid.'&offerid='.$id.'&q={keyword}';
 
       if($companyID === 2) {
         $uid = $job->proxy_url . str_pad($job->id, 8, '0', STR_PAD_LEFT);
         $job->proxy_url = $uid;
         $job->save();
-        $url = env('APP_DOMAIN').'/'.$uid.'&q={keyword}';
+        $url = env('ASKK2KNOW_DOMAIN').'/'.$uid.'&q={keyword}';
       }
       
       return redirect()->back()->with(['success_status' => 'Successfully Campaign is assigned to Publisher', 'link_url' => $url]);

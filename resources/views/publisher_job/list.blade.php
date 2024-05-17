@@ -77,7 +77,12 @@
                                         ({{ $record->campaign->advertiser->id }})</td>
                                     <td>{{ $record->campaign->campaign_name }}</td>
                                     <td>{{ $record->campaign->target_url }}</td>
-                                    <td>{{ $domain }}/search?code={{ $record->proxy_url }}&offerid={{ $record->id }}&q={keyword}
+                                    <td>
+                                        @if ($companyID == 1)
+                                            {{ $domain }}/search?code={{ $record->proxy_url }}&offerid={{ $record->id }}&q={keyword}
+                                        @elseif($companyID == 2)
+                                            {{ $domain }}/search/{{ $record->proxy_url }}?q={keyword}
+                                        @endif
                                     </td>
                                     <td>{{ $record->target_count }}</td>
                                     <td>{{ $record->tracking_count }}</td>

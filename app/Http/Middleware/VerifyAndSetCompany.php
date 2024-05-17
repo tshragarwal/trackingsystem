@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Company;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VerifyAndSetCompany
 {
@@ -17,7 +18,13 @@ class VerifyAndSetCompany
      */
     public function handle(Request $request, Closure $next)
     {
+        $user = Auth()->user();
         $companyID = $request->route('company_id');
+
+        if($user->company_id != $companyID) {
+            abort(404, 'Page not found');
+        }
+
         $company = Company::findOrFail($companyID);
         view()->share('companyID', $companyID);
         view()->share('companyLogo', $company->logo_path);
