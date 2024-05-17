@@ -39,7 +39,7 @@ class PublisherJobController extends Controller
         $campaignDetails = AdvertiserCampaignModel::with('advertiser')->where(['company_id' => $companyID, 'id' => $campaignID])->first();
       }
       
-      $advertisers = Advertiser::all();
+      $advertisers = Advertiser::where('company_id', $companyID)->get();
       return view('publisher_job.create', ['publisher' => $publisherList, 'advertisers' => $advertisers, 'optionalCampaignDetails' => $campaignDetails]);
     
     }
@@ -54,9 +54,16 @@ class PublisherJobController extends Controller
         'proxy_url' => $uid,
         'target_count' => $request->get('target_count'),
       ]);
-      
+
       $id = $job->id;
       $url = env('APP_DOMAIN').'/search?code='.$uid.'&offerid='.$id.'&q={keyword}';
+
+      if($companyID === 2) {
+        $uid = $job->proxy_url . str_pad($job->id, 8, '0', STR_PAD_LEFT);
+        $job->proxy_url = $uid;
+        $job->save();
+        $url = env('APP_DOMAIN').'/'.$uid.'&q={keyword}';
+      }
       
       return redirect()->back()->with(['success_status' => 'Successfully Campaign is assigned to Publisher', 'link_url' => $url]);
     }

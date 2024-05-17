@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\AdvertiserCampaignModel;
-use App\Models\AdvertizerRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\GeoLocationModel;
 
@@ -104,7 +103,7 @@ class TrackingKeywordModel extends Model
         return $this->belongsTo(User::class, 'publisher_id');
     }
     public function advertiser(){
-        return $this->belongsTo(AdvertizerRequest::class, 'advertiser_id');
+        return $this->belongsTo(Advertiser::class, 'advertiser_id');
     }
     public function campaign(){
         return $this->belongsTo(AdvertiserCampaignModel::class, 'campaign_id');

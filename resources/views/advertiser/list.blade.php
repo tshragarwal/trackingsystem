@@ -20,11 +20,11 @@
         @endif
 
 
-        <a href="{{ route('advertiser.create', ['company_id' => 1]) }}" class="btn btn-primary"
+        <a href="{{ route('advertiser.create', ['company_id' => $companyID]) }}" class="btn btn-primary"
             style="float:right;">{{ __('Add New Advertiser') }}</a>
 
         <div class="card card-body col-sm-7" style="margin-bottom: 20px">
-            <form class="form-inline" action="{{ route('advertiser.list', ['company_id' => 1]) }}">
+            <form class="form-inline" action="{{ route('advertiser.list', ['company_id' => $companyID]) }}">
                 <div class="form-group mx-sm-4">
                     <label for="staticEmail2" class="sr-only">
                         <lable> Filter List </lable>

@@ -18,9 +18,9 @@ class VerifyAndSetCompany
     public function handle(Request $request, Closure $next)
     {
         $companyID = $request->route('company_id');
-        Company::findOrFail($companyID);
+        $company = Company::findOrFail($companyID);
         view()->share('companyID', $companyID);
-
+        view()->share('companyLogo', $company->logo_path);
         return $next($request);
     }
 }

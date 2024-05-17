@@ -40,7 +40,7 @@
             </form>
         </div>
         <div class="table-container">
-            <div class="table-responsive">
+            <div class="table-responsive" style="min-height: 650px;">
                 <table class="table table-hover" id='publisher_job_list_table'>
                     <thead>
                         <tr>

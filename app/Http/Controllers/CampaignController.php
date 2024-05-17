@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RnmatriksPublisherJobModel;
 use Illuminate\Http\Request;
 use App\Http\Requests\CampaignSaveRequest;
 use App\Models\Advertiser;
@@ -39,8 +40,9 @@ class CampaignController extends Controller
         return response()->json($result, 200); // view('campaign.list', ['data' => $result, 'success' => $request->s??0, 'filter' => $requestData]);
     }
 
-    public function create() {
-        return view('campaign.create', ['advertiserObj'=> Advertiser::all()]);
+    public function create(int $companyID) {
+        $advertisers = Advertiser::where('company_id', $companyID)->get();
+        return view('campaign.create', ['advertiserObj'=> $advertisers]);
     }
 
     public function store(CampaignSaveRequest $request, int $companyID) {
@@ -170,10 +172,19 @@ class CampaignController extends Controller
    
     public function sync_geolocation(Request $request, int $companyID){
         ini_set('max_execution_time', 0);
+        if($companyID === 1) {
+            return $this->syncTrackingGeoLocation($request, $companyID);
+        } else if ($companyID === 2) {
+            return $this->syncRNMatriksGeoLocation($request, $companyID);
+        }
+        return response()->json(['message' => 'Invalid operations.'], 403);
+    }
+
+    private function syncTrackingGeoLocation(Request $request, int $companyID) {
         $requestData = $request->all();
         if(!empty($requestData['campaign_id'])){
            
-            $record = AdvertiserCampaignModel::find($requestData['campaign_id']);
+            $record = AdvertiserCampaignModel::where(['id' => $requestData['campaign_id'], 'company_id' => $companyID]);
             if(!$record) {
                 return response()->json(['message' => 'Campaing not found.'], 404);
             }
@@ -201,7 +212,43 @@ class CampaignController extends Controller
             
             return response()->json(['message' => "Geo Location Updated", 'status' => 1]);
         }
-    } 
+        return response()->json(['message' => "Invalid campaign ID.", 'status' => 0], 403);
+    }
+
+    private function syncRNMatriksGeoLocation(Request $request, int $companyID) {
+        $requestData = $request->all();
+        if(!empty($requestData['campaign_id'])){
+           
+            $record = AdvertiserCampaignModel::where(['id' => $requestData['campaign_id'], 'company_id' => $companyID]);
+            if(!$record) {
+                return response()->json(['message' => 'Campaing not found.'], 404);
+            }
+
+            if($record->company_id !== $companyID) {
+                return response()->json(['message' => 'Invalid operation'], 403);
+            }
+            // -- check is there campaign assign to it or not ------//
+            $modelObj = new RnmatriksPublisherJobModel();
+            $records = $modelObj->get_non_sync_geo_location($requestData['campaign_id']);
+            $chunksRecord = $records->chunk(80);
+            
+            foreach($chunksRecord as $chunk) {
+                $ipData = $idData = [];
+                foreach($chunk as $data) {
+                    $ipData[] = $data->ip;
+                    $idData[] = $data->id;
+                }
+                
+                $ipDetail = $this->getIPDetails($ipData);
+                if($this->filterIAndInsertpData($ipDetail)){
+                    RnmatriksPublisherJobModel::whereIn('id', $idData)->update(['geo_location_updated' => 1]);
+                }
+            }
+            
+            return response()->json(['message' => "Geo Location Updated", 'status' => 1]);
+        }
+        return response()->json(['message' => "Invalid campaign ID.", 'status' => 0], 403);
+    }
     
     
     private function getIPDetails($ips){

@@ -26,7 +26,8 @@ class PublisherJobModel extends Model
     public function list($filter =[], $size = 10){
 
         if(!empty($filter['publisher_id'])) {
-            return static::where(['publisher_id' => $filter['publisher_id'], 'company_id' => $filter['company_id']])->withCount('tracking')->with('publisher')->with('campaign')->orderBy('updated_at', 'desc')->paginate($size);
+            //->withCount('tracking')
+            return static::where(['publisher_id' => $filter['publisher_id'], 'company_id' => $filter['company_id']])->with('publisher')->with('campaign')->orderBy('updated_at', 'desc')->paginate($size);
         }
     
         if(!empty($filter) && (!empty($filter['id']) || !empty($filter['pub_name']) || !empty($filter['adver_name']) || !empty($filter['campaign_name']))){
@@ -54,7 +55,7 @@ class PublisherJobModel extends Model
             return $publisherJob->withCount('tracking')->paginate($size);
         }
         
-        return static::with(['publisher', 'campaign'])->withCount('tracking')->where('company_id', $filter['company_id'])->orderBy('updated_at', 'desc')->paginate($size);
+        return static::with(['publisher', 'campaign'])->where('company_id', $filter['company_id'])->orderBy('updated_at', 'desc')->paginate($size);
         
     }
     
