@@ -34,8 +34,10 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm col-sm-12">
             <div class="row">
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                    <div class="topSection"> <a class="logoBox" href="{{ route('advertiser.list', ['company_id' => $companyID]) }}"><img class="img-responsive"
-                                src="{{ $companyLogo }}" alt="" /></a> </div>
+                    <div class="topSection"> 
+                        <a class="logoBox" href="{{ route('advertiser.list', ['company_id' => $companyID]) }}"><img class="img-responsive"
+                                src="{{ $companyLogo }}" alt="" /></a> 
+                    </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <!--<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}"><span class="navbar-toggler-icon"></span> </button>-->
