@@ -79,9 +79,9 @@
                                     <td>{{ $record->campaign->target_url }}</td>
                                     <td>
                                         @if ($companyID == 1)
-                                            https://{{ $domain }}/search?code={{ $record->proxy_url }}&offerid={{ $record->id }}&q={keyword}
+                                            {{ $domain }}/search?code={{ $record->proxy_url }}&offerid={{ $record->id }}&q={keyword}
                                         @elseif($companyID == 2)
-                                            https://{{ $domain }}/search/{{ $record->proxy_url }}?q={keyword}
+                                            {{ $domain }}/search/{{ $record->proxy_url }}?q={keyword}
                                         @endif
                                     </td>
                                     <td>{{ $record->target_count }}</td>
