@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RnmatriksKeywordModel;
 use Illuminate\Http\Request;
 use App\Models\TrackingKeywordModel;
 use App\Models\AdvertizerRequest;
@@ -108,6 +109,9 @@ class TrackingKeywordController extends Controller
     public function tracking_report(Request $request, int $companyID){
         $data = $request->all();
         $model = new TrackingKeywordModel();
+        if($companyID === 2) {
+            $model = new RnmatriksKeywordModel();
+        }
         
         $publisher_advertizer_list = $this->get_advertizer_publisher_list($companyID);
         
