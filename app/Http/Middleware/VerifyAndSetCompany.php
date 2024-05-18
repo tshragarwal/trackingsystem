@@ -21,7 +21,7 @@ class VerifyAndSetCompany
         $user = Auth()->user();
         $companyID = $request->route('company_id');
 
-        if($user->company_id != $companyID) {
+        if($user->user_type != 'admin' && $user->company_id != $companyID) {
             abort(404, 'Page not found');
         }
 
