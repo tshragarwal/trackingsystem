@@ -57,8 +57,6 @@
                             </th>
                             <th data-field="target_count" data-sortable="true" scope="col">Target Count <i
                                     class="fa fa-sort"></i></th>
-                            <th data-field="tracking_count" data-sortable="true" scope="col">Tracking Count <i
-                                    class="fa fa-sort"></i></th>
                             <th data-field="updated_at" data-sortable="true" scope="col">Updated At <i
                                     class="fa fa-sort"></i></th>
                             <th data-field="created_at" data-sortable="true" scope="col">Created At <i
@@ -85,7 +83,6 @@
                                         @endif
                                     </td>
                                     <td>{{ $record->target_count }}</td>
-                                    <td>{{ $record->tracking_count }}</td>
                                     <td>{{ $record->updated_at }}</td>
                                     <td>{{ $record->created_at }}</td>
                                     <td> <span class="active_inactive_toggle" status="{{ $record->status }}"
