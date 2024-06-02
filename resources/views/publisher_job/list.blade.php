@@ -79,7 +79,7 @@
                                         @if ($companyID == 1)
                                             {{ $domain }}/search?code={{ $record->proxy_url }}&offerid={{ $record->id }}&q={keyword}
                                         @elseif($companyID == 2)
-                                            {{ $domain }}/search/{{ $record->proxy_url }}?q={keyword}
+                                            {{ $domain }}/search/{{ $record->proxy_url }}?query={keyword}
                                         @endif
                                     </td>
                                     <td>{{ $record->target_count }}</td>

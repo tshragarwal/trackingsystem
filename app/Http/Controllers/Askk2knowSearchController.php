@@ -13,7 +13,7 @@ class Askk2knowSearchController extends Controller
 
   public function search(request $request, string $code) {
     try{
-      $searchKeyword = $request->get('q') ?? '';
+      $searchKeyword = $request->get('query') ?? '';
       if($searchKeyword === '' || $searchKeyword === '{keyword}') {
         return response()->json(['message' => 'Please provide query string'], 403);
       }
@@ -70,12 +70,12 @@ class Askk2knowSearchController extends Controller
 
           $requestData = $request->all();
           
-          $finalRedirectUrl = str_replace('{keyword}', $requestData['q'], $job->campaign->target_url);
+          $finalRedirectUrl = str_replace('{keyword}', $requestData['query'], $job->campaign->target_url);
           
           if (strpos($job->campaign->target_url, '{clkid}') !== false) {
               $finalRedirectUrl = str_replace('{clkid}', base64_encode($tableObj->id), $finalRedirectUrl);
           }
-          unset($requestData['q']);
+          unset($requestData['query']);
           
           if (strpos($finalRedirectUrl, 'http://') !== 0 && strpos($finalRedirectUrl, 'https://') !== 0) {
               $finalRedirectUrl = 'http://'.$finalRedirectUrl;

@@ -164,7 +164,12 @@ if($host == env('ASKK2KNOW_DOMAIN')){
     
 }
 
-if(in_array($host, [env('SEARCHOSS_API_DOMAIN'), env('RNMATRIKS_API_DOMAIN')])){
+if(in_array($host, [env('SEARCHOSS_API_DOMAIN')])){
     Route::get('/publisher/token/data', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_data'] )->name('publisher_token.token_data');
+    Route::get('/lead/verify', [App\Http\Controllers\PublisherTokenController::class, 'lead_verify'])->name('lead.verify');
+}
+
+if(in_array($host, [env('RNMATRIKS_API_DOMAIN')])){
+    Route::get('/rnmat-data/{token}', [App\Http\Controllers\PublisherTokenController::class, 'rnmatriksAPIData'] )->name('publisher_token.token_data');
     Route::get('/lead/verify', [App\Http\Controllers\PublisherTokenController::class, 'lead_verify'])->name('lead.verify');
 }

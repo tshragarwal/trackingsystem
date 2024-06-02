@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\ReportN2sModel;
 use App\Models\ReportTypeinModel;
 use App\Http\Requests\PublisherTokenDataRequest;
+use App\Http\Requests\RnMatriksAPIDataRequest;
 use App\Http\Resources\PublihserTokenN2SJson;
 use App\Http\Traits\CommonTrait;
 use Illuminate\Support\Facades\Response;
@@ -23,9 +24,9 @@ class PublisherTokenController extends Controller
         if($user->user_type == 'admin'){
              $user = false;
         }
-        $domain = env('SEARCHOSS_API_DOMAIN');
+        $domain = "https://" . env('SEARCHOSS_API_DOMAIN') . "/publisher/token/data?token={{$user->api_token}}&start_date=2023-10-10&end_date=2023-10-10&report_type=n2s&format=json";
         if($companyID === 2 ) {
-            $domain = env('RNMATRIKS_API_DOMAIN');
+            $domain = "https://" . env('RNMATRIKS_API_DOMAIN') . "/rnmat-data/" . $user->api_token . "?start_date=2024-01-10&end_date=2024-02-29&report_type=n2s&format=json";
         }
 
 
@@ -59,9 +60,17 @@ class PublisherTokenController extends Controller
 
         return $randomString;
     }
+    public function rnmatriksAPIData(RnMatriksAPIDataRequest $request, string $token) {
+        $request = $request->merge(['token' => $token]);
+        return $this->getDataForAPI($request->all());
+    }
     
     public function publisher_token_data(PublisherTokenDataRequest $request){
         $requestData = $request->all();
+        return $this->getDataForAPI($request->all());
+    }
+
+    private function getDataForAPI(array $requestData) {
         if (!in_array($requestData['report_type'], ['n2s', 'typein'])){
             return response()->json(['message' => "Invalid Request vlaue in report_type. we support only n2s and typein"]);
         }else if (!in_array($requestData['format'], ['json', 'csv'])){
