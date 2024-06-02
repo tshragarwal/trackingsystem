@@ -187,38 +187,96 @@
 $(function() {
     
       $(document).ready(function() {
+        var companyID = {!! $companyID !!}
         $('#tracking_url_keyword_table').bootstrapTable();
         $('.fixed-table-loading').css('display', 'none');
-    });
 
-    if (($.trim($('#start_date').val()) !== '' ) && ($.trim($('#end_date').val()) !== '' )){
-         var start = moment($.trim($('#start_date').val()), "YYYY-MM-DD");
-         var end = moment($.trim($('#end_date').val()), "YYYY-MM-DD");
-         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-    } else{
-        var start = 0;
-        var end = 0;
-    }
-    function cb(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        $('#start_date').val(start.format('YYYY-MM-DD'));
-        $('#end_date').val(end.format('YYYY-MM-DD'));
-    }
 
-    $('#reportrange').daterangepicker({
-        startDate: start,
-        endDate: end,
-        ranges: {
-           'Today': [moment(), moment()],
-           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-           'This Month': [moment().startOf('month'), moment().endOf('month')],
-           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
-    }, cb);
+        $('#advertizer_select').on('change', function(){
+          $('.advertiser_campaign_list').attr('style', 'display:none');
+          $('.advertiser_campaign_publisher_list').attr('style', 'display:none');
+          var request = $.ajax({
+                url: "/" + companyID + "/campaign/" + this.value + "/list",
+                type: "GET",
+                dataType: "json",
+                success: function(data){
+                    html = '<option value="0">--Select Campaign--</option>';
+                    if ($.trim(data)) {
+                        var data = data.data;
+                        $.each(data, function(i) {
+                            html += '<option value="' + data[i].id + '">' + data[i]
+                                .campaign_name + '</option>';
+                        });
+                        $('.advertiser_campaign_list').attr('style', 'display:block');
+                    } else {
+                      $('.advertiser_campaign_list').attr('style', 'display:none');
+                    }
 
-    cb(start, end);
+                    $('#camp_option').html(html);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        message = JSON.parse(XMLHttpRequest.responseText);
+                        alert(message.message);
+                      }  
+            });
+        });    
+    
+    
+        $('#camp_option').on('change', function(){
+          $('.advertiser_campaign_publisher_list').attr('style', 'display:none');
+          var request = $.ajax({
+              url: "/" + companyID + "/campaign/" + this.value + "/publishers",
+              type: "GET",
+              dataType: "json",
+              success: function(data) {
+                  html = '<option value="0">--Select Publisher--</option>';
+                  if ($.trim(data)){
+                      $.each(data, function(i) {
+                          html += '<option value="'+data[i].id+'">'+data[i].publisher.name+'</option>';
+                      });
+                  }
+                  
+                  $('.advertiser_campaign_publisher_list').attr('style', 'display:block');    
+                  $('#publisher_option').html(html);
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) {
+                      message = JSON.parse(XMLHttpRequest.responseText);
+                      alert(message.message);
+                    } 
+          });
+        }); 
+
+      });
+
+      if (($.trim($('#start_date').val()) !== '' ) && ($.trim($('#end_date').val()) !== '' )){
+          var start = moment($.trim($('#start_date').val()), "YYYY-MM-DD");
+          var end = moment($.trim($('#end_date').val()), "YYYY-MM-DD");
+          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+      } else{
+          var start = 0;
+          var end = 0;
+      }
+      
+      function cb(start, end) {
+          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          $('#start_date').val(start.format('YYYY-MM-DD'));
+          $('#end_date').val(end.format('YYYY-MM-DD'));
+      }
+
+      $('#reportrange').daterangepicker({
+          startDate: start,
+          endDate: end,
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          }
+      }, cb);
+
+      cb(start, end);
 
     });
 
@@ -228,48 +286,7 @@ $(function() {
     });
     
     
-    $('#advertizer_select').on('change', function(){
-        $('.advertiser_campaign_list').attr('style', 'display:none');
-        $('.advertiser_campaign_publisher_list').attr('style', 'display:none');
-       var request = $.ajax({
-            url: "/advertiser/campaign/list/"+ this.value,
-            type: "GET",
-            dataType: "json",
-            success: function(data){
-                html = '<option value="0">--Select Campaign--</option>';
-                if ($.trim(data)){
-                    $.each(data, function(i) {
-                        html += '<option value="'+data[i].id+'">'+data[i].campaign_name+'</option>';
-                    });
-                    $('.advertiser_campaign_list').attr('style', 'display:block');    
-                }else{
-                    $('.advertiser_campaign_list').attr('style', 'display:none');
-                }
-                $('#camp_option').html(html);
-            }
-        });
-    });    
-    
-    
-    $('#camp_option').on('change', function(){
-        $('.advertiser_campaign_publisher_list').attr('style', 'display:none');
-       var request = $.ajax({
-            url: "/campaign/publisher/list/"+ this.value,
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-                html = '<option value="0">--Select Publisher--</option>';
-                if ($.trim(data)){
-                    $.each(data, function(i) {
-                        html += '<option value="'+data[i].id+'">'+data[i].publisher_name+'</option>';
-                    });
-                }
-                
-                $('.advertiser_campaign_publisher_list').attr('style', 'display:block');    
-                $('#publisher_option').html(html);
-            }
-        });
-    });    
+       
     
     
     

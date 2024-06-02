@@ -40,6 +40,17 @@ class CampaignController extends Controller
         return response()->json($result, 200); // view('campaign.list', ['data' => $result, 'success' => $request->s??0, 'filter' => $requestData]);
     }
 
+    public function campaignsPublisherList(Request $request, int $companyID, int $campaignID) {
+        if(!$request->ajax()) {
+            return response()->json(['message' => "Invalid request"], 403);
+        }
+        
+        $publishers = PublisherJobModel::where(['company_id' => $companyID, 'advertiser_campaign_id' => $campaignID])
+                    ->with('publisher')->get();
+        return response()->json($publishers, 200);
+    }
+
+
     public function create(int $companyID) {
         $advertisers = Advertiser::where('company_id', $companyID)->get();
         return view('campaign.create', ['advertiserObj'=> $advertisers]);

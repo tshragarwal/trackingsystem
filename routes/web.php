@@ -64,6 +64,7 @@ if(in_array($host, array_merge($adminAppDomain, $adminPublisherDomain))){
             // List
             Route::get('/campaign', [App\Http\Controllers\CampaignController::class, 'index'] )->name('campaign.list');
             Route::get('/campaign/{id}/list', [App\Http\Controllers\CampaignController::class, 'list'] )->name('campaign.filter-list');
+            Route::get('/campaign/{id}/publishers', [App\Http\Controllers\CampaignController::class, 'campaignsPublisherList'] )->name('campaign.publishers-list');
 
             // Create
             Route::get('/campaign/create', [App\Http\Controllers\CampaignController::class, 'create'] )->name('campaign.create');
