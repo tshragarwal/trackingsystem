@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Askk2knowSearchController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\TrckWinnersSearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,109 +16,154 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$prepix = "";
+$host = request()->getHttpHost();
+$adminAppDomain = explode(',', env('ADMIN_APP_DOMAIN'));
+$adminPublisherDomain = explode(',', env('PUBLISHER_DOMAIN'));
 
 
-$domain =  filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING);
-if($domain == env('WEB_DOMAIN') || $domain == env('SUB_DOMAIN') ){
-    Route::get($prepix.'/', function () {
+if(in_array($host, array_merge($adminAppDomain, $adminPublisherDomain))){
+    Route::get('/', function () {
         return redirect('/login');
     });
 
     //Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth'])->name('dashboard');
-    Route::get($prepix.'/dashboard', function () { 
-        return redirect('/report/list'); 
+    Route::get('/dashboard', function () {
+        if(Auth::user()->user_type === 'admin') {
+            return redirect()->route('companySelection');
+        } else if (Auth::user()->user_type === 'publisher') {
+            return redirect()->route('report.list', ['type' => 'n2s', 'company_id' => Auth::user()->company_id]);
+        }
     })->middleware(['auth', 'checkdomain'])->name('dashboard');
 
 
     require __DIR__.'/auth.php';
 
     Auth::routes();
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/company/choose', [CompanyController::class, 'selection'])->middleware(['auth', 'admin'])->name("companySelection");
 
-    Route::get($prepix.'/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::middleware(['auth', 'verifyAndSetCompany'])->prefix('{company_id}')->group(function() {
 
+        Route::middleware(['admin'])->group(function() {
+            //--------- Advertiser  ----------------- //
+            // List
+            Route::get('/advertiser', [App\Http\Controllers\AdvertizerController::class, 'index'] )->name('advertiser.list');
 
+            // Create
+            Route::get('/advertiser/create', [App\Http\Controllers\AdvertizerController::class, 'create'] )->name('advertiser.create');
+            Route::post('/advertiser', [App\Http\Controllers\AdvertizerController::class, 'store'] )->name('advertiser.store');
 
-    //--------- Advertiser  ----------------- //
-    Route::get($prepix.'/advertiser/form', [App\Http\Controllers\AdvertizerController::class, 'form'] )->middleware(['auth'])->name('advertiser.form');
-    Route::get($prepix.'/advertiser/list', [App\Http\Controllers\AdvertizerController::class, 'list'] )->middleware(['auth'])->name('advertiser.list');
-    Route::post($prepix.'/advertiser/delete', [App\Http\Controllers\AdvertizerController::class, 'destroy'] )->middleware(['auth'])->name('advertiser.delete');
-    Route::post($prepix.'/advertiser/form/save', [App\Http\Controllers\AdvertizerController::class, 'form_save'] )->middleware(['auth'])->name('advertiser.formsave');
-    Route::get($prepix.'/advertiser/campaign', [App\Http\Controllers\AdvertizerController::class, 'campaign'] )->middleware(['auth'])->name('advertiser.campaign');
-    Route::get($prepix.'/advertiser/campaign/list/{advertiser_id}', [App\Http\Controllers\AdvertizerController::class, 'advertiser_campaign_list'] )->middleware(['auth']);
-    Route::post($prepix.'/advertiser/campaignsave', [App\Http\Controllers\AdvertizerController::class, 'campaignsave'] )->middleware(['auth'])->name('advertiser.campaignsave');
+            // Edit
+            Route::get('/advertiser/{id}/edit', [App\Http\Controllers\AdvertizerController::class, 'edit'] )->name('advertiser.edit');
+            Route::patch('/advertiser/{id}', [App\Http\Controllers\AdvertizerController::class, 'update'] )->name('advertiser.update');
 
+            // Destroy
+            Route::delete('/advertiser/{id}', [App\Http\Controllers\AdvertizerController::class, 'destroy'] )->name('advertiser.delete');
 
-    //--------- Campaign  ----------------- //
-    Route::get($prepix.'/campaign/list', [App\Http\Controllers\AdvertizerController::class, 'campaignlist'] )->middleware(['auth'])->name('campaign.list');
-    Route::post($prepix.'/campaign/update', [App\Http\Controllers\AdvertizerController::class, 'campaignupdate'] )->middleware(['auth'])->name('campaign.update');
-    Route::get($prepix.'/campaign/detail/{id}', [App\Http\Controllers\AdvertizerController::class, 'campaigndetail'] )->middleware(['auth'])->name('advertiser.detail');
-    Route::post($prepix.'/campaign/delete', [App\Http\Controllers\AdvertizerController::class, 'delete_campaign'] )->middleware(['auth'])->name('advertiser.delete_campaign');
-    Route::post($prepix.'/campaign/sync/geolocation', [App\Http\Controllers\AdvertizerController::class, 'sync_geolocation'] )->middleware(['auth'])->name('advertiser.sync_geolocation');
-    Route::post($prepix.'/campaign/referer_status', [App\Http\Controllers\AdvertizerController::class, 'status_update'] )->middleware(['auth'])->name('campaign.status_update');
-    Route::get($prepix.'/campaign/publisher/list/{campaign_id}', [App\Http\Controllers\AdvertizerController::class, 'campaign_publisher_list'] )->middleware(['auth']);
+            //--------- Campaign  ----------------- //
+            // List
+            Route::get('/campaign', [App\Http\Controllers\CampaignController::class, 'index'] )->name('campaign.list');
+            Route::get('/campaign/{id}/list', [App\Http\Controllers\CampaignController::class, 'list'] )->name('campaign.filter-list');
 
+            // Create
+            Route::get('/campaign/create', [App\Http\Controllers\CampaignController::class, 'create'] )->name('campaign.create');
+            Route::post('/campaign', [App\Http\Controllers\CampaignController::class, 'store'] )->name('campaign.store');
 
-    //--------- Publisher  ----------------- //
-    Route::get($prepix.'/publisher/list', [App\Http\Controllers\PublisherController::class, 'list'] )->middleware(['auth'])->name('publisher.list');
-    Route::get($prepix.'/publisher/form', [App\Http\Controllers\PublisherController::class, 'form'] )->middleware(['auth'])->name('publisher.form');
-    Route::post($prepix.'/publisher/delete', [App\Http\Controllers\PublisherController::class, 'delete_publisher'] )->middleware(['auth'])->name('publisher.delete_publisher');
-    Route::post($prepix.'/publisher/save', [App\Http\Controllers\PublisherController::class, 'save'] )->middleware(['auth'])->name('publisher.save');
-    Route::get($prepix.'/publisher/detail/{id}', [App\Http\Controllers\PublisherController::class, 'publisher_detail'] )->middleware(['auth'])->name('publisher.detail');
-    Route::post($prepix.'/publisher/update', [App\Http\Controllers\PublisherController::class, 'publisher_update'] )->middleware(['auth'])->name('publisher.update');
-    
-    Route::get($prepix.'/publisher/token/list', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_list'] )->middleware(['auth','checkdomain'])->name('publisher_token.token_list');
-    Route::post($prepix.'/publisher/token/generate', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_generate'] )->middleware(['auth','checkdomain'])->name('publisher_token.token_generate');
-    
-    //--------- Publisher Jobs ----------------- //
-    Route::get($prepix.'/publisher/job/list', [App\Http\Controllers\PublisherJobController::class, 'list'] )->middleware(['auth'])->name('publisher.job.list');
-    Route::get($prepix.'/publisher/job/form', [App\Http\Controllers\PublisherJobController::class, 'form'] )->middleware(['auth'])->name('publisher.job.form');
-    Route::post($prepix.'/publisher/job/save', [App\Http\Controllers\PublisherJobController::class, 'save'] )->middleware(['auth'])->name('publisher.job.save');
-    Route::post($prepix.'/publisher/job/delete', [App\Http\Controllers\PublisherJobController::class, 'delete_publisher_job'] )->middleware(['auth'])->name('publisher.delete_publisher_job');
-    Route::post($prepix.'/publisher/job/update/status', [App\Http\Controllers\PublisherJobController::class, 'status_update'] )->middleware(['auth'])->name('publisher.status_update');
-    
-    
-    
-    
-    // ---------- CSV && Report
-    Route::get($prepix.'/report/list', [App\Http\Controllers\ReportController::class, 'list'] )->middleware(['auth', 'checkdomain'])->name('report.list');
-    Route::get($prepix.'/report/csv', [App\Http\Controllers\ReportController::class, 'csv'] )->middleware(['auth', 'checkdomain'])->name('report.csv');
-    Route::post($prepix.'/report/uploadcsv', [App\Http\Controllers\ReportController::class, 'uploadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.uploadcsv');
-    Route::get($prepix.'/report/download', [App\Http\Controllers\ReportController::class, 'n2s_downloadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.downloadcsv');
-    Route::get($prepix.'/report/csv_sample', [App\Http\Controllers\ReportController::class, 'n2s_csv_sample'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_csv_sample');
-    Route::get($prepix.'/report/edit/{id}', [App\Http\Controllers\ReportController::class, 'n2s_report_edit'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_report_edit');
-    Route::post($prepix.'/report/edit/save', [App\Http\Controllers\ReportController::class, 'n2s_report_edit_save'] )->middleware(['auth', 'checkdomain'])->name('report.n2s_report_edit_save');
-    Route::post($prepix.'/report/n2s/row/delete', [App\Http\Controllers\ReportController::class, 'delete_n2s_report_row'] )->middleware(['auth'])->name('report.delete_n2s_report_row');
-    Route::post($prepix.'/report/n2s/all/delete', [App\Http\Controllers\ReportController::class, 'delete_n2s_report_all'] )->middleware(['auth'])->name('report.delete_n2s_report_all');
+            // Edit
+            Route::get('/campaign/{id}/edit', [App\Http\Controllers\CampaignController::class, 'edit'] )->name('campaign.edit');
+            Route::patch('/campaign/{id}', [App\Http\Controllers\CampaignController::class, 'update'] )->name('campaign.update');
+            Route::patch('/campaign/{id}/status', [App\Http\Controllers\CampaignController::class, 'statusUpdate'])->name('campaign.statusUpdate');
 
+            // Destroy
+            Route::delete('/campaign/{id}', [App\Http\Controllers\CampaignController::class, 'destroy'] )->name('campaign.delete');
 
-    Route::get($prepix.'/report/typein/list', [App\Http\Controllers\ReportController::class, 'typein_list'] )->middleware(['auth', 'checkdomain'])->name('report.typein_list');
-    Route::get($prepix.'/report/typein/csv', [App\Http\Controllers\ReportController::class, 'typein_csv'] )->middleware(['auth', 'checkdomain'])->name('report.typein_csv');
-    Route::post($prepix.'/report/typein/uploadcsv', [App\Http\Controllers\ReportController::class, 'typein_uploadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.typein_uploadcsv');
-    Route::get($prepix.'/report/typein/download', [App\Http\Controllers\ReportController::class, 'typein_downloadcsv'] )->middleware(['auth', 'checkdomain'])->name('report.typein_downloadcsv');
-    Route::get($prepix.'/report/typein/csv_sample', [App\Http\Controllers\ReportController::class, 'typein_csv_sample'] )->middleware(['auth', 'checkdomain'])->name('report.typein_csv_sample');
-    Route::get($prepix.'/report/typein/edit/{id}', [App\Http\Controllers\ReportController::class, 'typein_report_edit'] )->middleware(['auth', 'checkdomain'])->name('report.typein_report_edit');
-    Route::post($prepix.'/report/typein/edit/save', [App\Http\Controllers\ReportController::class, 'typein_report_edit_save'] )->middleware(['auth', 'checkdomain'])->name('report.typein_report_edit_save');
-    Route::post($prepix.'/report/typein/row/delete', [App\Http\Controllers\ReportController::class, 'delete_typein_report_row'] )->middleware(['auth'])->name('report.delete_typein_report_row');
-    Route::post($prepix.'/report/typein/all/delete', [App\Http\Controllers\ReportController::class, 'delete_typein_report_all'] )->middleware(['auth'])->name('report.delete_typein_report_all');
-    
-    Route::get($prepix.'/traffic/keyword/list', [App\Http\Controllers\TrackingKeywordController::class, 'keyword_list'] )->middleware(['auth', 'checkdomain'])->name('traffic.keyword_list');
-    Route::get($prepix.'/traffic/count/list', [App\Http\Controllers\TrackingKeywordController::class, 'count_list'] )->middleware(['auth', 'checkdomain'])->name('traffic.count_list');
-    Route::get($prepix.'/report/agent/list', [App\Http\Controllers\TrackingKeywordController::class, 'agent_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.agent_report');
-    Route::get($prepix.'/report/location/list', [App\Http\Controllers\TrackingKeywordController::class, 'location_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.location_report');
-    Route::get($prepix.'/report/device/list', [App\Http\Controllers\TrackingKeywordController::class, 'device_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.device_report');
-    Route::get($prepix.'/report/ip/list', [App\Http\Controllers\TrackingKeywordController::class, 'ip_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.ip_report');
-    Route::get($prepix.'/report/platform/list', [App\Http\Controllers\TrackingKeywordController::class, 'platform_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.platform_report');
-    Route::get($prepix.'/report/tracking', [App\Http\Controllers\TrackingKeywordController::class, 'tracking_report'] )->middleware(['auth', 'checkdomain'])->name('traffic.tracking_report');
-    
+            // other operations
+            Route::post('/campaign/sync/geolocation', [App\Http\Controllers\CampaignController::class, 'sync_geolocation'] )->name('advertiser.sync_geolocation');
+
+            //--------- Publisher  ----------------- //
+            // List
+            Route::get('/publisher', [App\Http\Controllers\PublisherController::class, 'index'] )->name('publisher.list');
+
+            // Create
+            Route::get('/publisher/create', [App\Http\Controllers\PublisherController::class, 'create'] )->name('publisher.create');
+            Route::post('/publisher', [App\Http\Controllers\PublisherController::class, 'store'] )->name('publisher.store');
+
+            // Edit
+            Route::get('/publisher/{id}/edit', [App\Http\Controllers\PublisherController::class, 'edit'] )->name('publisher.edit');
+            Route::patch('/publisher/{id}', [App\Http\Controllers\PublisherController::class, 'update'] )->name('publisher.update');
+
+            // Destroy
+            Route::delete('/publisher/{id}', [App\Http\Controllers\PublisherController::class, 'destroy'] )->name('publisher.delete');
+        
+            //--------- Publisher Jobs ----------------- //
+            // List
+            Route::get('/publisher-job', [App\Http\Controllers\PublisherJobController::class, 'index'] )->name('publisherJob.list');
+
+            // Create
+            Route::get('/publisher-job/create/{campaign_id?}', [App\Http\Controllers\PublisherJobController::class, 'create'] )->name('publisherJob.create');
+            Route::post('/publisher-job', [App\Http\Controllers\PublisherJobController::class, 'store'] )->name('publisherJob.store');
+
+            // Edit
+            Route::patch('/publisher-job/{id}/toggle-status', [App\Http\Controllers\PublisherJobController::class, 'updateStatus'] )->name('publisherJob.updateStatus');
+
+            // Destroy
+            Route::delete('/publisher-job/{id}', [App\Http\Controllers\PublisherJobController::class, 'destroy'] )->name('publisherJob.delete');
+            
+            // ---------------  Report  ----------//
+            Route::get('/report/{type}/upload', [App\Http\Controllers\ReportController::class, 'upload'])->name('report.upload');
+            Route::post('/report/{type}/upload', [App\Http\Controllers\ReportController::class, 'store'] )->name('report.saveCSV');
+            Route::get('/report/{type}/download-sample-csv', [App\Http\Controllers\ReportController::class, 'downloadSampleCSV'] )->name('report.downloadSample');
+            Route::delete('/report/{type}/flush-data', [App\Http\Controllers\ReportController::class, 'flushTable'] )->name('report.flushData');
+            Route::get('/report/{type}/{id}/edit', [App\Http\Controllers\ReportController::class, 'edit'] )->name('report.edit');
+            Route::patch('/report/{type}/{id}', [App\Http\Controllers\ReportController::class, 'update'] )->name('report.update');
+            Route::delete('/report/{type}/{id}', [App\Http\Controllers\ReportController::class, 'destroy'] )->middleware(['auth'])->name('report.destroy');
+            
+        });
+
+        Route::middleware(['checkdomain'])->group(function() {
+            // ---- report
+            Route::get('/report/{type}', [App\Http\Controllers\ReportController::class, 'index'] )->name('report.list');
+
+            // N2S report download
+            Route::get('/report/n2s/download', [App\Http\Controllers\ReportController::class, 'n2s_downloadcsv'] )->name('report.downloadcsv');
+            
+            // Type-IN report download
+            Route::get('/report/typein/download', [App\Http\Controllers\ReportController::class, 'typein_downloadcsv'] )->name('report.typein_downloadcsv');
+
+            //--------- Publisher ----------------- //
+            Route::get('/publisher/token/list', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_list'] )->name('publisher_token.token_list');
+            Route::post('/publisher/token/generate', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_generate'] )->name('publisher_token.token_generate');
+        
+
+            // ---------- CSV && Report
+                        
+            Route::get('/traffic/keyword/list', [App\Http\Controllers\TrackingKeywordController::class, 'keyword_list'] )->name('traffic.keyword_list');
+            Route::get('/traffic/count/list', [App\Http\Controllers\TrackingKeywordController::class, 'count_list'] )->name('traffic.count_list');
+            Route::get('/report/agent/list', [App\Http\Controllers\TrackingKeywordController::class, 'agent_report'] )->name('traffic.agent_report');
+            Route::get('/report/location/list', [App\Http\Controllers\TrackingKeywordController::class, 'location_report'] )->name('traffic.location_report');
+            Route::get('/report/device/list', [App\Http\Controllers\TrackingKeywordController::class, 'device_report'] )->name('traffic.device_report');
+            Route::get('/report/ip/list', [App\Http\Controllers\TrackingKeywordController::class, 'ip_report'] )->name('traffic.ip_report');
+            Route::get('/report/platform/list', [App\Http\Controllers\TrackingKeywordController::class, 'platform_report'] )->name('traffic.platform_report');
+            Route::get('/reports/tracking', [App\Http\Controllers\TrackingKeywordController::class, 'tracking_report'] )->name('traffic.tracking_report');
+ 
+        });        
+    });
+
 }
-if($domain == env('PUBLISHER_DOMAIN')){
+
+if($host == env('TRCKWINNERS_DOMAIN')){
     // --------- Tracking Url --------------- //
-    Route::get($prepix.'/search', [App\Http\Controllers\PublisherJobController::class, 'tracking_url']);
+    Route::get('/search', [TrckWinnersSearchController::class, 'search']);
     
 }
 
-if($domain == env('PUBLISHER_API_DOMAIN')){
-    Route::get($prepix.'/publisher/token/data', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_data'] )->name('publisher_token.token_data');
-    Route::get($prepix.'/lead/verify', [App\Http\Controllers\PublisherTokenController::class, 'lead_verify'])->name('lead.verify');
+if($host == env('ASKK2KNOW_DOMAIN')){
+    // --------- Tracking Url --------------- //
+    Route::get('/search/{token}', [Askk2knowSearchController::class, 'search']);
+    
+}
+
+if(in_array($host, [env('SEARCHOSS_API_DOMAIN'), env('RNMATRIKS_API_DOMAIN')])){
+    Route::get('/publisher/token/data', [App\Http\Controllers\PublisherTokenController::class, 'publisher_token_data'] )->name('publisher_token.token_data');
+    Route::get('/lead/verify', [App\Http\Controllers\PublisherTokenController::class, 'lead_verify'])->name('lead.verify');
 }

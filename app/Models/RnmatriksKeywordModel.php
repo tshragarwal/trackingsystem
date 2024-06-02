@@ -9,11 +9,11 @@ use App\Models\AdvertiserCampaignModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\GeoLocationModel;
 
-class TrackingKeywordModel extends Model
+class RnmatriksKeywordModel extends Model
 {
     use HasFactory;
     
-    protected $table = 'tracking_publisher_jobs';
+    protected $table = 'rnmatriks_publisher_jobs';
     public $timestamps = false;
     
     

@@ -12,8 +12,10 @@
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#">Report</a></li>
-      <li class="breadcrumb-item"><a href="javascript:void(0)">Typein Report Edit</a></li>
+        <li class="breadcrumb-item"><a href="#">TypeIN Report</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('report.list', ['company_id' => $companyID, 'type' => 'typein']) }}">TypeIN
+            Report</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0)">Edit</a></li>
     </ol>
   </nav>
   
@@ -29,7 +31,7 @@
                             </div>
                      @elseif(!empty($data))
 
-                        <form method="POST" action="{{ route('report.typein_report_edit_save') }}">
+                        <form method="POST" action="{{ route('report.update', ['company_id' => $companyID, 'type' => 'typein', 'id'  => $data->id ]) }}">
 
                             @if (session('success_status'))
                               <h6 class="alert alert-success">{{ session('success_status') }}</h6>
@@ -39,7 +41,7 @@
                            @endif
 
                              @csrf
-                             <input id="id" type="hidden" class="form-control  is-invalid " name="id" value="{{ $data->id }}">
+                             @method('patch')
                              
                              <div class="row mb-3">
                                  <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Date') }}</label>

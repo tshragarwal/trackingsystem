@@ -23,20 +23,20 @@ class CheckDomain
      */
     public function handle(Request $request, Closure $next)
     {
-        $fullDomain = $request->getHost();
+        $fullDomain = request()->getHttpHost();
+        $adminAppDomain = explode(',', env('ADMIN_APP_DOMAIN'));
+        $adminPublisherDomain = explode(',', env('PUBLISHER_DOMAIN'));
+
         $user = Auth::guard('web')->user();
         if(empty($user)){
              return $next($request);
         }
-        if($user->user_type == 'admin' && $fullDomain == env('FULL_DOMAIN')){
+        if($user->user_type == 'admin' && in_array($fullDomain, $adminAppDomain)){
             return $next($request);
-        }else if($user->user_type == 'publisher' && $fullDomain == env('SUB_DOMAIN')){
+        }else if($user->user_type == 'publisher' && in_array($fullDomain, $adminPublisherDomain)){
             return $next($request);
         }
         Auth::logout();
         return redirect('/login')->with('status', 'Credential Unauthorized')->with('level', 'danger');
-//        return response()->json([
-//                'message' => 'Unauthorized.',
-//            ], 401);
     }
 }

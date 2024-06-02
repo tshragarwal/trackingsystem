@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AdvertizerFormSaveRequest extends FormRequest
+class AdvertiserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,8 @@ class AdvertizerFormSaveRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string']
-//            'target_url' => ['required', 'string'],
-//            'target_count' => ['required', 'numeric']
+            'name' => ['required', 'string', 'min:3'],
+            'manual_email' => ['nullable','email']
         ];
     }
 }

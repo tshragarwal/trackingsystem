@@ -6,15 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\ReportN2sModel;
 use App\Models\ReportTypeinModel;
 use App\Http\Traits\CommonTrait;
+use App\Models\Advertiser;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
-use App\Models\AdvertizerRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
-
-
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use League\Csv\Writer;
 
 
@@ -22,98 +23,17 @@ class ReportController extends Controller
 {
     use CommonTrait;
 
-    public function csv(){
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
+    public function index(Request $request, int $companyID, string $type = 'n2s') {
+        $request->merge(['company_id' => $companyID]);
         
-        return view('reports.uploadcsv');
-    }
-    
-    public function uploadcsv(Request $request) {
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
         $request->validate([
-            'csv_file' => 'required|mimes:csv,txt',
+            'start_date' => ['nullable','date', 'date_format:Y-m-d'],
+            'end_date' => ['nullable','date', 'date_format:Y-m-d'],
         ]);
-
-        $file = $request->file('csv_file');
-        $filePath = $file->getRealPath();
-
-        // Use a CSV parsing library (e.g., League\Csv) to read and import data
-        $csv = \League\Csv\Reader::createFromPath($filePath);
-
-        $i = 0;
-        $batch = $firstRow = [];
-        foreach ($csv->getRecords() as $record) {
-            if ($i == 0){
-                $firstRow = $record;
-            }else{
-                $batch[] = array_combine($firstRow, $record);
-            }
-                       
-            if($i == 100) {
-               $this->insertData($batch);
-               $batch = [];
-            }
-            $i = 0;
-            $i++;
-        }
-        if (!empty($batch)){
-             $this->insertData($batch);
-        }
-        return redirect()->back()->with('success', 'CSV file imported successfully.');
-    }
-    
-    private function insertData(array $batch ) : bool {
-        $finalBatch = [];
-        $n2s_csv_mapping_header = CommonTrait::n2s_csv_mapping_header();
-        foreach($batch as $singleRecod) { 
-            $newDoc = [];
-            foreach($singleRecod as $fieldname => $value){
-                if(isset($n2s_csv_mapping_header[$fieldname])) {
-                    if($fieldname == 'Date'){
-//                        $date = DateTime::createFromFormat('d/m/Y', $value);
-//                        $value = $date->format('Y-m-d');
-                         $value = date('Y-m-d',strtotime($value)); 
-                    }
-                    $newDoc[$n2s_csv_mapping_header[$fieldname]] = $value;
-                }
-            }
-            $newDoc['created_at'] = date('Y-m-d H:i:s');
-            $newDoc['updated_at'] = date('Y-m-d H:i:s');
-            $finalBatch[] = $newDoc;
-        }
-        
-        if(!empty($finalBatch)){
-            return DB::table('report_n2s')->upsert($finalBatch, ['date', 'subid', 'campaign_id', 'publisher_id'],
-                    ['advertiser_name', 'publisher_name', 'offer_id', 'campaign_name', 'country', 'total_searches', 'ad_clicks', 'ctr', 'tq', 'revenue', 'publisher_RPM',
-                        'publisher_RPC', 'advertiser_RPM', 'advertiser_CPC', 'gross_revenue','updated_at']);
-        }
-        return false;
-    }
-    
-    public function list(Request $request) {
         $requestData = $request->all();
-        if(!empty($requestData['start_date'])){
-             $validator = Validator::make($request->all(), [
-                'start_date' => 'date|date_format:Y-m-d'
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            }
-        }
-        if(!empty($requestData['end_date'])){
-             $validator = Validator::make($request->all(), [
-                'end_date' => 'date|date_format:Y-m-d'
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            }
-        }
         
-        $publisher_advertizer_list = $this->get_advertizer_publisher_list();
+        
+        $publisher_advertizer_list = $this->get_advertizer_publisher_list($companyID);
         $admin = true;
         $requestData['publishers_id'] = !empty($requestData['publishers_id'])? explode(',', $requestData['publishers_id']): [];
         if(Auth::guard('web')->user()->user_type != "admin"){
@@ -124,33 +44,231 @@ class ReportController extends Controller
         
         
         $size = 100;
-        $reportN2sModel = new ReportN2sModel();
-        $data = $reportN2sModel->reportList($requestData, $size);
+        $data = [];
+        $view = 'reports.n2s.list';
+        if($type === 'n2s') {
+            $data = ReportN2sModel::reportList($requestData, $size);
+        } else if($type === 'typein') {
+            $view = 'reports.typein.list';
+            $data = ReportTypeinModel::reportList($requestData, $size);
+        }
+
+        return view($view, ['data' => $data, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list, 'adminFlag' => $admin]);
+    }
+
+    public function upload(int $companyID, string $type) {
+        $view = 'reports.n2s.upload';
+        if($type === 'typein') {
+            $view = 'reports.typein.upload';
+        }
+        return view($view);
+    }
+
+    public function downloadSampleCSV(int $companyID, string $type) {
+        $filename = "N2S-Sample-CSV.csv";
+        $csvHeaders = CommonTrait::n2s_csv_mapping_header();
+
+        if($type === 'typein'){
+            $filename = "TypeIN-Sample-CSV.csv";
+            $csvHeaders = CommonTrait::typein_csv_mapping_header();
+        }
         
-        return view('reports.list', ['data' => $data, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list, 'adminFlag' => $admin]);
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, array_keys($csvHeaders));
+        fclose($handle);
+        
+        $headers = array(
+            'Content-Type' => 'text/csv',
+        );
+        return  Response::download($filename, $filename, $headers)->deleteFileAfterSend(true);
+    }
+
+    public function store(Request $request, int $companyID, string $type) {
+        $request->validate([
+            'csv_file' => 'required|mimes:csv,txt',
+        ]);
+
+        $file = $request->file('csv_file');
+        $filePath = $file->getRealPath();
+
+        $headers = CommonTrait::n2s_csv_mapping_header();
+        if($type === 'typein') {
+            $headers = CommonTrait::typein_csv_mapping_header();
+        }
+
+        // Use a CSV parsing library (e.g., League\Csv) to read and import data
+        $csv = \League\Csv\Reader::createFromPath($filePath);
+
+        $i = 0;
+        $firstRow = $csv->first();
+        $foundDiff = array_diff(array_keys($headers), $firstRow);
+        
+        if(!empty($foundDiff)) {
+            throw ValidationException::withMessages(['csv_file' => 'Incorrect file headers.' . implode(",", $foundDiff)]);
+        }
+
+
+        $batch = [];
+        foreach ($csv->getRecords() as $record) {
+            if ($i == 0){
+                $i++;
+                continue;
+            }else{
+                $batch[] = array_combine($firstRow, $record);
+            }
+            $i++;
+                       
+            if($i == 100) {
+               $this->insertData($batch, $companyID, $type);
+               $batch = [];
+               $i = 1;
+            }
+        }
+        if (!empty($batch)){
+             $this->insertData($batch, $companyID, $type);
+        }
+        return redirect()->back()->with('success', 'CSV file imported successfully.');
     }
     
-    public function n2s_downloadcsv(Request $request){
+    private function insertData(array $batch, int $companyID, string $type ) : bool {
+        $finalBatch = [];
+        $headers = CommonTrait::n2s_csv_mapping_header();
+        if($type === 'typein') {
+            $headers = CommonTrait::typein_csv_mapping_header();
+        }
+
+        foreach($batch as $singleRecod) { 
+            $newDoc = [];
+            foreach($singleRecod as $fieldname => $value){
+                if(isset($headers[$fieldname])) {
+                    if($fieldname == 'Date'){
+//                        $date = DateTime::createFromFormat('d/m/Y', $value);
+//                        $value = $date->format('Y-m-d');
+                         $value = date('Y-m-d',strtotime($value)); 
+                    }
+                    $newDoc[$headers[$fieldname]] = $value;
+                }
+            }
+            $newDoc['company_id'] = $companyID;
+            $newDoc['created_at'] = date('Y-m-d H:i:s');
+            $newDoc['updated_at'] = date('Y-m-d H:i:s');
+            $finalBatch[] = $newDoc;
+        }
+
+        if(!empty($finalBatch)){
+            if($type === 'n2s') {
+                return DB::table('report_n2s')->upsert($finalBatch, ['company_id','date', 'subid', 'campaign_id', 'publisher_id'],
+                    ['company_id', 'advertiser_name', 'publisher_name', 'offer_id', 'campaign_name', 'country', 'total_searches', 'ad_clicks', 'ctr', 'tq', 'revenue', 'publisher_RPM',
+                        'publisher_RPC', 'advertiser_RPM', 'advertiser_CPC', 'gross_revenue','updated_at']);
+            } else if($type === 'typein') {
+                return DB::table('report_typein')->upsert($finalBatch, 
+                    ['company_id', 'date', 'subid', 'campaign_id', 'publisher_id'],
+                    ['company_id', 'advertiser_name', 'publisher_name', 'campaign_name', 'country', 'total_searches','monetized_searches', 'ad_clicks','ad_coverage', 
+                        'ctr', 'cpc', 'rpm','gross_revenue','offer_id', 'publisher_RPM', 'publisher_RPC','net_revenue','updated_at']);
+            }
+        }
+        return false;
+    }
+
+    public function flushTable(int $companID, string $type) {
+        try{
+            if($type === 'n2s') {
+                $record = ReportN2sModel::where(['company_id' => $companID])->delete();
+            } else if ($type === 'typein') {
+                $record = ReportTypeinModel::where(['company_id' => $companID])->delete();
+            }
+            if ($record) {
+                return response()->json(['message' => 'Data Deleted', 'status' => 1], 200);
+            } else {
+                return response()->json(['message' => 'Data Not Deleted'], 400);
+            }
+        } catch(Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
+        }        
+    }
+    
+    public function edit(Request $request, int $companyID, string $type, int $id) {
+        $view = 'reports.n2s.edit';
+        if($type === 'n2s') {
+            $data = ReportN2sModel::where(['id' => $id, 'company_id' => $companyID])->first();
+        } else if ($type === 'typein') {
+            $view = 'reports.typein.edit';
+            $data = ReportTypeinModel::where(['id' => $id, 'company_id' => $companyID])->first();
+        } else {
+            abort(404, 'Invalid report type');
+        }
+
+        if($data->company_id !== $companyID) {
+            abort(400, "Bad request");
+        }
+
+        if(empty($data)){
+            return ['error' => 'Invalid Request'];
+        }
+        return view($view, ['data' => $data]);
+    }
+
+    public function update(Request $request, int $companyID, string $type, int $id) {
+        $data = $request->all();
+        unset($data['_token']);
+
+        if($type === 'n2s') {
+            $record = ReportN2sModel::findOrFail($id);
+        } else if($type === 'typein') {
+            $record = ReportTypeinModel::findOrFail($id);
+        } else {
+            abort(404, 'Invalid report type');
+        }
+        if($record->company_id !== $companyID) {
+            abort(400, "Bad request");
+        }
+        $response = $record->update($data);
+        
+        if($response) {
+            return redirect()->route('report.list', ['company_id' => $companyID, 'type' => $type])->with('success_status', 'Report successfully Updated.');
+        }
+    }
+
+    public function destroy(int $companyID, string $type, int $id) {
+        if($type === 'n2s') {
+            $data = ReportN2sModel::where(['id' => $id, 'company_id' => $companyID])->first();
+        } else if ($type === 'typein') {
+            $view = 'reports.typein.edit';
+            $data = ReportTypeinModel::where(['id' => $id, 'company_id' => $companyID])->first();
+        } else {
+            abort(404, 'Invalid report type');
+        }
+
+        if(!empty($data)){
+
+            $response = $data->delete();
+            if ($response) {
+                $message = 'Record deleted successfully';
+                return response()->json(['message' => $message, 'status' => 1]);
+            } else {
+                return response()->json(['message' => 'Unable to delete record.'], 500);
+            }
+        }
+         else {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+    }
+
+
+    
+    public function n2s_downloadcsv(Request $request, int $companyID){
         
         $requestData = [];
         parse_str($request->all()['query_string'], $requestData);
         
-        if(!empty($requestData['start_date'])){
-             $validator = Validator::make($request->all(), [
-                'start_date' => 'date|date_format:Y-m-d'
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            }
-        }
-        if(!empty($requestData['end_date'])){
-             $validator = Validator::make($request->all(), [
-                'end_date' => 'date|date_format:Y-m-d'
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            }
-        }
+        $request->validate([
+            'start_date' => ['nullable','date', 'date_format:Y-m-d'],
+            'end_date' => ['nullable','date', 'date_format:Y-m-d'],
+        ]);
+        $requestData = $request->all();
+        
+        $requestData['company_id'] = $companyID;
         
         $requestData['publishers_id'] = !empty($requestData['publishers_id']) ? explode(',', $requestData['publishers_id']): [];
         $requestData['advertizers_name'] = !empty($requestData['advertizers_name']) ? explode(',', $requestData['advertizers_name']): [];
@@ -161,8 +279,7 @@ class ReportController extends Controller
             $requestData['publishers_id'] = [Auth::guard('web')->user()->id];
         }
 
-        $reportModel = new ReportN2sModel();
-        $data = $reportModel->downloadcsvdata($requestData);
+        $data = ReportN2sModel::downloadcsvdata($requestData);
         $filename = "tracking_system_".time().".csv";
         
         $handle = fopen($filename, 'w+');
@@ -204,164 +321,43 @@ class ReportController extends Controller
         $respone = Response::download($filename, $filename, $headers)->deleteFileAfterSend(true);
         return $respone;
     }
-    
-    public function typein_list(Request $request) {
-        $requestData = $request->all();
-        if(!empty($requestData['start_date'])){
-             $validator = Validator::make($request->all(), [
-                'start_date' => 'date|date_format:Y-m-d'
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            }
-        }
-        if(!empty($requestData['end_date'])){
-             $validator = Validator::make($request->all(), [
-                'end_date' => 'date|date_format:Y-m-d'
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            }
-        }
-        
-        $publisher_advertizer_list = $this->get_advertizer_publisher_list();
-        $admin = true;
-        $requestData['publishers_id'] = !empty($requestData['publishers_id'])? explode(',', $requestData['publishers_id']): [];
-        if(Auth::guard('web')->user()->user_type != "admin"){
-            $admin = false;
-            $requestData['publishers_id'] = [Auth::guard('web')->user()->id];
-        }
-        $requestData['advertizers_name'] = !empty($requestData['advertizers_name'])? explode(',', $requestData['advertizers_name']): [];
-        
-        $size = 100;
-        $reportN2sModel = new ReportTypeinModel();
-        $data = $reportN2sModel->reportList($requestData, $size);
-       
-        return view('reports.typein_list', ['data' => $data, 'query_string' => $request->query(), 'publisher_advertizer_list' => $publisher_advertizer_list, 'adminFlag' => $admin]);
-        
-    }
-    
-    public function typein_csv(){
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
-        
-        return view('reports.typein_uploadcsv');
-    }
-    
-    public function typein_uploadcsv(Request $request) {
-        if(!CommonTrait::is_super_admin()){
-            return view('access_denied');
-        }
-        $request->validate([
-            'csv_file' => 'required|mimes:csv,txt',
-        ]);
 
-        $file = $request->file('csv_file');
-        $filePath = $file->getRealPath();
-
-        // Use a CSV parsing library (e.g., League\Csv) to read and import data
-        $csv = \League\Csv\Reader::createFromPath($filePath);
-
-        $i = 0;
-        $batch = $firstRow = [];
-        foreach ($csv->getRecords() as $record) {
-            if ($i == 0){
-                $firstRow = $record;
-            }else{
-                $batch[] = array_combine($firstRow, $record);
-            }
-           
-            if($i == 100) {
-               $this->typein_insertData($batch);
-               $batch = [];
-            }
-            $i = 0;
-            $i++;
-        }
-        if (!empty($batch)){
-             $this->typein_insertData($batch);
-        }
-        return redirect()->back()->with('success', 'CSV file imported successfully.');
-    }
-    
-    private function typein_insertData(array $batch ) : bool {
-        $finalBatch = [];
-        $typein_csv_mapping_header = CommonTrait::typein_csv_mapping_header();
-        foreach($batch as $singleRecod) { 
-            $newDoc = [];
-            foreach($singleRecod as $fieldname => $value){
-                if(isset($typein_csv_mapping_header[$fieldname])) {
-                    if($fieldname == 'Date'){
-//                        $date = DateTime::createFromFormat('d/m/Y', $value);
-//                        $value = $date->format('Y-m-d');
-                          $value = date('Y-m-d',strtotime($value)); 
-                    }
-                    $newDoc[$typein_csv_mapping_header[$fieldname]] = $value;
-                }
-            }
-            $newDoc['created_at'] = date('Y-m-d H:i:s');
-            $newDoc['updated_at'] = date('Y-m-d H:i:s');
-            $finalBatch[] = $newDoc;
-        }
-        
-        if(!empty($finalBatch)){
-            return DB::table('report_typein')->upsert($finalBatch, 
-                    ['date', 'subid', 'campaign_id', 'publisher_id'],
-                    ['advertiser_name', 'publisher_name', 'campaign_name', 'country', 'total_searches','monetized_searches', 'ad_clicks','ad_coverage', 
-                        'ctr', 'cpc', 'rpm','gross_revenue','offer_id', 'publisher_RPM', 'publisher_RPC','net_revenue','updated_at']);
-        }
-        return false;
-    }
-    
-    private function get_advertizer_publisher_list(): array {
+    private function get_advertizer_publisher_list(int $companyID): array {
         // --- in case of superadmin -------
         $advertizer_list = [];
         $publisher_list = [];
         if(CommonTrait::is_super_admin()) {
-            $allAdvertizer = AdvertizerRequest::all('name');
+            $allAdvertizer = Advertiser::select('id', 'name')->where('company_id', $companyID)->get();
             $advertizer_list = $allAdvertizer->toArray();
             
             $userModel = new User();
-            $publisher_list = $userModel->all_publisher_list();
+            $publisher_list = $userModel->all_publisher_list($companyID);
             $publisher_list = $publisher_list->toArray();
         }
         
         return ['advertizer_list' => $advertizer_list, 'publisher_list' => $publisher_list];
     }
     
-    public function typein_downloadcsv(Request $request){
+    public function typein_downloadcsv(Request $request, int $companyID){
         
         $requestData = [];
         parse_str($request->all()['query_string'], $requestData);
+
+        $request->validate([
+            'start_date' => ['nullable','date', 'date_format:Y-m-d'],
+            'end_date' => ['nullable','date', 'date_format:Y-m-d'],
+        ]);
         
-        if(!empty($requestData['start_date'])){
-             $validator = Validator::make($request->all(), [
-                'start_date' => 'date|date_format:Y-m-d'
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            }
-        }
-        if(!empty($requestData['end_date'])){
-             $validator = Validator::make($request->all(), [
-                'end_date' => 'date|date_format:Y-m-d'
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
-            }
-        }
-        
+        $requestData['company_id'] = $companyID;
         $requestData['publishers_id'] = !empty($requestData['publishers_id']) ? explode(',', $requestData['publishers_id']): [];
         $requestData['advertizers_name'] = !empty($requestData['advertizers_name']) ? explode(',', $requestData['advertizers_name']): [];
-        
+
         $publisher = false;
         if(Auth::guard('web')->user()->user_type != "admin"){
             $publisher = true;
             $requestData['publishers_id'] = [Auth::guard('web')->user()->id];
         }
-        $reportModel = new ReportTypeinModel();
-        $data = $reportModel->downloadcsvdata($requestData);
+        $data = ReportTypeinModel::downloadcsvdata($requestData);
         $filename = "tracking_system_".time().".csv";
         
         $handle = fopen($filename, 'w+');
@@ -407,144 +403,5 @@ class ReportController extends Controller
         );
         $respone = Response::download($filename, $filename, $headers)->deleteFileAfterSend(true);
         return $respone;
-    }
-    
-    public function n2s_csv_sample(){
-        $filename = "tracking_system_n2s_csv_sample.csv";
-        
-        $handle = fopen($filename, 'w+');
-        $n2s_csv_mapping_header = CommonTrait::n2s_csv_mapping_header();
-        fputcsv($handle, array_keys($n2s_csv_mapping_header));
-      
-        fclose($handle);
-        
-        $headers = array(
-            'Content-Type' => 'text/csv',
-        );
-        $respone = Response::download($filename, $filename, $headers)->deleteFileAfterSend(true);
-        return $respone;
-    }
-    public function typein_csv_sample(){
-        $filename = "tracking_system_typein_csv_sample.csv";
-        
-        $handle = fopen($filename, 'w+');
-        $typein_csv_mapping_header = CommonTrait::typein_csv_mapping_header();
-        fputcsv($handle, array_keys($typein_csv_mapping_header));
-      
-        fclose($handle);
-        
-        $headers = array(
-            'Content-Type' => 'text/csv',
-        );
-        $respone = Response::download($filename, $filename, $headers)->deleteFileAfterSend(true);
-        return $respone;
-    }
-    
-    public function n2s_report_edit(Request $request){
-        if(empty($request['id'])){
-            return ['error' => 'invalid request'];
-        }
-        
-        $doc = ReportN2sModel::where('id', $request['id'])->first();
-        if(empty($doc)){
-            return ['error' => 'Invalid Request'];
-        }
-       
-        return view('reports.n2s_report_edit', ['data' => $doc]);
-    }
-    
-    public function n2s_report_edit_save(Request $request){
-        $data = $request->all();
-        $id = $data['id'];
-        unset($data['_token']);
-        unset($data['id']);
-        
-        $response = ReportN2sModel::where('id', $id)->update($data);
-        if($response) {
-            return redirect()->route('report.list')->with('success_status', 'Report successfully Updated.');
-        }
-    }
-
-    
-    public function typein_report_edit(Request $request){
-        if(empty($request['id'])){
-            return ['error' => 'invalid request'];
-        }
-        
-        $doc = ReportTypeinModel::where('id', $request['id'])->first();
-        if(empty($doc)){
-            return ['error' => 'Invalid Request'];
-        }
-       
-        return view('reports.typein_report_edit', ['data' => $doc]);
-    }
-    
-    public function typein_report_edit_save(Request $request) {
-        $data = $request->all();
-        $id = $data['id'];
-        unset($data['_token']);
-        unset($data['id']);
-        
-        $response = ReportTypeinModel::where('id', $id)->update($data);
-        if($response) {
-            return redirect()->route('report.typein_list')->with('success_status', 'Report successfully Updated.');
-        }
-    }
-    
-    
-    public function delete_n2s_report_row(Request $request){
-        $requestData = $request->all();
-
-        if(!empty($requestData['id'])){
-            
-            $record = ReportN2sModel::find($requestData['id']);
-            if ($record) {
-              
-                $record->delete();
-                $message = 'N2S Report Row successfully deleted';
-                
-                return response()->json(['message' => $message, 'status' => 1]);
-            } else {
-                return response()->json(['message' => 'Typein Report Row not found'], 404);
-            }
-        }
-    }      
-    
-    public function delete_typein_report_row(Request $request){
-        $requestData = $request->all();
-
-        if(!empty($requestData['id'])){
-            
-            $record = ReportTypeinModel::find($requestData['id']);
-            if ($record) {
-              
-                $record->delete();
-                $message = 'Typein Report Row successfully deleted';
-                
-                return response()->json(['message' => $message, 'status' => 1]);
-            } else {
-                return response()->json(['message' => 'Typein Report Row not found'], 404);
-            }
-        }
-    }   
-    
-    public function delete_n2s_report_all(){
-        $record = ReportN2sModel::truncate();
-        if ($record) {
-            $message = 'Data Deleted';
-            return response()->json(['message' => $message, 'status' => 1]);
-        } else {
-            return response()->json(['message' => 'Data Not Deleted'], 404);
-        }
-    }  
-    
-    public function delete_typein_report_all(){
-        $record = ReportTypeinModel::truncate();
-        if ($record) {
-            $message = 'Data Deleted';
-            return response()->json(['message' => $message, 'status' => 1]);
-        } else {
-            return response()->json(['message' => 'Data Not Deleted'], 404);
-        }
-    }      
+    }     
 }

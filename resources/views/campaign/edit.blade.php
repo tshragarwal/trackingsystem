@@ -6,7 +6,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Update Campaign Detail') }}</div>
-
+                    
                     <div class="card-body">
                         @if (!empty($error))
                             <div class="alert alert-error" role="alert">
@@ -16,7 +16,9 @@
                         @elseif(!empty($data))
                             <!--  Advertiser Detail Form -->
 
-                            <form method="POST" action="{{ route('campaign.update', ['company_id' => $companyID]) }}">
+                            <form method="POST" action="{{ route('campaign.update', ['company_id' => $companyID, 'id' => $data->id]) }}">
+                                @csrf
+                                @method('patch')
 
                                 @if (session('success_status'))
                                     <h6 class="alert alert-success">{{ session('success_status') }}</h6>
@@ -25,9 +27,7 @@
                                     <h6 class="alert alert-danger">{{ session('error_status') }}</h6>
                                 @endif
 
-                                @csrf
-                                <input id="id" type="hidden" class="form-control  is-invalid " name="id"
-                                    value="{{ $data->id }}">
+                                
                                 <div class="row mb-3">
                                     <label for="name"
                                         class="col-md-4 col-form-label text-md-end">{{ __('Advertiser Name') }}</label>
@@ -38,12 +38,7 @@
                                             name="name"
                                             value="{{ $data->advertiser->name }}  ({{ $data->advertiser->manual_email }})"
                                             required autocomplete="name" autofocus>
-
-                                        @error('name')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                        <input type="hidden" name="advertiser_id" id="advertiser_id" value="{{ $data->advertiser->id }}" />
                                     </div>
                                 </div>
 
@@ -74,20 +69,10 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-
                                             <select class="form-control" name="link_type" id="link_type">
                                                 <option value="">--SELECT Type--</option>
-                                                @if ($data->link_type == 'typein')
-                                                    <option value="typein" Selected> TypeIn</option>
-                                                @else
-                                                    <option value="typein"> TypeIn</option>
-                                                @endif
-
-                                                @if ($data->link_type == 'n2s')
-                                                    <option value="n2s" Selected> N2S</option>
-                                                @else
-                                                    <option value="n2s"> N2S</option>
-                                                @endif
+                                                <option value="typein" @if ($data->link_type == 'typein') {{ 'Selected' }} @endif> TypeIn</option>
+                                                <option value="n2s" @if ($data->link_type == 'n2s') {{ 'Selected' }} @endif> N2S</option>
                                             </select>
                                         </div>
 
@@ -174,23 +159,9 @@
 
                                             <select class="form-control" name="status" id="status">
                                                 <option value="0">--SELECT Status--</option>
-                                                @if ($data->status == '1')
-                                                    <option value="1" Selected> Active</option>
-                                                @else
-                                                    <option value="1"> Active</option>
-                                                @endif
-
-                                                @if ($data->status == '2')
-                                                    <option value="2" Selected> Paused</option>
-                                                @else
-                                                    <option value="2"> Pause</option>
-                                                @endif
-
-                                                @if ($data->status == '3')
-                                                    <option value="3" Selected> Completed</option>
-                                                @else
-                                                    <option value="3"> Completed</option>
-                                                @endif
+                                                <option value="1" @if ($data->status == '1') {{ 'Selected' }} @endif> Active</option>
+                                                <option value="2" @if ($data->status == '2') {{ 'Selected' }} @endif> Paused</option>
+                                                <option value="3" @if ($data->status == '3') {{ 'Selected' }} @endif> Completed</option>
                                             </select>
                                         </div>
 
@@ -209,21 +180,12 @@
                                         <div class="form-group">
                                             <select class="form-control" name="enable_referer_redirection"
                                                 id="enable_referer_redirection">
-                                                @if ($data->enable_referer_redirection == '1')
-                                                    <option value="1" Selected> Enable</option>
-                                                @else
-                                                    <option value="1"> Enable</option>
-                                                @endif
-
-                                                @if ($data->enable_referer_redirection == '0')
-                                                    <option value="0" Selected> Disable</option>
-                                                @else
-                                                    <option value="0"> Disable</option>
-                                                @endif
+                                                <option value="1" @if ($data->enable_referer_redirection == '1') {{ 'Selected' }} @endif> Enable</option>
+                                                <option value="0" @if ($data->enable_referer_redirection == '0') {{ 'Selected' }} @endif> Disable</option>
                                             </select>
                                         </div>
                                         @error('status')
-                                            <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback d-block" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
@@ -237,17 +199,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select class="form-control" name="allow_mobile" id="allow_mobile">
-                                                @if ($data->allow_mobile == '1')
-                                                    <option value="1" Selected> Enable</option>
-                                                @else
-                                                    <option value="1"> Enable</option>
-                                                @endif
-
-                                                @if ($data->allow_mobile == '0')
-                                                    <option value="0" Selected> Disable</option>
-                                                @else
-                                                    <option value="0"> Disable</option>
-                                                @endif
+                                                <option value="1" @if ($data->allow_mobile == '1') {{ 'Selected' }} @endif> Enable</option>
+                                                <option value="0" @if ($data->allow_mobile == '0') {{ 'Selected' }} @endif> Disable</option>
                                             </select>
                                         </div>
                                         @error('status')
@@ -265,17 +218,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select class="form-control" name="allow_tablet" id="allow_tablet">
-                                                @if ($data->allow_tablet == '1')
-                                                    <option value="1" Selected> Enable</option>
-                                                @else
-                                                    <option value="1"> Enable</option>
-                                                @endif
-
-                                                @if ($data->allow_tablet == '0')
-                                                    <option value="0" Selected> Disable</option>
-                                                @else
-                                                    <option value="0"> Disable</option>
-                                                @endif
+                                                <option value="1" @if ($data->allow_tablet == '1') {{ 'Selected' }} @endif> Enable</option>
+                                                <option value="0" @if ($data->allow_tablet == '0') {{ 'Selected' }} @endif> Disable</option>
                                             </select>
                                         </div>
                                         @error('status')
@@ -293,17 +237,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select class="form-control" name="allow_desktop" id="allow_desktop">
-                                                @if ($data->allow_desktop == '1')
-                                                    <option value="1" Selected> Enable</option>
-                                                @else
-                                                    <option value="1"> Enable</option>
-                                                @endif
-
-                                                @if ($data->allow_desktop == '0')
-                                                    <option value="0" Selected> Disable</option>
-                                                @else
-                                                    <option value="0"> Disable</option>
-                                                @endif
+                                                <option value="1" @if ($data->allow_desktop == '1') {{ 'Selected' }} @endif> Enable</option>
+                                                <option value="0" @if ($data->allow_desktop == '0') {{ 'Selected' }} @endif> Disable</option>
                                             </select>
                                         </div>
                                         @error('status')

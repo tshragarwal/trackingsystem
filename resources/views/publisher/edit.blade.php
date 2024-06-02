@@ -18,8 +18,9 @@
                      @elseif(!empty($data))
                     <!--  Advertiser Detail Form --> 
                    
-                        <form method="POST" action="{{ route('publisher.update') }}">
-                                                             
+                        <form method="POST" action="{{ route('publisher.update', ['company_id' => $companyID, 'id' => $data->id ]) }}">
+                            @csrf
+                            @method('patch')                           
                             @if (session('success_status'))
                               <h6 class="alert alert-success">{{ session('success_status') }}</h6>
                            @endif
@@ -27,8 +28,7 @@
                               <h6 class="alert alert-danger">{{ session('error_status') }}</h6>
                            @endif
                            
-                             @csrf
-                             <input id="id" type="hidden" class="form-control  is-invalid " name="id" value="{{ $data->id }}">
+                             
                              <div class="row mb-3">
                                  <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Publisher Name') }}</label>
                                  

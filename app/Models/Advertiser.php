@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AdvertizerRequest extends Model
+class Advertiser extends Model
 {
     use HasFactory;
     
     protected $table = 'advertisers';
+    protected $guarded = [];
     
     
     public function list(){
@@ -22,13 +23,14 @@ class AdvertizerRequest extends Model
     }
     
     public function get_publisher_list($filter, $size = 10){
+        $query = self::where('company_id', $filter['companyID']);
         if(!empty($filter) && !empty($filter['type']) && $filter['type'] =='id' && $filter['v'] !=0){
-            return self::where($filter['type'], $filter['v'])->orderby('id','desc')->paginate($size);
+            $query->where($filter['type'], $filter['v']);
         }else if (!empty($filter) && !empty($filter['type']) && $filter['type'] =='name' && $filter['v'] !=''){
-            return self::where($filter['type'], 'like','%'.$filter['v'].'%')->orderby('id','desc')->paginate($size);
-        }else{
-            return self::orderby('id','desc')->paginate($size);
+            $query->where($filter['type'], 'like','%'.$filter['v'].'%');
         }
+            
+        return $query->orderby('id','desc')->paginate($size);
     }    
     
 //    public function update($data){

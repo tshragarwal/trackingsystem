@@ -24,9 +24,15 @@ class CampaignSaveRequest extends FormRequest
     public function rules()
     {
         return [
-            'advertiser_id' => ['required', 'numeric','min:1'],
-            'target_url' => ['required', 'string'],
+            'advertiser_id' => ['required', 'numeric','min:1', 'exists:advertisers,id'],
             'campaign_name' => ['required', 'string'],
+            'target_url' => ['required', 'string',
+                function($attribute, $value, $fail) {
+                    if (strpos($value, '{keyword}') === false) {
+                        $fail("The {$attribute} must contain '{keyword}'.");
+                    }
+                }
+            ],
 //            'query_string' => ['required', 'string'],
             'link_type' => ['required', 'string', 'in:typein,n2s'],
             'target_count' => ['required', 'numeric','min:1']

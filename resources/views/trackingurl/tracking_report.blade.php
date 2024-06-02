@@ -19,38 +19,38 @@
   </nav>
    <ul class="nav nav-tabs">
             <li class="nav-item">
-              <a class="nav-link {{$type=='count'?'active':''}} " href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'count'])}}">Count Report</a>
+              <a class="nav-link {{$type=='count'?'active':''}} " href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'count', 'company_id' => $companyID])}}">Count Report</a>
             </li>
             
             <li class="nav-item">
-              <a class="nav-link {{$type=='keyword'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'keyword'])}}">Keyword Report</a>
+              <a class="nav-link {{$type=='keyword'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'keyword', 'company_id' => $companyID])}}">Keyword Report</a>
             </li>
             
             <li class="nav-item">
-              <a class="nav-link {{$type=='browser'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'browser'])}}">Browser Report</a>
+              <a class="nav-link {{$type=='browser'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'browser', 'company_id' => $companyID])}}">Browser Report</a>
             </li>
             
             <li class="nav-item">
-              <a class="nav-link {{$type=='location'?'active':''}} " href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'location'])}}">Location Report</a>
+              <a class="nav-link {{$type=='location'?'active':''}} " href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'location', 'company_id' => $companyID])}}">Location Report</a>
             </li>
             
             <li class="nav-item">
-              <a class="nav-link  {{$type=='device'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'device'])}}">Device Report</a>
+              <a class="nav-link  {{$type=='device'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'device', 'company_id' => $companyID])}}">Device Report</a>
             </li>
             
             <li class="nav-item">
-              <a class="nav-link  {{$type=='ip'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'ip'])}}">IP Report</a>
+              <a class="nav-link  {{$type=='ip'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'ip', 'company_id' => $companyID])}}">IP Report</a>
             </li>
             
             <li class="nav-item">
-              <a class="nav-link  {{$type=='platform'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'platform'])}}">Platform Report</a>
+              <a class="nav-link  {{$type=='platform'?'active':''}}" href="{{route('traffic.tracking_report', ['start_date'=> date('Y-m-d') , 'end_date'=> date('Y-m-d'), 'type' => 'platform', 'company_id' => $companyID])}}">Platform Report</a>
             </li>
             
         </ul>
     <br/>
   <div class="card card-body" style="margin-bottom: 20px">
       
-    <form action="{{route('traffic.tracking_report')}}" method='get'>
+    <form action="{{route('traffic.tracking_report', ['company_id' => $companyID])}}" method='get'>
        
       <div class="row">
         <div class="col-md-12 col-lg-4">

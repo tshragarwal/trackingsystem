@@ -18,16 +18,21 @@ class PublisherTokenController extends Controller
 {
     use CommonTrait;
     
-    public function publisher_token_list(){
+    public function publisher_token_list(int $companyID){
         $user = Auth::guard('web')->user();
         if($user->user_type == 'admin'){
              $user = false;
         }
-        $domain = env('PUBLISHER_API_DOMAIN');
+        $domain = env('SEARCHOSS_API_DOMAIN');
+        if($companyID === 2 ) {
+            $domain = env('RNMATRIKS_API_DOMAIN');
+        }
+
+
         return view('publisher_token.token_list', ['user' => $user, 'domain' => $domain]);
     } 
     
-    public function publisher_token_generate(){
+    public function publisher_token_generate(int $companyID){
         $user = Auth::guard('web')->user();
       
         if($user->user_type == 'publisher'){
@@ -64,7 +69,8 @@ class PublisherTokenController extends Controller
         }
         
         $user = User::where('api_token', $requestData['token'])->first();
-       
+        $requestData['company_id'] = $user->company_id;
+
         if(empty($user) || $user->user_type == 'admin'){
             return response()->json(['message' => "Invalid Request token."]);
         }
@@ -98,8 +104,7 @@ class PublisherTokenController extends Controller
         $hF = array_flip($n2s_csv_mapping_header);
         
                 
-        $reportModel = new ReportN2sModel();
-        $reportData = $reportModel->downloadcsvdata($requestData);
+        $reportData = ReportN2sModel::downloadcsvdata($requestData);
         
         if($type == 'csv'){
             $filename = "report_n2s_".time().".csv";
@@ -155,8 +160,7 @@ class PublisherTokenController extends Controller
         $hF = array_flip($typein_csv_mapping_header);
         
                 
-        $reportModel = new ReportTypeinModel();
-        $reportData = $reportModel->downloadcsvdata($requestData);
+        $reportData = ReportTypeinModel::downloadcsvdata($requestData);
         
         if($type == 'csv'){
             $filename = "report_typein_".time().".csv";

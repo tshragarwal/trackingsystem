@@ -9,9 +9,12 @@ class ReportTypeinModel extends Model
 {
    use HasFactory;
     protected $table = 'report_typein';
+
+    protected $guarded = [];
     
-    public function reportList($requestData = [], $size = 10) {
-        $model = new ReportTypeinModel();
+    public function scopeReportList($query, $requestData = [], $size = 10) {
+        $model = $query->where('company_id', $requestData['company_id']);
+
         if(isset($requestData['subid']) && !empty($requestData['subid'])){
             $model = $model->where('subid', $requestData['subid']);
         }
@@ -32,14 +35,14 @@ class ReportTypeinModel extends Model
             $model =  $model->where('country', $requestData['country']);
         }        
         
-        $result = $model->orderBy('id', 'desc')->paginate($size);
-        return $result;
+        return $model->orderBy('id', 'desc')->paginate($size);
     }
     
     
     
-    public function downloadcsvdata($requestData = []) {
-        $model = new ReportTypeinModel();
+    public function scopeDownloadcsvdata($query, array $requestData = []) {
+        $model = $query->where('company_id', $requestData['company_id']);
+        
         if(isset($requestData['subid']) && !empty($requestData['subid'])){
             $model = $model->where('subid', $requestData['subid']);
         }

@@ -13,7 +13,7 @@
     @if( Auth::guard('web')->user()->user_type == "publisher")
         <div class="row " style="margin-right: 40px;margin-bottom: 20px;">
             <div class=" offset-md-10">
-                <form method="POST" action="{{ route('publisher_token.token_generate') }}">
+                <form method="POST" action="{{ route('publisher_token.token_generate', ['company_id' => $companyID]) }}">
                     @csrf
                     <button type="submit"  class="btn btn-primary"> {{ __('Generate Publisher Token') }} </button>
 
