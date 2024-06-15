@@ -28,6 +28,7 @@ class VerifyAndSetCompany
         $company = Company::findOrFail($companyID);
         view()->share('companyID', $companyID);
         view()->share('companyLogo', $company->logo_path);
+        view()->share('companyFavicon', $company->favicon_path);
         return $next($request);
     }
 }

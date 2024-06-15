@@ -26,13 +26,13 @@
         env('SEARCHOSS_ADMIN_APP_DOMAIN'), 
         env('SEARCHOSS_PUBLISHER_APP_DOMAIN'), 
         env('SEARCHOSS_API_DOMAIN'), 
-        env('TRCKWINNERS_DOMAIN') ]) || $companyID === 1)
+        env('TRCKWINNERS_DOMAIN') ]))
     <link rel="icon" href="https://searchoss.com/favicon.ico" sizes="192x192" />
     @elseif (in_array($siteURLWithoutScheme, [
         env('RNMATRIKS_ADMIN_APP_DOMAIN'), 
         env('RNMATRIKS_PUBLISHER_APP_DOMAIN'), 
         env('RNMATRIKS_API_DOMAIN'), 
-        env('ASKK2KNOW_DOMAIN') ]) || $companyID === 2)
+        env('ASKK2KNOW_DOMAIN') ]))
     <link rel="icon" href="https://searchoss.com/rnmatriks-favicon.ico" sizes="192x192" /> 
     @endif
     <script>
@@ -171,6 +171,25 @@
         $('.parentReport').on('click', function() {
             $('.childReport').css("display", "block");
         });
+        function addOrReplaceLink(href, rel = 'stylesheet') {
+            // Check for any existing link tags with the same href and rel
+            const existingLinks = document.querySelectorAll(`link[rel="${rel}"]`);
+
+            // Remove existing link tags
+            existingLinks.forEach(link => link.remove());
+
+            // Create a new link tag
+            const newLink = document.createElement('link');
+            newLink.href = href;
+            newLink.rel = rel;
+            document.head.appendChild(newLink);
+        }
+
+        $(document).ready(function() {
+            var companyFavicon = "{!! $companyFavicon !!}";
+            addOrReplaceLink(companyFavicon, 'icon');
+        });
+
     </script>
 </body>
 
