@@ -28,7 +28,7 @@
         env('SEARCHOSS_API_DOMAIN'), 
         env('TRCKWINNERS_DOMAIN') ]))
         @php
-            $siteLogo = "/logo.jpeg";
+            $sitelogo = "/logo.jpeg";
         @endphp
     <link rel="icon" href="https://searchoss.com/favicon.ico" sizes="192x192" />
     @elseif (in_array($siteURLWithoutScheme, [
@@ -42,7 +42,7 @@
     <link rel="icon" href="https://searchoss.com/rnmatriks-favicon.ico" sizes="192x192" />
     @else
     @php
-        $sitelogo = "/rnmatriks-logo.png";
+        $sitelogo = "/logo.jpeg";
     @endphp 
     @endif
     <script>
@@ -62,7 +62,7 @@
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                     <div class="topSection"> 
                         <a class="logoBox" href="{{ route('login') }}"><img class="img-responsive"
-                                src="{{ $sitelogo }}" alt="" /></a> 
+                                src="{{ $sitelogo ?? '' }}" alt="" /></a> 
                     </div>
                 </div>
             </div>

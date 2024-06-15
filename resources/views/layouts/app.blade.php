@@ -27,23 +27,13 @@
         env('SEARCHOSS_PUBLISHER_APP_DOMAIN'), 
         env('SEARCHOSS_API_DOMAIN'), 
         env('TRCKWINNERS_DOMAIN') ]))
-        @php
-            $siteLogo = "/logo.jpeg";
-        @endphp
     <link rel="icon" href="https://searchoss.com/favicon.ico" sizes="192x192" />
     @elseif (in_array($siteURLWithoutScheme, [
         env('RNMATRIKS_ADMIN_APP_DOMAIN'), 
         env('RNMATRIKS_PUBLISHER_APP_DOMAIN'), 
         env('RNMATRIKS_API_DOMAIN'), 
         env('ASKK2KNOW_DOMAIN') ]))
-    @php
-        $sitelogo = "/rnmatriks-logo.png";
-    @endphp
     <link rel="icon" href="https://searchoss.com/rnmatriks-favicon.ico" sizes="192x192" /> 
-    @else
-    @php
-        $sitelogo = "/rnmatriks-logo.png";
-    @endphp
     @endif
     <script>
         jQuery(document).ready(function($) {
