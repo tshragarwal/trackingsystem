@@ -26,13 +26,13 @@
         env('SEARCHOSS_ADMIN_APP_DOMAIN'), 
         env('SEARCHOSS_PUBLISHER_APP_DOMAIN'), 
         env('SEARCHOSS_API_DOMAIN'), 
-        env('TRCKWINNERS_DOMAIN') ]))
+        env('TRCKWINNERS_DOMAIN') ]) || $companyID === 1)
     <link rel="icon" href="https://searchoss.com/favicon.ico" sizes="192x192" />
     @elseif (in_array($siteURLWithoutScheme, [
         env('RNMATRIKS_ADMIN_APP_DOMAIN'), 
         env('RNMATRIKS_PUBLISHER_APP_DOMAIN'), 
         env('RNMATRIKS_API_DOMAIN'), 
-        env('ASKK2KNOW_DOMAIN') ]))
+        env('ASKK2KNOW_DOMAIN') ]) || $companyID === 2)
     <link rel="icon" href="https://searchoss.com/rnmatriks-favicon.ico" sizes="192x192" /> 
     @endif
     <script>
