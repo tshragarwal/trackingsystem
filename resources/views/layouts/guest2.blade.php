@@ -19,6 +19,28 @@
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/bootstrap-table.min.js"></script>
+    @php
+        $siteURLWithoutScheme = preg_replace('/^https?:\/\//', '', request()->root());
+    @endphp
+    @if (in_array($siteURLWithoutScheme, [
+        env('SEARCHOSS_ADMIN_APP_DOMAIN'), 
+        env('SEARCHOSS_PUBLISHER_APP_DOMAIN'), 
+        env('SEARCHOSS_API_DOMAIN'), 
+        env('TRCKWINNERS_DOMAIN') ]))
+        @php
+            $siteLogo = "/logo.jpeg";
+        @endphp
+    <link rel="icon" href="https://searchoss.com/favicon.ico" sizes="192x192" />
+    @elseif (in_array($siteURLWithoutScheme, [
+        env('RNMATRIKS_ADMIN_APP_DOMAIN'), 
+        env('RNMATRIKS_PUBLISHER_APP_DOMAIN'), 
+        env('RNMATRIKS_API_DOMAIN'), 
+        env('ASKK2KNOW_DOMAIN') ]))
+    @php
+        $sitelogo = "/rnmatriks-logo.png";
+    @endphp
+    <link rel="icon" href="https://searchoss.com/rnmatriks-favicon.ico" sizes="192x192" /> 
+    @endif
     <script>
         jQuery(document).ready(function($) {
             $("#menu-toggle").click(function(e) {
@@ -36,7 +58,7 @@
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                     <div class="topSection"> 
                         <a class="logoBox" href="{{ route('login') }}"><img class="img-responsive"
-                                src="/logo.jpeg" alt="" /></a> 
+                                src="{{ $sitelogo }}" alt="" /></a> 
                     </div>
                 </div>
             </div>
