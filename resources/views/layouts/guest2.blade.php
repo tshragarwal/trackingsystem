@@ -39,7 +39,11 @@
     @php
         $sitelogo = "/rnmatriks-logo.png";
     @endphp
-    <link rel="icon" href="https://searchoss.com/rnmatriks-favicon.ico" sizes="192x192" /> 
+    <link rel="icon" href="https://searchoss.com/rnmatriks-favicon.ico" sizes="192x192" />
+    @else
+    @php
+        $sitelogo = "/rnmatriks-logo.png";
+    @endphp 
     @endif
     <script>
         jQuery(document).ready(function($) {
