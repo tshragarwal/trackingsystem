@@ -67,7 +67,7 @@ class PublisherJobController extends Controller
         $uid = $job->proxy_url . str_pad($job->id, 8, '0', STR_PAD_LEFT);
         $job->proxy_url = $uid;
         $job->save();
-        $url = $scheme . env('ASKK2KNOW_DOMAIN').'/'.$uid.'&q={keyword}';
+        $url = $scheme . env('ASKK2KNOW_DOMAIN').'/'.$uid.'&query={keyword}';
       }
       
       return redirect()->back()->with(['success_status' => 'Successfully Campaign is assigned to Publisher', 'link_url' => $url]);
