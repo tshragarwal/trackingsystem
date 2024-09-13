@@ -15,7 +15,10 @@ class PublisherController extends Controller
     public function index(Request $request, int $companyID) {
         $request->merge(['company_id' => $companyID]);
         $requestData = $request->all();
-        return view('publisher.list', ['data'=> User::publisherList($requestData, 20), 'filter' => $requestData]);
+        $result = User::publisherList($requestData, 20);
+        $result->appends($requestData);
+        
+        return view('publisher.list', ['data'=> $result, 'filter' => $requestData]);
     }
     
     public function create(){

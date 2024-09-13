@@ -23,6 +23,7 @@ class CampaignController extends Controller
         
         $modelObj = new AdvertiserCampaignModel();
         $result = $modelObj->list($requestData, 20);
+        $result->appends($requestData);
         return view('campaign.list', ['data' => $result, 'success' => $request->s??0, 'filter' => $requestData]);
     }
 

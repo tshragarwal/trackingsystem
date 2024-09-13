@@ -20,6 +20,7 @@ class AdvertizerController extends Controller
         $userObj = new Advertiser();
         
         $advertizerList = $userObj->get_publisher_list($requestData, 20);
+        $advertizerList->appends($requestData);
        
         return view('advertiser.list', ['data' => $advertizerList, 'success' => $request->s, 'filter' => $requestData ]);
     }

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class User extends Authenticatable
 {
@@ -44,7 +45,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    public function scopePublisherList($query, $filter, $size = 1000){
+    public function scopePublisherList($query, $filter, $size = 1000): LengthAwarePaginator{
         $query = $query->where(['user_type' => 'publisher', 'company_id' => $filter['company_id']]);
         
         if(!empty($filter['type'])){

@@ -24,6 +24,7 @@ class PublisherJobController extends Controller
 
       $jobs = new PublisherJobModel();
       $result = $jobs->list($request->all(), 20);
+      $result->appends($request->all());
       $scheme = $request->secure() ? 'https://' : 'http://';
       $domainName = $scheme . env('TRCKWINNERS_DOMAIN');
       if($companyID === 2) {

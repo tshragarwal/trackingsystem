@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
 use App\Models\User;
 use App\Models\AdvertiserCampaignModel;
+
+use Illuminate\Database\Eloquent\Model;
 use App\Models\TrackingPublisherJobModel;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PublisherJobModel extends Model
 {
@@ -23,7 +24,7 @@ class PublisherJobModel extends Model
     ];
     
     
-    public function list($filter =[], $size = 10){
+    public function list($filter =[], $size = 10): LengthAwarePaginator{
 
         if(!empty($filter['publisher_id'])) {
             //->withCount('tracking')
@@ -33,21 +34,21 @@ class PublisherJobModel extends Model
         if(!empty($filter) && (!empty($filter['id']) || !empty($filter['pub_name']) || !empty($filter['adver_name']) || !empty($filter['campaign_name']))){
             $publisherJob = static::where('company_id', $filter['company_id'])->orderBy('updated_at', 'desc');
 
-            if($filter['id'] != 0 ){
+            if(isset($filter['id']) && $filter['id'] != 0 ){
                 $publisherJob->where('id', $filter['id'])->with('publisher')->with('campaign');
             }
-            if ($filter['pub_name'] != '' ){
+            if (isset($filter['pub_name']) && $filter['pub_name'] != '' ){
                     $publisherJob->whereHas('publisher', function ($query) use ($filter) {
                         $query->where('name', 'like', '%' . $filter['pub_name'] . '%');
                     })->with('campaign');
             }
             
-            if ( $filter['campaign_name'] != '' ){
+            if (isset($filter['campaign_name']) && $filter['campaign_name'] != '' ){
                     $publisherJob->whereHas('campaign', function ($query) use ($filter) {
                         $query->where('campaign_name', 'like', '%' . $filter['campaign_name'] . '%');
                     })->with('publisher');
             }
-            if ($filter['adver_name'] != '' ){
+            if (isset($filter['adver_name']) && $filter['adver_name'] != '' ){
                 $publisherJob->whereHas('campaign.advertiser', function ($query) use ($filter) {
                         $query->where('name', 'like', '%' . $filter['adver_name'] . '%');
                     })->with('publisher');

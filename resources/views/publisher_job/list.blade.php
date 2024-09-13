@@ -16,29 +16,67 @@
             <div class="alert alert-success" role="alert"> New Advertiser data successfully saved. </div>
         @endif
 
-        <div class="card card-body col-sm-10" style="margin-bottom: 20px">
+        <div class="container" style="padding: 0"> <!-- Wrap in a responsive container -->
+            <div class="card card-body w-100 mb-4"> <!-- Ensure card takes full width on smaller screens -->
+                <form class="form-inline" action="{{ route('publisherJob.list', ['company_id' => $companyID]) }}">
+                    <div class="form-group w-100" style="display: block"> <!-- Make the form group responsive -->
+                        <div class="row">
+                            <div class="col-12 col-sm-2 mb-2"> <!-- Full width on extra small screens, 2 cols on small and up -->
+                                <input type="text" class="form-control w-100" name="id" 
+                                    value="{{ !empty($filter['id']) ? $filter['id'] : '' }}" 
+                                    placeholder="Job ID"> 
+                            </div>
+                            <div class="col-12 col-sm-2 mb-2">
+                                <input type="text" class="form-control w-100" name="pub_name" 
+                                    value="{{ !empty($filter['pub_name']) ? $filter['pub_name'] : '' }}" 
+                                    placeholder="Publisher Name"> 
+                            </div>
+                            <div class="col-12 col-sm-2 mb-2">
+                                <input type="text" class="form-control w-100" name="adver_name" 
+                                    value="{{ !empty($filter['adver_name']) ? $filter['adver_name'] : '' }}" 
+                                    placeholder="Advertiser Name"> 
+                            </div>
+                            <div class="col-12 col-sm-2 mb-2">
+                                <input type="text" class="form-control w-100" name="campaign_name" 
+                                    value="{{ !empty($filter['campaign_name']) ? $filter['campaign_name'] : '' }}" 
+                                    placeholder="Campaign Name"> 
+                            </div>
+                            <div class="col-12 col-sm-2 mb-2">
+                                <button type="submit" class="btn btn-success w-100 mb-2">Filter</button>
+                            </div>
+                            <div class="col-12 col-sm-2 mb-2">
+                                <a href="{{ route('publisherJob.list', ['company_id' => $companyID]) }}" class="btn btn-danger w-100">Reset</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+
+        {{-- <div class="card card-body col-sm-10" style="margin-bottom: 20px">
             <form class="form-inline" action="{{ route('publisherJob.list', ['company_id' => $companyID]) }}">
                 <div class="form-group ">
                     <div class='row'>
                         <div class="col"> <input type="text" class="form-control" name="id"
                                 value="{{ !empty($filter['id']) ? $filter['id'] : '' }}" placeholder="Job ID"> </div>
-                        <div class="col"> <input type="text" class="form-control" name="pub_name"
+                        <div class="col-sm-2"> <input type="text" class="form-control" name="pub_name"
                                 value="{{ !empty($filter['pub_name']) ? $filter['pub_name'] : '' }}"
                                 placeholder="Publisher Name"> </div>
-                        <div class="col"> <input type="text" class="form-control" name="adver_name"
+                        <div class="col-sm-2"> <input type="text" class="form-control" name="adver_name"
                                 value="{{ !empty($filter['adver_name']) ? $filter['adver_name'] : '' }}"
                                 placeholder="Advertiser Name"> </div>
-                        <div class="col"> <input type="text" class="form-control" name="campaign_name"
+                        <div class="col-sm-2"> <input type="text" class="form-control" name="campaign_name"
                                 value="{{ !empty($filter['campaign_name']) ? $filter['campaign_name'] : '' }}"
                                 placeholder="Campaign Name"> </div>
-                        <div class="col"> 
+                        <div class="col-sm-2"> 
                             <button type="submit" class="btn btn-success mb-2">Filter</button> 
                             <a href="{{ route('publisherJob.list', ['company_id' => $companyID]) }}" class="btn btn-danger mb-2">Reset</a>
                         </div>
                     </div>
                 </div>
             </form>
-        </div>
+        </div> --}}
         <div class="table-container">
             <div class="table-responsive" style="min-height: 650px;">
                 <table class="table table-hover" id='publisher_job_list_table'>
