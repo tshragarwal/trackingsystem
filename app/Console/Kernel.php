@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('process_location:data')->everyHour();
+        $schedule->command('process_location:data')->hourly();
+        $schedule->command('reset_tracking_count:cron')->daily()->timezone('America/Los_Angeles');
     }
 
     /**
