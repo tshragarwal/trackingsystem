@@ -28,9 +28,9 @@ class TrckWinnersSearchController extends Controller
       if(!empty($job)){ 
         if($job->status == 1 && !empty($job->campaign) && !empty($job->campaign->id)) {
 
-          if($job->target_count <= $job->tracking_count) {
-            return response()->json(['message' => 'Daily Target count limit reached.'], 200);
-          }
+          // if($job->target_count <= $job->tracking_count) {
+          //   return response()->json(['message' => 'Daily Target count limit reached.'], 200);
+          // }
 
           if($job->campaign->status == 2){
             return response()->json(['message' => 'Campaign is Paused'], 200);
