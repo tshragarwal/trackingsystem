@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\PublisherJobModel;
+use Illuminate\Database\QueryException;
 
 class ResetTrackingCountCron extends Command
 {
@@ -38,8 +39,13 @@ class ResetTrackingCountCron extends Command
      */
     public function handle()
     {
-        info("Reset tracking Cron Job running at ". now());
-        PublisherJobModel::where('status', '=', 1 )->update(['tracking_count' => 0]);
-        return;
+        try {
+            info("Reset tracking Cron Job running at ". now());
+            $rows = PublisherJobModel::where('status', '=', 1 )->update(['tracking_count' => 0]);
+            info("Reset tracking Cron Job completed at ". now() . " and affected rows are " . $rows);
+            return;
+        } catch (QueryException $qe) {
+            logger($qe->getMessage());
+        }
     }
 }
