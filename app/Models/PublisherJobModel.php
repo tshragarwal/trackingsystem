@@ -64,6 +64,7 @@ class PublisherJobModel extends Model
     public function publisher(){
         return $this->belongsTo(User::class, 'publisher_id');
     }
+
     public function campaign(){
         return $this->belongsTo(AdvertiserCampaignModel::class, 'advertiser_campaign_id');
     }

@@ -93,6 +93,8 @@
                                     class="fa fa-sort"></i></th>
                             <th data-field="proxy_url" data-sortable="true" scope="col">Link <i class="fa fa-sort"></i>
                             </th>
+                            <th data-field="fallback_url" data-sortable="false" scope="col">Fallback Link <i class="fa fa-sort"></i>
+                            </th>
                             <th data-field="target_count" data-sortable="true" scope="col">Target Count <i
                                     class="fa fa-sort"></i></th>
                             <th data-field="updated_at" data-sortable="true" scope="col">Updated At <i
@@ -120,14 +122,18 @@
                                             {{ $domain }}/search/{{ $record->proxy_url }}?query={keyword}
                                         @endif
                                     </td>
+                                    <td>{{ $record->fallback_url }}</td>
                                     <td>{{ $record->target_count }}</td>
                                     <td>{{ $record->updated_at }}</td>
                                     <td>{{ $record->created_at }}</td>
-                                    <td> <span class="active_inactive_toggle" status="{{ $record->status }}"
+                                    <td> 
+                                        <span class="active_inactive_toggle" status="{{ $record->status }}"
                                             id="{{ $record->id }}"
                                             style="font-size: 20px;cursor: pointer;margin-right:5px"> <i
                                                 class="fa fa-solid {{ $record->status == 1 ? 'fa-toggle-on' : 'fa-toggle-off' }}">
                                             </i> </span>
+                                        <a style="font-size: 18px" href="{{ route('publisherJob.edit', ['id' => $record->id, 'company_id' => $companyID]) }}"><i
+                                                class="fa fa-edit"></i></a>
                                         <a style="font-size: 18px" href="javascript:void(0)" data-toggle="modal"
                                             data-target="#deletecamp" class="delete_camp" id="{{ $record->id }}"> <i
                                                 class="fa fa-trash-o "></i></a>

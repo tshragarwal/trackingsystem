@@ -8,6 +8,7 @@ use App\Models\AdvertiserCampaignModel;
 use App\Models\Advertiser;
 use App\Models\User;
 use App\Http\Requests\AssignPublisherJob;
+use App\Http\Requests\UpdateAssignPublisherJob;
 use App\Models\PublisherJobModel;
 use App\Models\TrackingPublisherJobModel;
 
@@ -58,6 +59,7 @@ class PublisherJobController extends Controller
         'advertiser_campaign_id' => $request->get('advertiser_campaign_id'),
         'proxy_url' => $uid,
         'target_count' => $request->get('target_count'),
+        'fallback_url' => $request->get('fallback_url'),
       ]);
 
       $id = $job->id;
@@ -83,6 +85,41 @@ class PublisherJobController extends Controller
 
       return $uid;
     }
+
+    public function edit(int $companyID, int $id){
+
+      $job = PublisherJobModel::with(['campaign', 'publisher', 'campaign.advertiser'])->where(['company_id' => $companyID, 'id' => $id])->first();
+
+      if(empty($job)) {
+        return response()->json(['message' => 'Job not found'], 404);
+      }
+
+      return view('publisher_job.edit', ['data' => $job, 'error' => '']);
+    }
+  
+  public function update(UpdateAssignPublisherJob $request, int $companyID, int $id){
+
+      $job = PublisherJobModel::where(['company_id' => $companyID, 'id' => $id])->first();
+
+      if(empty($job)) {
+        return response()->json(['message' => 'Job not found'], 404);
+      }
+      
+      $requestData = $request->post();
+
+      if(Auth::user()->company_id !== $job->company_id) {
+          abort(403, "Invalid operation");
+      }
+  
+      $job->fallback_url = $requestData['fallback_url'];
+      $job->target_count = $requestData['target_count'];
+      $job->tracking_count = $requestData['tracking_count'];
+      
+      $job->update();
+      
+      return redirect()->back()->with('success_status','Publisher Job data Updated Successfully');
+          
+  }
     
     
     public function updateStatus(Request $request, int $companyID, int $id){

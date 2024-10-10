@@ -28,10 +28,6 @@ class TrckWinnersSearchController extends Controller
       if(!empty($job)){ 
         if($job->status == 1 && !empty($job->campaign) && !empty($job->campaign->id)) {
 
-          if(($job->id === 846 || $job->id === 895 ) && $job->target_count <= $job->tracking_count) {
-            return response()->json(['message' => 'Daily Target count limit reached.'], 200);
-          }
-
           if($job->campaign->status == 2){
             return response()->json(['message' => 'Campaign is Paused'], 200);
           }else if($job->campaign->status == 3){
@@ -77,9 +73,17 @@ class TrckWinnersSearchController extends Controller
           $tableObj->device = $user_agent['device'];
           $tableObj->save();
 
+          $redirectURL = $job->campaign->target_url;
+          if(($job->id === 846 || $job->id === 895 ) && $job->target_count <= $job->tracking_count) {
+            if(empty($job->fallback_url)) {
+              return response()->json(['message' => 'Daily Target count limit reached.'], 200);
+            }
+            $redirectURL = $job->fallback_url;
+          }
+
           $requestData = $request->all();
           
-          $finalRedirectUrl = str_replace('{keyword}', $requestData['q'], $job->campaign->target_url);
+          $finalRedirectUrl = str_replace('{keyword}', $requestData['q'], $redirectURL);
           
           if (strpos($job->campaign->target_url, '{clkid}') !== false) {
               $finalRedirectUrl = str_replace('{clkid}', base64_encode($tableObj->id), $finalRedirectUrl);

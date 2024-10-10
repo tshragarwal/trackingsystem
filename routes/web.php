@@ -105,7 +105,10 @@ if(in_array($host, array_merge($adminAppDomain, $adminPublisherDomain))){
             Route::post('/publisher-job', [App\Http\Controllers\PublisherJobController::class, 'store'] )->name('publisherJob.store');
 
             // Edit
+            Route::get('/publisher-job/{id}/edit', [App\Http\Controllers\PublisherJobController::class, 'edit'] )->name('publisherJob.edit');
+            Route::patch('/publisher-job/{id}', [App\Http\Controllers\PublisherJobController::class, 'update'] )->name('publisherJob.update');
             Route::patch('/publisher-job/{id}/toggle-status', [App\Http\Controllers\PublisherJobController::class, 'updateStatus'] )->name('publisherJob.updateStatus');
+
 
             // Destroy
             Route::delete('/publisher-job/{id}', [App\Http\Controllers\PublisherJobController::class, 'destroy'] )->name('publisherJob.delete');
