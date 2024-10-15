@@ -107,7 +107,7 @@ class PublisherJobController extends Controller
       
       $requestData = $request->post();
 
-      if(Auth::user()->company_id !== $job->company_id) {
+      if(Auth::user()->user_type == 'publisher') {
           abort(403, "Invalid operation");
       }
   
